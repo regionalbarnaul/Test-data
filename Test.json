@@ -1,0 +1,7 @@
+{
+  "version": "1.0",
+  "products": [
+    {"art": "TEST001", "name": "Тестовый товар 1", "percent": 5, "type": "focus"},
+    {"art": "TEST002", "name": "Тестовый товар 2", "percent": 3, "type": "focus"}
+  ]
+}

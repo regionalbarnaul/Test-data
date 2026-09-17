@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест камеры</title>
+<style>
+body { font-family: sans-serif; background: #0a0f0d; color: #e8f5f0; padding: 20px; }
+button { display: block; width: 100%; padding: 16px; margin: 10px 0; background: #10b981; color: #0a0f0d; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; }
+video { width: 100%; height: 300px; margin-top: 12px; background: #000; border-radius: 12px; }
+#log { margin-top: 12px; padding: 12px; background: #121a16; border-radius: 12px; font-family: monospace; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>Тест задней камеры</h1>
+<button id="btn">Запустить камеру</button>
+<video id="video" autoplay playsinline muted></video>
+<div id="log">Нажми кнопку</div>
+<script>
+document.getElementById('btn').onclick = function() {
+  var log = document.getElementById('log');
+  log.textContent = 'Запрашиваю заднюю камеру...';
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: 1280, height: 720 } })
+    .then(function(stream) {
+      document.getElementById('video').srcObject = stream;
+      log.textContent = 'УСПЕХ! Камера работает.';
+    })
+    .catch(function(e) {
+      log.textContent = 'ОШИБКА: ' + e.name + ' — ' + e.message;
+    });
+};
+</script>
+</body>
+</html>

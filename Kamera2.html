@@ -20,7 +20,7 @@ video { width: 100%; height: 300px; margin-top: 12px; background: #000; border-r
 document.getElementById('btn').onclick = function() {
   var log = document.getElementById('log');
   log.textContent = 'Запрашиваю заднюю камеру...';
-  navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: 1280, height: 720 } })
+  navigator.mediaDevices.getUserMedia({ video: true })
     .then(function(stream) {
       document.getElementById('video').srcObject = stream;
       log.textContent = 'УСПЕХ! Камера работает.';

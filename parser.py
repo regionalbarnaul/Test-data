@@ -19,10 +19,22 @@ def load_articles():
     return articles
 
 
+def warm_up(session):
+    """Прогреваем сессию: заходим на главную DNS, получаем cookies."""
+    try:
+        session.get("https://www.dns-shop.ru/", impersonate="chrome120", timeout=30)
+    except Exception as e:
+        print(f"[warmup] error: {e}")
+
+
 def get_price(session, article, debug=False):
     url = f"https://www.dns-shop.ru/search/?q={article}"
+    headers = {
+        "Referer": "https://www.dns-shop.ru/",
+        "Accept-Language": "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
+    }
     try:
-        r = session.get(url, impersonate="chrome120", timeout=30)
+        r = session.get(url, impersonate="chrome120", timeout=30, headers=headers)
         html = r.text
         soup = BeautifulSoup(html, "html.parser")
 
@@ -50,6 +62,8 @@ def get_price(session, article, debug=False):
             print(f"[DEBUG] html-length={len(html)}")
             print(f"[DEBUG] title={(soup.title.get_text() if soup.title else '')[:80]}")
             print(f"[DEBUG] price-classes={sorted(classes)[:30]}")
+            if r.status_code != 200:
+                print(f"[DEBUG] body-head={html[:500]!r}")
         return None
     except Exception as e:
         print(f"[{article}] error: {e}")
@@ -62,6 +76,7 @@ def main():
     articles = articles[:3]
 
     session = cffi_requests.Session()
+    warm_up(session)
 
     prices = {}
     for i, art in enumerate(articles, 1):

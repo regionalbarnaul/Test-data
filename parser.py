@@ -3,43 +3,72 @@ import csv
 import io
 import time
 import urllib.request
-import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
+import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 CSV_URL = "https://raw.githubusercontent.com/regionalbarnaul/Test-data/main/Test.csv"
 
+
 def load_articles():
-    req = urllib.request.Request(CSV_URL, headers={"User-Agent": "Mozilla/5.0"})
-    text = urllib.request.urlopen(req, timeout=30).read().decode("utf-8-sig")
+    req = urllib.request.Request(CSV_URL)
+    text = urllib.request.urlopen(req).read().decode("utf-8")
     reader = csv.reader(io.StringIO(text))
     articles = []
-    for i, row in enumerate(reader):
-        if i == 0:
-            continue
+    for row in reader:
         if row and row[0].strip().isdigit():
             articles.append(row[0].strip())
     return articles
 
-def get_price(driver, article):
+
+def get_price(driver, article, debug=False):
     url = f"https://www.dns-shop.ru/search/?q={article}"
     try:
         driver.get(url)
-        time.sleep(4)
+        try:
+            WebDriverWait(driver, 20).until(
+                EC.presence_of_element_located((By.TAG_NAME, "body"))
+            )
+        except Exception:
+            pass
+        time.sleep(3)
         soup = BeautifulSoup(driver.page_source, "html.parser")
-        for sel in ["div.product-buy__price", "div.product-buy__price-active", "span.product-buy__price"]:
-            tag = soup.select_one(sel)
-            if tag:
-                digits = "".join(c for c in tag.get_text() if c.isdigit())
-                if digits:
+
+        selectors = [
+            "div.product-buy__price",
+            "[class*='product-buy__price']",
+            "[class*='product-mini-card__price-current']",
+            "[class*='product-mini-card__price']",
+            "[class*='product-card__price']",
+        ]
+        for sel in selectors:
+            for tag in soup.select(sel):
+                text = tag.get_text(" ", strip=True)
+                digits = "".join(c for c in text if c.isdigit())
+                if digits and len(digits) >= 3:
                     return int(digits)
+
+        if debug:
+            classes = set()
+            for tag in soup.find_all(True):
+                for c in (tag.get("class") or []):
+                    if "price" in c.lower():
+                        classes.add(c)
+            print(f"[DEBUG] title='{(driver.title or '')[:80]}'")
+            print(f"[DEBUG] price-classes={sorted(classes)[:30]}")
+            print(f"[DEBUG] html-length={len(driver.page_source)}")
         return None
     except Exception as e:
         print(f"[{article}] error: {e}")
         return None
 
+
 def main():
     articles = load_articles()
     print(f"Articles: {len(articles)}")
+    articles = articles[:3]  # ВРЕМЕННО: тестируем только на 3 товарах
 
     options = uc.ChromeOptions()
     options.add_argument("--headless=new")
@@ -49,7 +78,7 @@ def main():
 
     prices = {}
     for i, art in enumerate(articles, 1):
-        price = get_price(driver, art)
+        price = get_price(driver, art, debug=(i == 1))
         prices[art] = price
         print(f"[{i}/{len(articles)}] {art} -> {price}")
 
@@ -58,6 +87,7 @@ def main():
     with open("prices.json", "w", encoding="utf-8") as f:
         json.dump(prices, f, ensure_ascii=False, indent=2)
     print(f"Saved: {len(prices)}")
+
 
 if __name__ == "__main__":
     main()

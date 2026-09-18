@@ -16,11 +16,9 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install
-        run: pip install undetected-chromedriver beautifulsoup4 selenium
-      - name: Install xvfb
-        run: sudo apt-get update && sudo apt-get install -y xvfb
+        run: pip install curl_cffi beautifulsoup4
       - name: Run parser
-        run: xvfb-run -a python parser.py
+        run: python parser.py
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"

@@ -2,20 +2,16 @@ import json
 import csv
 import io
 import time
-import urllib.request
 from bs4 import BeautifulSoup
-import undetected_chromedriver as uc
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from curl_cffi import requests as cffi_requests
 
 CSV_URL = "https://raw.githubusercontent.com/regionalbarnaul/Test-data/main/Test.csv"
 
 
 def load_articles():
-    req = urllib.request.Request(CSV_URL)
-    text = urllib.request.urlopen(req).read().decode("utf-8")
-    reader = csv.reader(io.StringIO(text))
+    r = cffi_requests.get(CSV_URL, impersonate="chrome120", timeout=30)
+    r.encoding = "utf-8"
+    reader = csv.reader(io.StringIO(r.text))
     articles = []
     for row in reader:
         if row and row[0].strip().isdigit():
@@ -23,18 +19,12 @@ def load_articles():
     return articles
 
 
-def get_price(driver, article, debug=False):
+def get_price(session, article, debug=False):
     url = f"https://www.dns-shop.ru/search/?q={article}"
     try:
-        driver.get(url)
-        try:
-            WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.TAG_NAME, "body"))
-            )
-        except Exception:
-            pass
-        time.sleep(4)
-        soup = BeautifulSoup(driver.page_source, "html.parser")
+        r = session.get(url, impersonate="chrome120", timeout=30)
+        html = r.text
+        soup = BeautifulSoup(html, "html.parser")
 
         selectors = [
             "div.product-buy__price",
@@ -56,9 +46,10 @@ def get_price(driver, article, debug=False):
                 for c in (tag.get("class") or []):
                     if "price" in c.lower():
                         classes.add(c)
-            print(f"[DEBUG] title='{(driver.title or '')[:80]}'")
+            print(f"[DEBUG] status={r.status_code}")
+            print(f"[DEBUG] html-length={len(html)}")
+            print(f"[DEBUG] title={(soup.title.get_text() if soup.title else '')[:80]}")
             print(f"[DEBUG] price-classes={sorted(classes)[:30]}")
-            print(f"[DEBUG] html-length={len(driver.page_source)}")
         return None
     except Exception as e:
         print(f"[{article}] error: {e}")
@@ -68,23 +59,16 @@ def get_price(driver, article, debug=False):
 def main():
     articles = load_articles()
     print(f"Articles: {len(articles)}")
-    articles = articles[:3]  # ВРЕМЕННО: тестируем только на 3 товарах
+    articles = articles[:3]
 
-    options = uc.ChromeOptions()
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36")
-    options.add_argument("--window-size=1920,1080")
-    driver = uc.Chrome(options=options, version_main=152)
+    session = cffi_requests.Session()
 
     prices = {}
     for i, art in enumerate(articles, 1):
-        price = get_price(driver, art, debug=(i == 1))
+        price = get_price(session, art, debug=(i == 1))
         prices[art] = price
         print(f"[{i}/{len(articles)}] {art} -> {price}")
-
-    driver.quit()
+        time.sleep(2)
 
     with open("prices.json", "w", encoding="utf-8") as f:
         json.dump(prices, f, ensure_ascii=False, indent=2)

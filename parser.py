@@ -33,7 +33,7 @@ def get_price(driver, article, debug=False):
             )
         except Exception:
             pass
-        time.sleep(3)
+        time.sleep(4)
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
         selectors = [
@@ -71,9 +71,11 @@ def main():
     articles = articles[:3]  # ВРЕМЕННО: тестируем только на 3 товарах
 
     options = uc.ChromeOptions()
-    options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36")
+    options.add_argument("--window-size=1920,1080")
     driver = uc.Chrome(options=options, version_main=152)
 
     prices = {}

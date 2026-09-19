@@ -1,0 +1,18 @@
+{
+  "name": "Трекер продаж",
+  "short_name": "Трекер",
+  "start_url": "./Kamera.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0f0d",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjM4IiBmaWxsPSIjMTBhZTdlIi8+PHBhdGggZD0iTTUwIDEwMGg5MnYxMkg1MHoiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNNjAgNzBoNzJ2MTJINjB6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTcwIDQwaDUydjEySDcweiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

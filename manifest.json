@@ -7,12 +7,19 @@
   "orientation": "portrait",
   "background_color": "#0a0f0d",
   "theme_color": "#10b981",
+  "description": "Личный трекер продаж для продавца-консультанта",
   "icons": [
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjM4IiBmaWxsPSIjMTBhZTdlIi8+PHBhdGggZD0iTTUwIDEwMGg5MnYxMkg1MHoiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNNjAgNzBoNzJ2MTJINjB6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTcwIDQwaDUydjEySDcweiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==",
+      "src": "./icon-192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-192.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }

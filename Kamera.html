@@ -47,7 +47,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .history-item .sum { font-size: 15px; font-weight: 700; color: #10b981; }
 .history-item .edit { margin-left: 8px; background: none; border: none; color: #10b981; font-size: 17px; cursor: pointer; padding: 2px 6px; }
 .history-item .delete { margin-left: 4px; background: none; border: none; color: #ef4444; font-size: 17px; cursor: pointer; padding: 2px 6px; }
-.nav { position: fixed; bottom: 0; left: 0; right: 0; background: #121a16; border-top: 1px solid #1e2b24; display: flex; justify-content: space-around; padding: 8px 0 14px; }
+.nav { position: fixed; bottom: 0; left: 0; right: 0; background: #121a16; border-top: 1px solid #1e2b24; display: flex; justify-content: space-around; padding: 8px 0 14px; z-index: 100; }
 .nav button { background: none; border: none; color: #6b8a7d; font-size: 10px; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 2px 6px; }
 .nav button.active { color: #10b981; }
 .screen { display: none; }
@@ -66,17 +66,33 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 #versionLink { text-align: center; color: #6b8a7d; font-size: 12px; padding: 16px; cursor: pointer; }
 .date-display { padding: 12px; background: #0a0f0d; border: 1px solid #1e2b24; border-radius: 10px; color: #e8f5f0; font-size: 15px; cursor: pointer; }
 .date-display:active { background: #1e2b24; }
+
 .toast { position: fixed; top: 20px; left: 14px; right: 14px; padding: 14px 16px; border-radius: 12px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; z-index: 99999; opacity: 0; transform: translateY(-20px); transition: all 0.3s ease; box-shadow: 0 6px 20px rgba(0,0,0,0.5); color: #0a0f0d; }
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast.success { background: linear-gradient(135deg, #10b981, #059669); }
 .toast.warn { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
 .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
 .toast .icon { font-size: 20px; }
+
 #liveQRModal { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#000; z-index:99998; display:none; flex-direction:column; }
 #liveQRModal.show { display: flex; }
-#liveVideo { flex:1; width:100%; object-fit:cover; background:#000; }
-#liveStatus { padding:14px; background:#1f2937; color:#fff; font-size:16px; text-align:center; }
-#liveCloseBtn { padding:16px; background:#ef4444; color:#fff; border:none; font-size:18px; font-weight:bold; }
+.qr-cam-wrap { position: relative; flex: 1; overflow: hidden; background: #000; }
+#liveVideo { width: 100%; height: 100%; object-fit: cover; display: block; }
+.qr-overlay { position: absolute; inset: 0; pointer-events: none; }
+.qr-frame { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 68vw; height: 68vw; max-width: 300px; max-height: 300px; border-radius: 20px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.55); }
+.qr-corner { position: absolute; width: 42px; height: 42px; border: 4px solid #10b981; }
+.qr-corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: 16px; }
+.qr-corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; border-top-right-radius: 16px; }
+.qr-corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; border-bottom-left-radius: 16px; }
+.qr-corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: 16px; }
+.qr-laser { position: absolute; left: 10px; right: 10px; height: 2px; background: linear-gradient(90deg, transparent, #10b981, transparent); animation: qrLaser 2.2s ease-in-out infinite; box-shadow: 0 0 8px #10b981; }
+@keyframes qrLaser { 0%,100% { top: 12%; } 50% { top: 88%; } }
+.qr-hint { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: #fff; font-size: 14px; text-shadow: 0 2px 6px rgba(0,0,0,0.9); opacity: 0.9; }
+.qr-controls { position: absolute; left: 0; right: 0; bottom: 60px; display: flex; justify-content: center; gap: 40px; align-items: center; }
+.qr-ctl { width: 56px; height: 56px; border-radius: 50%; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.6); color: #fff; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.qr-ctl.close { background: rgba(239,68,68,0.7); border-color: #fff; }
+.qr-ctl.active { background: #fbbf24; color: #0a0f0d; border-color: #fbbf24; }
+#liveStatus { padding: 14px; background: #1f2937; color: #fff; font-size: 16px; text-align: center; }
 </style>
 </head>
 <body>
@@ -260,9 +276,24 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 </div>
 
 <div id="liveQRModal">
-  <video id="liveVideo" playsinline autoplay muted></video>
+  <div class="qr-cam-wrap">
+    <video id="liveVideo" playsinline autoplay muted></video>
+    <div class="qr-overlay">
+      <div class="qr-frame">
+        <div class="qr-corner tl"></div>
+        <div class="qr-corner tr"></div>
+        <div class="qr-corner bl"></div>
+        <div class="qr-corner br"></div>
+        <div class="qr-laser"></div>
+      </div>
+      <div class="qr-hint">Наведите на QR-код</div>
+    </div>
+    <div class="qr-controls">
+      <button id="liveTorchBtn" class="qr-ctl">🔦</button>
+      <button id="liveCloseBtn" class="qr-ctl close">✕</button>
+    </div>
+  </div>
   <div id="liveStatus">Наведи на QR-код...</div>
-  <button id="liveCloseBtn">Закрыть</button>
 </div>
 
 <script>
@@ -649,6 +680,7 @@ document.getElementById('editDate').addEventListener('change', function() { upda
 // ====== ЖИВОЙ СКАНЕР ======
 var liveStream = null;
 var liveScanning = false;
+var torchOn = false;
 
 document.getElementById('btnScanQR').onclick = function() {
   startLiveScanner();
@@ -670,10 +702,20 @@ function startLiveScanner() {
   }
 
   navigator.mediaDevices.getUserMedia({
-    video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } },
+    video: {
+      facingMode: 'environment',
+      width: { ideal: 1920 },
+      height: { ideal: 1080 }
+    },
     audio: false
   }).then(function(stream) {
     liveStream = stream;
+    var track = stream.getVideoTracks()[0];
+    if (track && track.applyConstraints) {
+      track.applyConstraints({
+        advanced: [{ focusMode: 'continuous' }]
+      }).catch(function(){});
+    }
     video.srcObject = stream;
     video.play();
     liveScanning = true;
@@ -686,15 +728,31 @@ function startLiveScanner() {
 
 function stopLiveScanner() {
   liveScanning = false;
+  torchOn = false;
   if (liveStream) {
     liveStream.getTracks().forEach(function(t){ t.stop(); });
     liveStream = null;
   }
   var modal = document.getElementById('liveQRModal');
   if (modal) modal.classList.remove('show');
+  var tb = document.getElementById('liveTorchBtn');
+  if (tb) { tb.classList.remove('active'); tb.textContent = '🔦'; }
 }
 
 document.getElementById('liveCloseBtn').onclick = stopLiveScanner;
+
+document.getElementById('liveTorchBtn').onclick = function() {
+  if (!liveStream) return;
+  var track = liveStream.getVideoTracks()[0];
+  if (!track) return;
+  torchOn = !torchOn;
+  var btn = this;
+  track.applyConstraints({ advanced: [{ torch: torchOn }] }).then(function() {
+    btn.classList.toggle('active', torchOn);
+  }).catch(function() {
+    showToast('Фонарик недоступен на этом телефоне', 'warn');
+  });
+};
 
 function liveTick() {
   if (!liveScanning || !liveStream) return;
@@ -704,15 +762,26 @@ function liveTick() {
     requestAnimationFrame(liveTick);
     return;
   }
+
+  var vw = video.videoWidth, vh = video.videoHeight;
+  if (!vw || !vh) { requestAnimationFrame(liveTick); return; }
+
+  var frameSize = Math.min(vw, vh) * 0.68;
+  var sx = (vw - frameSize) / 2;
+  var sy = (vh - frameSize) / 2;
+
   var canvas = document.createElement('canvas');
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
+  canvas.width = frameSize;
+  canvas.height = frameSize;
   var ctx = canvas.getContext('2d');
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  var img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(video, sx, sy, frameSize, frameSize, 0, 0, frameSize, frameSize);
+
+  var img = ctx.getImageData(0, 0, frameSize, frameSize);
   var code = jsQR(img.data, img.width, img.height);
+
   if (code && code.data) {
     status.textContent = '✅ ' + code.data;
+    if (navigator.vibrate) navigator.vibrate(80);
     var data = code.data;
     setTimeout(function() {
       stopLiveScanner();
@@ -1012,6 +1081,13 @@ document.getElementById('btnSyncFocus').onclick = function() {
     });
 };
 
+// ====== SERVICE WORKER для PWA ======
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+
 document.getElementById('inputDate').value = today();
 document.getElementById('inputDate').max = today();
 document.getElementById('editDate').max = today();
@@ -1021,4 +1097,4 @@ document.getElementById('currentDate').textContent = new Date().toLocaleDateStri
 render();
 </script>
 </body>
-</html>
+  </html>

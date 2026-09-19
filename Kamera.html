@@ -72,7 +72,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .date-display:active { background: #1e2b24; }
 .chart-wrap { margin-top: 8px; overflow-x: auto; padding-bottom: 4px; }
 .chart { display: flex; align-items: flex-end; gap: 3px; height: 90px; padding: 4px 0; min-width: 100%; }
-.bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 8px; }
+.bar-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; min-width: 8px; height: 100%; }
 .bar { width: 100%; background: linear-gradient(180deg, #10b981, #059669); border-radius: 3px 3px 0 0; min-height: 2px; transition: height 0.3s; }
 .bar-day { font-size: 8px; color: #6b8a7d; margin-top: 2px; }
 .compare-up { color: #10b981; font-weight: 700; }
@@ -104,13 +104,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .qr-ctl.active { background: #fbbf24; color: #0a0f0d; border-color: #fbbf24; }
 #liveStatus { padding: 14px; background: #1f2937; color: #fff; font-size: 16px; text-align: center; }
 .btn-cam svg { display: block; }
-.chart-wrap { margin-top: 8px; overflow-x: auto; padding-bottom: 4px; }
-.chart { display: flex; align-items: flex-end; gap: 3px; height: 90px; padding: 4px 0; min-width: 100%; }
-.bar-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; min-width: 8px; height: 100%; }
-.bar { width: 100%; background: linear-gradient(180deg, #10b981, #059669); border-radius: 3px 3px 0 0; min-height: 2px; transition: height 0.3s; }
-.bar-day { font-size: 8px; color: #6b8a7d; margin-top: 2px; }
-.compare-up { color: #10b981; font-weight: 700; }
-.compare-down { color: #ef4444; font-weight: 700; }
 </style>
 </head>
 <body>
@@ -318,6 +311,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   </div>
   <a class="about-mail" href="mailto:regionalbarnaul@yandex.ru">Написать разработчику</a>
   <button class="btn" id="btnBackup" style="margin-top:12px">Данные (бэкап)</button>
+  <button class="btn" id="btnSaveFile" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">💾 Скачать бэкап в файл</button>
+  <button class="btn" id="btnShareBackup" style="background:#334155;color:#fff;">📤 Отправить бэкап (Telegram)</button>
   <button class="btn" id="btnDedup" style="background:#1e2b24;color:#e8f5f0;">Удалить дубли товаров</button>
   <button class="btn" id="btnSyncFocus" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">Обновить фокус-лист из сети</button>
   <div id="versionLink">Версия 1.1.0</div>
@@ -426,6 +421,74 @@ function showToast(message, type) {
   }, 2400);
 }
 
+// ===== АВТОБЭКАП =====
+function getBackupJSON() {
+  return JSON.stringify({
+    sales: sales, plans: plans, products: products,
+    exportDate: new Date().toISOString(),
+    version: '1.1'
+  }, null, 2);
+}
+
+function saveBackupToFile() {
+  try {
+    var data = getBackupJSON();
+    var filename = 'tracker_backup_' + today() + '.json';
+    var blob = new Blob([data], {type: 'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+    localStorage.setItem('lastBackupDate', today());
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+function maybeAutoBackup() {
+  var todayStr = today();
+  var last = localStorage.getItem('lastBackupDate');
+  if (last === todayStr) return;
+  saveBackupToFile();
+}
+
+function shareBackup() {
+  var data = getBackupJSON();
+  if (navigator.share) {
+    navigator.share({
+      title: 'Бэкап трекера продаж',
+      text: data
+    }).then(function() {
+      localStorage.setItem('lastBackupDate', today());
+      showToast('Бэкап отправлен', 'success');
+    }).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(data).then(function() {
+      localStorage.setItem('lastBackupDate', today());
+      showToast('Скопировано — вставь в Telegram себе', 'success');
+    }).catch(function() {
+      showToast('Не удалось скопировать', 'error');
+    });
+  }
+}
+
+function checkBackupReminder() {
+  var last = localStorage.getItem('lastBackupDate');
+  if (!last) return;
+  var lastD = new Date(last);
+  var diffDays = Math.floor((new Date() - lastD) / 86400000);
+  if (diffDays >= 7) {
+    setTimeout(function() {
+      showToast('⚠️ Бэкап не делался ' + diffDays + ' дн.', 'warn');
+    }, 3000);
+  }
+}
+
 function playBeep() {
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -530,6 +593,7 @@ function addSale() {
   document.getElementById('inputDate').value = today();
   updateDateDisplay('inputDate', 'inputDateDisplay');
   showToast('Продажа сохранена', 'success');
+  maybeAutoBackup();
   if (wasRecord) setTimeout(function() { showToast('🏆 Новый рекорд дня!', 'record'); }, 800);
   showScreen('home');
 }
@@ -563,6 +627,7 @@ function addAD() {
   document.getElementById('adDate').value = today();
   updateDateDisplay('adDate', 'adDateDisplay');
   showToast('Возврат сохранён', 'success');
+  maybeAutoBackup();
   showScreen('home');
 }
 
@@ -1186,10 +1251,17 @@ document.getElementById('btnDedup').onclick = function() {
 };
 
 document.getElementById('btnBackup').onclick = function() {
-  document.getElementById('exportText').value = JSON.stringify({ sales: sales, plans: plans, products: products, exportDate: new Date().toISOString() });
+  document.getElementById('exportText').value = getBackupJSON();
   document.getElementById('importText2').value = '';
   showScreen('backup');
 };
+
+document.getElementById('btnSaveFile').onclick = function() {
+  if (saveBackupToFile()) showToast('Бэкап сохранён в Загрузки', 'success');
+  else showToast('Ошибка сохранения', 'error');
+};
+
+document.getElementById('btnShareBackup').onclick = shareBackup;
 
 document.getElementById('btnRestore').onclick = function() {
   var val = document.getElementById('importText2').value.trim();
@@ -1293,6 +1365,8 @@ updateDateDisplay('inputDate', 'inputDateDisplay');
 updateDateDisplay('editDate', 'editDateDisplay');
 updateDateDisplay('adDate', 'adDateDisplay');
 document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' });
+checkBackupReminder();
 render();
 </script>
 </body>
+</html>

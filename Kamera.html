@@ -1,3 +1,378 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Трекер продаж</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#10b981">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0f0d; color: #e8f5f0; min-height: 100vh; padding-bottom: 64px; font-size: 14px; }
+.accent { color: #10b981; }
+.header { padding: 14px 44px 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 19px; font-weight: 700; }
+.header .date { font-size: 12px; color: #6b8a7d; }
+.card { background: #121a16; border-radius: 12px; margin: 0 14px 10px; padding: 12px 14px; border: 1px solid #1e2b24; }
+.card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b8a7d; margin-bottom: 5px; }
+.big-number { font-size: 25px; font-weight: 800; color: #10b981; }
+.sub-text { font-size: 12px; color: #6b8a7d; margin-top: 3px; }
+.progress-bg { background: #1e2b24; border-radius: 6px; height: 12px; margin-top: 10px; overflow: hidden; position: relative; }
+.progress-fill { height: 100%; border-radius: 6px; transition: width 0.4s ease; width: 0%; background: linear-gradient(90deg, #ef4444, #f59e0b); }
+.progress-fill.ok { background: linear-gradient(90deg, #10b981, #34d399); }
+.progress-fill.gold { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.progress-mark { position: absolute; top: 0; bottom: 0; width: 2px; background: #e8f5f0; opacity: 0.7; z-index: 2; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 14px 10px; }
+.grid-2 .card { margin: 0; }
+.grid-2.inside { margin: 0; gap: 8px; }
+.btn { display: block; width: calc(100% - 28px); margin: 12px auto; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; }
+.btn.danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+.form-group { margin-bottom: 10px; }
+.form-group label { display: block; font-size: 11px; color: #6b8a7d; margin-bottom: 5px; text-transform: uppercase; }
+.form-group input { width: 100%; padding: 12px; background: #0a0f0d; border: 1px solid #1e2b24; border-radius: 10px; color: #e8f5f0; font-size: 15px; outline: none; }
+.search-row { display: flex; gap: 8px; align-items: stretch; }
+.search-row input { flex: 1; }
+.btn-cam { padding: 0 20px; background: #10b981; color: #0a0f0d; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; min-width: 56px; }
+#searchResults, #adSearchResults { background: #121a16; border: 1px solid #1e2b24; border-radius: 10px; max-height: 150px; overflow-y: auto; margin-top: 4px; }
+#searchResults div, #adSearchResults div { padding: 8px 12px; border-bottom: 1px solid #1e2b24; cursor: pointer; font-size: 13px; }
+#searchResults div:last-child, #adSearchResults div:last-child { border-bottom: none; }
+#searchResults div:active, #adSearchResults div:active { background: #1e2b24; }
+.history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e2b24; }
+.history-item:last-child { border-bottom: none; }
+.history-item .info { flex: 1; }
+.history-item .name { font-size: 14px; font-weight: 600; }
+.history-item .meta { font-size: 12px; color: #6b8a7d; margin-top: 2px; }
+.history-item .sum { font-size: 15px; font-weight: 700; color: #10b981; }
+.history-item.ad .sum { color: #ef4444; }
+.badge-ad { display: inline-block; padding: 2px 6px; background: #ef4444; color: #fff; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
+.history-item .edit { margin-left: 8px; background: none; border: none; color: #10b981; font-size: 17px; cursor: pointer; padding: 2px 6px; }
+.history-item .delete { margin-left: 4px; background: none; border: none; color: #ef4444; font-size: 17px; cursor: pointer; padding: 2px 6px; }
+.nav { position: fixed; bottom: 0; left: 0; right: 0; background: #121a16; border-top: 1px solid #1e2b24; display: flex; justify-content: space-around; padding: 8px 0 14px; z-index: 100; }
+.nav button { background: none; border: none; color: #6b8a7d; font-size: 9px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; padding: 2px 4px; flex: 1; }
+.nav button.active { color: #10b981; }
+.nav button.ad.active { color: #ef4444; }
+.screen { display: none; }
+.screen.active { display: block; }
+.empty { text-align: center; color: #6b8a7d; padding: 24px 12px; font-size: 13px; }
+.record-badge { display: inline-block; padding: 4px 12px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0a0f0d; border-radius: 16px; font-size: 11px; font-weight: 700; margin-top: 8px; }
+.about-icon { text-align: center; font-size: 52px; margin: 16px 0 8px; }
+.about-name { text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.about-version { text-align: center; font-size: 12px; color: #6b8a7d; margin-bottom: 16px; }
+.about-desc { font-size: 13px; color: #a8c5b8; line-height: 1.5; }
+.about-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1e2b24; font-size: 13px; }
+.about-row .label { color: #6b8a7d; }
+.about-row .value { color: #e8f5f0; }
+.about-mail { display: block; text-align: center; margin: 16px 14px 10px; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; }
+#aboutBtn { position: fixed; top: 14px; right: 14px; background: none; border: none; color: #6b8a7d; font-size: 22px; cursor: pointer; z-index: 10; padding: 4px; }
+#versionLink { text-align: center; color: #6b8a7d; font-size: 12px; padding: 16px; cursor: pointer; }
+.date-display { padding: 12px; background: #0a0f0d; border: 1px solid #1e2b24; border-radius: 10px; color: #e8f5f0; font-size: 15px; cursor: pointer; }
+.date-display:active { background: #1e2b24; }
+.chart-wrap { margin-top: 8px; overflow-x: auto; padding-bottom: 4px; }
+.chart { display: flex; align-items: flex-end; gap: 3px; height: 90px; padding: 4px 0; min-width: 100%; }
+.bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 8px; }
+.bar { width: 100%; background: linear-gradient(180deg, #10b981, #059669); border-radius: 3px 3px 0 0; min-height: 2px; transition: height 0.3s; }
+.bar-day { font-size: 8px; color: #6b8a7d; margin-top: 2px; }
+.compare-up { color: #10b981; font-weight: 700; }
+.compare-down { color: #ef4444; font-weight: 700; }
+.toast { position: fixed; top: 20px; left: 14px; right: 14px; padding: 14px 16px; border-radius: 12px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; z-index: 99999; opacity: 0; transform: translateY(-20px); transition: all 0.3s ease; box-shadow: 0 6px 20px rgba(0,0,0,0.5); color: #0a0f0d; }
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: linear-gradient(135deg, #10b981, #059669); }
+.toast.warn { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+.toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+.toast.record { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+.toast .icon { font-size: 20px; }
+#liveQRModal { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#000; z-index:99998; display:none; flex-direction:column; }
+#liveQRModal.show { display: flex; }
+.qr-cam-wrap { position: relative; flex: 1; overflow: hidden; background: #000; }
+#liveVideo { width: 100%; height: 100%; object-fit: cover; display: block; }
+.qr-overlay { position: absolute; inset: 0; pointer-events: none; }
+.qr-frame { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 68vw; height: 68vw; max-width: 300px; max-height: 300px; border-radius: 20px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.55); }
+.qr-corner { position: absolute; width: 42px; height: 42px; border: 4px solid #10b981; }
+.qr-corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: 16px; }
+.qr-corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; border-top-right-radius: 16px; }
+.qr-corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; border-bottom-left-radius: 16px; }
+.qr-corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: 16px; }
+.qr-laser { position: absolute; left: 10px; right: 10px; height: 2px; background: linear-gradient(90deg, transparent, #10b981, transparent); animation: qrLaser 2.2s ease-in-out infinite; box-shadow: 0 0 8px #10b981; }
+@keyframes qrLaser { 0%,100% { top: 12%; } 50% { top: 88%; } }
+.qr-hint { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: #fff; font-size: 14px; text-shadow: 0 2px 6px rgba(0,0,0,0.9); opacity: 0.9; }
+.qr-controls { position: absolute; left: 0; right: 0; bottom: 60px; display: flex; justify-content: center; gap: 40px; align-items: center; }
+.qr-ctl { width: 56px; height: 56px; border-radius: 50%; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.6); color: #fff; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.qr-ctl.close { background: rgba(239,68,68,0.7); border-color: #fff; }
+.qr-ctl.active { background: #fbbf24; color: #0a0f0d; border-color: #fbbf24; }
+#liveStatus { padding: 14px; background: #1f2937; color: #fff; font-size: 16px; text-align: center; }
+.btn-cam svg { display: block; }
+</style>
+</head>
+<body>
+
+<button id="aboutBtn">ⓘ</button>
+
+<div id="screen-home" class="screen active">
+  <div class="header"><h1>Трекер продаж</h1><div class="date" id="currentDate"></div></div>
+  <div class="card">
+    <div class="card-title">План на месяц</div>
+    <div class="big-number" id="monthPlan">0 ₽</div>
+    <div class="sub-text"><span id="monthPercent">0.0%</span> выполнено · осталось <span id="daysLeft">0</span> дн.</div>
+    <div class="progress-bg">
+      <div class="progress-fill" id="monthProgress"></div>
+      <div class="progress-mark" style="left: 80%;"></div>
+    </div>
+    <div class="sub-text" id="minThreshold">Минимум 80% — не выполнен</div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><div class="card-title">Продано сегодня</div><div class="big-number" style="font-size:22px" id="todaySales">0 ₽</div><div class="sub-text" id="todayCount">0 продаж</div></div>
+    <div class="card"><div class="card-title">Отчисления сегодня</div><div class="big-number" style="font-size:22px;color:#34d399" id="todayCommission">0 ₽</div></div>
+  </div>
+  <div class="card"><div class="card-title">Отчисления за месяц</div><div class="big-number" style="font-size:25px" id="monthCommission">0 ₽</div><div class="sub-text">Всего процентов за текущий месяц</div></div>
+  <div class="card"><div class="card-title">Осталось до плана</div><div class="big-number" style="font-size:22px;color:#f59e0b" id="remaining">0 ₽</div><div class="sub-text"><span id="remainingPercent">100.0%</span> от плана</div></div>
+  <div class="card">
+    <div class="card-title">Прогноз до конца месяца</div>
+    <div class="big-number" style="font-size:22px;color:#fbbf24" id="forecastPercent">0%</div>
+    <div class="sub-text" id="forecastText">при текущем темпе</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Продажи по дням месяца</div>
+    <div class="chart-wrap"><div class="chart" id="daysChart"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Рекорд месяца</div>
+    <div class="grid-2 inside">
+      <div><div class="sub-text">По сумме</div><div class="big-number" style="font-size:20px;color:#fbbf24" id="recordSum">0 ₽</div><div class="sub-text" id="recordDate">—</div></div>
+      <div><div class="sub-text">По отчислениям</div><div class="big-number" style="font-size:20px;color:#34d399" id="recordComm">0 ₽</div><div class="sub-text" id="recordCommDate">—</div></div>
+    </div>
+    <div id="recordBadge"></div>
+  </div>
+</div>
+
+<div id="screen-add" class="screen">
+  <div class="header"><h1>Новая продажа</h1></div>
+  <div class="card">
+    <div class="form-group"><label>Поиск товара (артикул или название)</label>
+      <div class="search-row">
+        <input type="text" id="searchProduct" placeholder="Начни вводить...">
+        <button class="btn-cam" id="btnScanQR" type="button" title="Сканировать QR">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg>
+        </button>
+      </div>
+      <div id="searchResults"></div>
+    </div>
+    <div class="form-group"><label>Дата</label>
+      <input type="date" id="inputDate" max="" style="display:none;">
+      <div class="date-display" id="inputDateDisplay">Сегодня</div>
+    </div>
+    <div class="form-group"><label>Товар</label><input type="text" id="inputName" placeholder="Название товара"></div>
+    <div class="form-group"><label>Количество</label><input type="number" id="inputQty" value="1" min="1"></div>
+    <div class="form-group"><label>Цена за штуку (₽)</label><input type="number" id="inputSum" placeholder="0" min="0"></div>
+    <div class="form-group"><label>Процент отчисления (%)</label><input type="number" id="inputPercent" value="1.5" min="0" max="100" step="0.1"></div>
+    <button class="btn" id="btnAdd">Сохранить</button>
+  </div>
+</div>
+
+<div id="screen-edit" class="screen">
+  <div class="header"><h1>Редактировать</h1></div>
+  <div class="card">
+    <div class="form-group"><label>Дата</label>
+      <input type="date" id="editDate" max="" style="display:none;">
+      <div class="date-display" id="editDateDisplay">Сегодня</div>
+    </div>
+    <div class="form-group"><label>Товар</label><input type="text" id="editName"></div>
+    <div class="form-group"><label>Количество</label><input type="number" id="editQty" min="1"></div>
+    <div class="form-group"><label>Цена за штуку (₽)</label><input type="number" id="editSum" min="0"></div>
+    <div class="form-group"><label>Процент отчисления (%)</label><input type="number" id="editPercent" min="0" max="100" step="0.1"></div>
+    <button class="btn" id="btnUpdate">Обновить</button>
+  </div>
+</div>
+
+<div id="screen-history" class="screen">
+  <div class="header"><h1 id="histTitle">Сегодня</h1></div>
+  <div class="card">
+    <div class="form-group" style="margin-bottom:0;">
+      <label>Выбрать дату</label>
+      <input type="date" id="historyDatePicker" max="" style="display:none;">
+      <div class="date-display" id="historyDateDisplay">Сегодня</div>
+    </div>
+  </div>
+  <div class="card"><div id="historyList"><div class="empty">Нет продаж за этот день</div></div></div>
+  <div class="card">
+    <div class="card-title">Итог за день</div>
+    <div class="sub-text">Сумма: <span class="accent" id="histTotal">0 ₽</span></div>
+    <div class="sub-text">Отчисления: <span class="accent" id="histCommission">0 ₽</span></div>
+  </div>
+</div>
+
+<div id="screen-totals" class="screen">
+  <div class="header"><h1 id="totalsTitle">Итоги</h1></div>
+  <div class="card">
+    <div class="card-title">План на месяц</div>
+    <div class="big-number" id="totalsPlan">0 ₽</div>
+    <div class="sub-text" id="totalsPercent">0.0% выполнено</div>
+    <div class="progress-bg">
+      <div class="progress-fill" id="totalsProgress"></div>
+      <div class="progress-mark" style="left: 80%;"></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><div class="card-title">Продано</div><div class="big-number" style="font-size:22px" id="totalsSum">0 ₽</div><div class="sub-text" id="totalsCount">0 продаж</div></div>
+    <div class="card"><div class="card-title">Отчисления</div><div class="big-number" style="font-size:22px;color:#34d399" id="totalsComm">0 ₽</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Возвраты (АД)</div>
+    <div class="big-number" style="font-size:22px;color:#ef4444" id="totalsAD">0 ₽</div>
+    <div class="sub-text" id="totalsADCount">0 записей</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Чистый оборот</div>
+    <div class="big-number" style="font-size:25px" id="totalsNet">0 ₽</div>
+    <div class="sub-text">Продажи минус возвраты</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Сравнение с прошлым месяцем</div>
+    <div class="big-number" style="font-size:22px" id="totalsCompare">0%</div>
+    <div class="sub-text" id="totalsCompareDetail">—</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Средний чек</div>
+    <div class="big-number" style="font-size:22px;color:#fbbf24" id="totalsAvgSum">0 ₽</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Фокусные товары</div>
+    <div class="sub-text">Продано: <span class="accent" id="totalsFocusSum">0 ₽</span></div>
+    <div class="sub-text">Отчисления: <span class="accent" id="totalsFocusComm">0 ₽</span></div>
+    <div class="sub-text">Количество: <span class="accent" id="totalsFocusCount">0 шт</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Регулярные товары</div>
+    <div class="sub-text">Продано: <span class="accent" id="totalsRegSum">0 ₽</span></div>
+    <div class="sub-text">Отчисления: <span class="accent" id="totalsRegComm">0 ₽</span></div>
+    <div class="sub-text">Количество: <span class="accent" id="totalsRegCount">0 шт</span></div>
+  </div>
+  <div class="card"><div class="card-title">Лучший день по сумме</div><div class="big-number" style="font-size:22px;color:#fbbf24" id="totalsBestSum">0 ₽</div><div class="sub-text" id="totalsBestSumDate">—</div></div>
+</div>
+
+<div id="screen-plan" class="screen">
+  <div class="header"><h1>Мой план</h1></div>
+  <div class="card">
+    <div class="form-group"><label>План на текущий месяц (₽)</label><input type="number" id="inputPlan" placeholder="0" min="0"></div>
+    <button class="btn" id="btnPlan">Сохранить план</button>
+  </div>
+  <div class="card">
+    <div class="card-title">Текущий прогресс</div>
+    <div class="big-number" style="font-size:22px" id="planProgress">0 ₽</div>
+    <div class="sub-text"><span id="planPercent">0.0%</span> выполнено</div>
+    <div class="progress-bg">
+      <div class="progress-fill" id="planProgressBar"></div>
+      <div class="progress-mark" style="left: 80%;"></div>
+    </div>
+  </div>
+</div>
+
+<div id="screen-ad" class="screen">
+  <div class="header"><h1>Акт дефектовки (АД)</h1></div>
+  <div class="card">
+    <div class="form-group"><label>Поиск товара (артикул или название)</label>
+      <div class="search-row">
+        <input type="text" id="adSearchProduct" placeholder="Начни вводить...">
+        <button class="btn-cam" id="adScanQR" type="button" title="Сканировать QR">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg>
+        </button>
+      </div>
+      <div id="adSearchResults"></div>
+    </div>
+    <div class="form-group"><label>Дата возврата</label>
+      <input type="date" id="adDate" max="" style="display:none;">
+      <div class="date-display" id="adDateDisplay">Сегодня</div>
+    </div>
+    <div class="form-group"><label>Товар</label><input type="text" id="adName" placeholder="Название товара"></div>
+    <div class="form-group"><label>Количество</label><input type="number" id="adQty" value="1" min="1"></div>
+    <div class="form-group"><label>Сумма возврата за штуку (₽)</label><input type="number" id="adSum" placeholder="0" min="0"></div>
+    <button class="btn danger" id="btnAddAD">Сохранить возврат</button>
+  </div>
+  <div class="card">
+    <div class="card-title">Возвраты за текущий месяц</div>
+    <div class="big-number" style="font-size:22px;color:#ef4444" id="adMonthSum">0 ₽</div>
+    <div class="sub-text" id="adMonthCount">0 записей</div>
+  </div>
+</div>
+
+<div id="screen-about" class="screen">
+  <div class="header"><h1>О приложении</h1></div>
+  <div class="card">
+    <div class="about-icon">📊</div>
+    <div class="about-name">Трекер продаж</div>
+    <div class="about-version">Версия 1.1</div>
+    <div class="about-desc">Простое приложение для учёта личных продаж.</div>
+  </div>
+  <div class="card">
+    <div class="about-row"><span class="label">Разработчик</span><span class="value">Максим</span></div>
+    <div class="about-row"><span class="label">Почта</span><span class="value">regionalbarnaul@yandex.ru</span></div>
+  </div>
+  <a class="about-mail" href="mailto:regionalbarnaul@yandex.ru">Написать разработчику</a>
+  <button class="btn" id="btnBackup" style="margin-top:12px">Данные (бэкап)</button>
+  <button class="btn" id="btnDedup" style="background:#1e2b24;color:#e8f5f0;">Удалить дубли товаров</button>
+  <button class="btn" id="btnSyncFocus" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">Обновить фокус-лист из сети</button>
+  <div id="versionLink">Версия 1.1.0</div>
+</div>
+
+<div id="screen-backup" class="screen">
+  <div class="header"><h1>Данные</h1></div>
+  <div class="card">
+    <div class="card-title">Экспорт (сохрани себе)</div>
+    <div class="sub-text" style="margin-bottom:8px">Скопируй всё и отправь себе в Telegram / заметки.</div>
+    <textarea id="exportText" readonly style="width:100%;height:180px;padding:10px;background:#0a0f0d;border:1px solid #1e2b24;border-radius:10px;color:#e8f5f0;font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea>
+  </div>
+  <div class="card">
+    <div class="card-title">Импорт (восстановить)</div>
+    <div class="sub-text" style="margin-bottom:8px">Вставь сохранённый текст и нажми «Восстановить».</div>
+    <textarea id="importText2" placeholder="Вставь данные сюда..." style="width:100%;height:180px;padding:10px;background:#0a0f0d;border:1px solid #1e2b24;border-radius:10px;color:#e8f5f0;font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea>
+    <button class="btn" id="btnRestore">Восстановить</button>
+  </div>
+</div>
+
+<div id="screen-import" class="screen">
+  <div class="header"><h1>Импорт товаров</h1></div>
+  <div class="card">
+    <div class="form-group">
+      <label>Вставьте HTML-код или текст таблицы</label>
+      <textarea id="importText" style="width:100%;height:300px;padding:12px;background:#0a0f0d;border:1px solid #1e2b24;border-radius:10px;color:#e8f5f0;font-size:13px;font-family:monospace;outline:none;resize:none;"></textarea>
+    </div>
+    <button class="btn" id="btnImport">Сохранить</button>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="active" data-screen="home">Главная</button>
+  <button data-screen="add">Добавить</button>
+  <button data-screen="history">История</button>
+  <button data-screen="totals">Итоги</button>
+  <button data-screen="plan">План</button>
+  <button data-screen="ad" class="ad">АД</button>
+</div>
+
+<div id="liveQRModal">
+  <div class="qr-cam-wrap">
+    <video id="liveVideo" playsinline autoplay muted></video>
+    <div class="qr-overlay">
+      <div class="qr-frame">
+        <div class="qr-corner tl"></div>
+        <div class="qr-corner tr"></div>
+        <div class="qr-corner bl"></div>
+        <div class="qr-corner br"></div>
+        <div class="qr-laser"></div>
+      </div>
+      <div class="qr-hint">Наведите на QR-код</div>
+    </div>
+    <div class="qr-controls">
+      <button id="liveTorchBtn" class="qr-ctl">🔦</button>
+      <button id="liveCloseBtn" class="qr-ctl close">✕</button>
+    </div>
+  </div>
+  <div id="liveStatus">Наведи на QR-код...</div>
+</div>
+
+<script>
 var sales = [];
 var plans = {};
 var products = [];
@@ -25,7 +400,6 @@ function dayOfMonth() { return new Date().getDate(); }
 function weekStart(d) { var day = d.getDay(); var diff = d.getDate() - day + (day === 0 ? -6 : 1); return new Date(d.setDate(diff)); }
 function inSameWeek(a, b) { return dateStr(weekStart(new Date(a))) === dateStr(weekStart(new Date(b))); }
 function normalizeName(n) { return (n || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
-
 function prevMonth(d) { var x = new Date(d); x.setMonth(x.getMonth() - 1); return x; }
 
 function showToast(message, type) {
@@ -122,7 +496,6 @@ function recalcConditional(productName, dateStrVal) {
   ws.forEach(function(s) { s.percent = np; s.commission = s.sum * np / 100; });
 }
 
-// ===== ПРОДАЖИ =====
 function addSale() {
   var date = document.getElementById('inputDate').value || today();
   if (date > today()) { showToast('Дата не может быть в будущем', 'warn'); return; }
@@ -130,23 +503,17 @@ function addSale() {
   var qty = parseInt(document.getElementById('inputQty').value) || 1;
   var price = parseFloat(document.getElementById('inputSum').value) || 0;
   var percent = parseFloat(document.getElementById('inputPercent').value) || 1.5;
-
   if (!name) { showToast('Заполни поле «Товар»', 'warn'); return; }
   if (price <= 0) { showToast('Укажи цену товара', 'warn'); return; }
   if (qty < 1) { showToast('Количество не меньше 1', 'warn'); return; }
-
   var sum = price * qty;
   var commission = sum * percent / 100;
-
-  // Проверка рекорда до добавления
   var wasRecord = checkIfWillBeRecord(sum, date);
-
   sales.push({ id: Date.now(), date: date, name: name, qty: qty, sum: sum, percent: percent, commission: commission, isAD: false });
   var prod = products.find(function(p) { return normalizeName(p.name) === normalizeName(name); });
   if (prod && prod.type === 'conditional') recalcConditional(name, date);
   if (!prod) saveRegularProduct(name);
   save();
-
   document.getElementById('inputName').value = '';
   document.getElementById('inputSum').value = '';
   document.getElementById('inputQty').value = '1';
@@ -169,22 +536,18 @@ function checkIfWillBeRecord(newSum, date) {
   return afterSum > currentBest;
 }
 
-// ===== ВОЗВРАТЫ (АД) =====
 function addAD() {
   var date = document.getElementById('adDate').value || today();
   if (date > today()) { showToast('Дата не может быть в будущем', 'warn'); return; }
   var name = document.getElementById('adName').value.trim();
   var qty = parseInt(document.getElementById('adQty').value) || 1;
   var price = parseFloat(document.getElementById('adSum').value) || 0;
-
   if (!name) { showToast('Заполни поле «Товар»', 'warn'); return; }
   if (price <= 0) { showToast('Укажи сумму возврата', 'warn'); return; }
   if (qty < 1) { showToast('Количество не меньше 1', 'warn'); return; }
-
-  var sum = -(price * qty); // отрицательная
+  var sum = -(price * qty);
   sales.push({ id: Date.now(), date: date, name: name, qty: qty, sum: sum, percent: 0, commission: 0, isAD: true });
   save();
-
   document.getElementById('adName').value = '';
   document.getElementById('adSum').value = '';
   document.getElementById('adQty').value = '1';
@@ -196,7 +559,6 @@ function addAD() {
   showScreen('home');
 }
 
-// ===== РЕДАКТИРОВАНИЕ =====
 function openEdit(id) {
   var s = sales.find(function(x) { return x.id === id; });
   if (!s) return;
@@ -220,12 +582,10 @@ function updateSale() {
   var price = parseFloat(document.getElementById('editSum').value) || 0;
   var percent = parseFloat(document.getElementById('editPercent').value) || 1.5;
   if (!name || price <= 0) { showToast('Заполни «Товар» и «Цену»', 'warn'); return; }
-
   var sum = price * qty;
   if (s.isAD) { sum = -sum; percent = 0; }
   s.date = date; s.name = name; s.qty = qty; s.sum = sum; s.percent = percent;
   s.commission = s.isAD ? 0 : sum * percent / 100;
-
   var prod = products.find(function(p) { return normalizeName(p.name) === normalizeName(name); });
   if (prod && prod.type === 'conditional') recalcConditional(name, date);
   save();
@@ -265,28 +625,22 @@ document.addEventListener('touchend', function(e) {
   }
 }, { passive: true });
 
-// ===== РЕНДЕР =====
 function render() {
   var t = today(), m = currentMonth();
   var tSales = sales.filter(function(s) { return s.date === t && !s.isAD; });
   var mSalesAll = sales.filter(function(s) { return s.date.indexOf(m) === 0; });
   var mSales = mSalesAll.filter(function(s) { return !s.isAD; });
   var mAD = mSalesAll.filter(function(s) { return s.isAD; });
-
   var tSum = 0, tComm = 0, mSum = 0, mComm = 0, mADSum = 0;
   tSales.forEach(function(s) { tSum += s.sum; tComm += s.commission; });
   mSales.forEach(function(s) { mSum += s.sum; mComm += s.commission; });
   mAD.forEach(function(s) { mADSum += Math.abs(s.sum); });
-
   var netTurnover = mSum - mADSum;
   var mPlan = getPlan(m);
   var pct = mPlan > 0 ? (netTurnover / mPlan * 100) : 0;
   var rem = Math.max(0, mPlan - netTurnover);
   var remPct = mPlan > 0 ? (rem / mPlan * 100) : 100;
   var dl = daysLeft();
-  var daily = dl > 0 ? rem / dl : 0;
-
-  // Прогресс-бар с порогом 80%
   var bar = document.getElementById('monthProgress');
   if (bar) {
     bar.style.width = Math.min(100, pct) + '%';
@@ -300,7 +654,6 @@ function render() {
     else if (pct >= 80) minEl.innerHTML = '🟢 <span class="accent">Минимум 80% — выполнен</span>';
     else minEl.innerHTML = '🔴 Минимум 80% — не выполнен (' + pct.toFixed(0) + '%)';
   }
-
   document.getElementById('monthPlan').textContent = fmt(mPlan);
   document.getElementById('monthPercent').textContent = pct.toFixed(1) + '%';
   document.getElementById('daysLeft').textContent = dl;
@@ -310,8 +663,6 @@ function render() {
   document.getElementById('monthCommission').textContent = fmt(mComm);
   document.getElementById('remaining').textContent = fmt(rem);
   document.getElementById('remainingPercent').textContent = remPct.toFixed(1) + '%';
-
-  // Прогноз
   var dom = dayOfMonth();
   var totalDays = daysInMonth(new Date());
   var forecast = dom > 0 ? (netTurnover / dom * totalDays) : 0;
@@ -327,11 +678,7 @@ function render() {
     else if (forecastPct >= 80) ftEl.textContent = 'при текущем темпе — минимум будет';
     else ftEl.textContent = 'при текущем темпе — не дотянешь';
   }
-
-  // График по дням
   renderChart(mSales, mAD, m);
-
-  // Рекорды
   var bdS = {}, bdC = {};
   mSales.forEach(function(s) { bdS[s.date] = (bdS[s.date] || 0) + s.sum; bdC[s.date] = (bdC[s.date] || 0) + s.commission; });
   var ds = Object.keys(bdS);
@@ -350,8 +697,6 @@ function render() {
     document.getElementById('recordCommDate').textContent = '—';
     document.getElementById('recordBadge').innerHTML = '';
   }
-
-  // План
   document.getElementById('planProgress').textContent = fmt(netTurnover);
   document.getElementById('planPercent').textContent = pct.toFixed(1) + '%';
   var pb = document.getElementById('planProgressBar');
@@ -360,19 +705,15 @@ function render() {
   if (pct >= 100) pb.classList.add('gold');
   else if (pct >= 80) pb.classList.add('ok');
   document.getElementById('inputPlan').value = mPlan || '';
-
-  // История за день
   var hDate = dateStr(historyDate);
   var hSales = sales.filter(function(s) { return s.date === hDate; });
   var ht = document.getElementById('histTitle');
   if (hDate === t) ht.textContent = 'Сегодня';
   else if (hDate === dateStr(new Date(Date.now() - 86400000))) ht.textContent = 'Вчера';
   else ht.textContent = historyDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-
   document.getElementById('historyDatePicker').value = hDate;
   document.getElementById('historyDatePicker').max = today();
   updateDateDisplay('historyDatePicker', 'historyDateDisplay');
-
   var list = document.getElementById('historyList');
   if (hSales.length === 0) list.innerHTML = '<div class="empty">Нет записей за этот день</div>';
   else {
@@ -392,13 +733,10 @@ function render() {
   hSales.forEach(function(s) { hS += s.sum; hC += s.commission; });
   document.getElementById('histTotal').textContent = fmt(hS);
   document.getElementById('histCommission').textContent = fmt(hC);
-
-  // ИТОГИ месяца
   var tm = monthStr(totalsMonth);
   var tot = sales.filter(function(s) { return s.date.indexOf(tm) === 0; });
   var totSales = tot.filter(function(s) { return !s.isAD; });
   var totAD = tot.filter(function(s) { return s.isAD; });
-
   var tS = 0, tC = 0, adS = 0, fS = 0, fC = 0, fQ = 0, rS = 0, rC = 0, rQ = 0;
   totSales.forEach(function(s) {
     tS += s.sum; tC += s.commission;
@@ -406,11 +744,9 @@ function render() {
     else { rS += s.sum; rC += s.commission; rQ += s.qty; }
   });
   totAD.forEach(function(s) { adS += Math.abs(s.sum); });
-
   var netT = tS - adS;
   var tPlan = getPlan(tm);
   var tPct = tPlan > 0 ? (netT / tPlan * 100) : 0;
-
   document.getElementById('totalsTitle').textContent = totalsMonth.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
   document.getElementById('totalsPlan').textContent = fmt(tPlan);
   document.getElementById('totalsPercent').textContent = tPct.toFixed(1) + '% выполнено';
@@ -425,8 +761,6 @@ function render() {
   document.getElementById('totalsAD').textContent = '−' + fmt(adS);
   document.getElementById('totalsADCount').textContent = totAD.length + ' записей';
   document.getElementById('totalsNet').textContent = fmt(netT);
-
-  // Сравнение с прошлым месяцем
   var pm = monthStr(prevMonth(totalsMonth));
   var pmSales = sales.filter(function(s) { return s.date.indexOf(pm) === 0 && !s.isAD; });
   var pmAD = sales.filter(function(s) { return s.date.indexOf(pm) === 0 && s.isAD; });
@@ -447,7 +781,6 @@ function render() {
     cmpEl.className = 'big-number';
     cmpDetail.textContent = 'нет данных за прошлый месяц';
   }
-
   document.getElementById('totalsAvgSum').textContent = fmt(totSales.length > 0 ? tS / totSales.length : 0);
   document.getElementById('totalsFocusSum').textContent = fmt(fS);
   document.getElementById('totalsFocusComm').textContent = fmt(fC);
@@ -455,7 +788,6 @@ function render() {
   document.getElementById('totalsRegSum').textContent = fmt(rS);
   document.getElementById('totalsRegComm').textContent = fmt(rC);
   document.getElementById('totalsRegCount').textContent = rQ + ' шт';
-
   var tdS = {};
   totSales.forEach(function(s) { tdS[s.date] = (tdS[s.date] || 0) + s.sum; });
   var td = Object.keys(tdS);
@@ -467,8 +799,6 @@ function render() {
     document.getElementById('totalsBestSum').textContent = '0 ₽';
     document.getElementById('totalsBestSumDate').textContent = '—';
   }
-
-  // АД месяц
   document.getElementById('adMonthSum').textContent = '−' + fmt(mADSum);
   document.getElementById('adMonthCount').textContent = mAD.length + ' записей';
 }
@@ -487,19 +817,16 @@ function renderChart(monthSales, monthAD, m) {
   });
   var maxSum = 0;
   Object.keys(sums).forEach(function(d) { if (sums[d] > maxSum) maxSum = sums[d]; });
-
   var today_ = new Date();
   var isCurrentMonth = (today_.getFullYear() === year && today_.getMonth() === mon);
   var limit = isCurrentMonth ? today_.getDate() : totalDays;
-
   var html = '';
   for (var d = 1; d <= limit; d++) {
     var val = sums[d] || 0;
     var heightPct = maxSum > 0 ? Math.max(2, val / maxSum * 100) : 2;
-    var barCls = val > 0 ? 'bar' : 'bar';
     var style = 'height: ' + heightPct + '%';
     if (val === 0) style = 'height: 2px; background: #1e2b24;';
-    html += '<div class="bar-col"><div class="' + barCls + '" style="' + style + '"></div><div class="bar-day">' + d + '</div></div>';
+    html += '<div class="bar-col"><div class="bar" style="' + style + '"></div><div class="bar-day">' + d + '</div></div>';
   }
   chartEl.innerHTML = html;
 }
@@ -514,7 +841,6 @@ function showScreen(name) {
   render();
 }
 
-// ===== НАВИГАЦИЯ =====
 document.querySelectorAll('.nav button').forEach(function(btn) {
   btn.onclick = function() { showScreen(this.getAttribute('data-screen')); };
 });
@@ -524,7 +850,6 @@ document.getElementById('btnPlan').onclick = savePlan;
 document.getElementById('btnAddAD').onclick = addAD;
 document.getElementById('aboutBtn').onclick = function() { showScreen('about'); };
 
-// ===== ПОИСК (продажа) =====
 document.getElementById('searchProduct').oninput = function() {
   var q = this.value.trim();
   var res = document.getElementById('searchResults');
@@ -551,7 +876,6 @@ document.getElementById('searchProduct').oninput = function() {
   });
 };
 
-// ===== ПОИСК (АД) =====
 document.getElementById('adSearchProduct').oninput = function() {
   var q = this.value.trim();
   var res = document.getElementById('adSearchResults');
@@ -576,7 +900,6 @@ document.getElementById('adSearchProduct').oninput = function() {
   });
 };
 
-// ===== ДАТА =====
 document.getElementById('inputDateDisplay').onclick = function() {
   var inp = document.getElementById('inputDate');
   if (inp.showPicker) inp.showPicker(); else inp.click();
@@ -604,11 +927,10 @@ document.getElementById('adDateDisplay').onclick = function() {
 };
 document.getElementById('adDate').addEventListener('change', function() { updateDateDisplay('adDate', 'adDateDisplay'); });
 
-// ===== СКАНЕР =====
 var liveStream = null;
 var liveScanning = false;
 var torchOn = false;
-var scanTarget = 'add'; // 'add' или 'ad'
+var scanTarget = 'add';
 
 document.getElementById('btnScanQR').onclick = function() { scanTarget = 'add'; startLiveScanner(); };
 document.getElementById('adScanQR').onclick = function() { scanTarget = 'ad'; startLiveScanner(); };
@@ -619,11 +941,9 @@ function startLiveScanner() {
   var video = document.getElementById('liveVideo');
   modal.classList.add('show');
   status.textContent = 'Запрашиваю камеру...';
-
   if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
     navigator.mediaDevices.enumerateDevices().catch(function(){});
   }
-
   navigator.mediaDevices.getUserMedia({
     video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } },
     audio: false
@@ -657,7 +977,6 @@ function stopLiveScanner() {
 }
 
 document.getElementById('liveCloseBtn').onclick = stopLiveScanner;
-
 document.getElementById('liveTorchBtn').onclick = function() {
   if (!liveStream) return;
   var track = liveStream.getVideoTracks()[0];
@@ -666,9 +985,7 @@ document.getElementById('liveTorchBtn').onclick = function() {
   var btn = this;
   track.applyConstraints({ advanced: [{ torch: torchOn }] }).then(function() {
     btn.classList.toggle('active', torchOn);
-  }).catch(function() {
-    showToast('Фонарик недоступен', 'warn');
-  });
+  }).catch(function() { showToast('Фонарик недоступен', 'warn'); });
 };
 
 function liveTick() {
@@ -752,7 +1069,6 @@ function handleQRDataAD(data) {
   showToast('Возврат · ' + r.article, 'success');
 }
 
-// ===== ПАРОЛЬ / ИМПОРТ ТОВАРОВ =====
 document.getElementById('versionLink').onclick = function() {
   if (passwordBlocked) return;
   var pwd = prompt('Для обновления приложения переведите разработчику 100 руб. Чек на почту.\n\nВведите пароль:');
@@ -888,10 +1204,8 @@ document.getElementById('btnSyncFocus').onclick = function() {
   var pwd = prompt('Сбор средств на приложение.\n\nВведите пароль:');
   if (pwd === null) return;
   if (pwd !== '5246') { showToast('Неверный пароль', 'error'); return; }
-
   var url = 'https://raw.githubusercontent.com/regionalbarnaul/Test-data/main/Test.csv';
   showToast('Загружаю фокус-лист...', 'warn');
-
   fetch(url)
     .then(function(r) { return r.text(); })
     .then(function(text) {
@@ -955,14 +1269,12 @@ document.getElementById('btnSyncFocus').onclick = function() {
     .catch(function(e) { showToast('Ошибка загрузки: ' + e.message, 'error'); });
 };
 
-// ===== SERVICE WORKER =====
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js').catch(function(){});
   });
 }
 
-// ===== INIT =====
 document.getElementById('inputDate').value = today();
 document.getElementById('inputDate').max = today();
 document.getElementById('editDate').max = today();
@@ -972,7 +1284,7 @@ updateDateDisplay('inputDate', 'inputDateDisplay');
 updateDateDisplay('editDate', 'editDateDisplay');
 updateDateDisplay('adDate', 'adDateDisplay');
 document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' });
-render() 
+render();
 </script>
 </body>
-</html>      
+</html>

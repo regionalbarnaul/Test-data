@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Трекер продаж</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#10b981">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -746,6 +750,7 @@ document.getElementById('qrFileInput').addEventListener('change', function(event
   reader.readAsDataURL(file);
 });
 
+// ====== ОБРАБОТКА QR ======
 function handleQRData(data) {
   var article = null;
   var priceFromQR = null;
@@ -766,6 +771,8 @@ function handleQRData(data) {
     return;
   }
 
+  document.getElementById('searchProduct').value = article;
+
   var prod = products.find(function(p) { return p.art === article; });
 
   if (prod) {
@@ -773,8 +780,12 @@ function handleQRData(data) {
     var dv = document.getElementById('inputDate').value || today();
     document.getElementById('inputPercent').value = getProductPercent(prod, dv);
   } else {
-    document.getElementById('searchProduct').value = article;
-    document.getElementById('searchProduct').dispatchEvent(new Event('input'));
+    var inp = document.getElementById('inputName');
+    inp.value = 'Товар ' + article;
+    setTimeout(function() {
+      inp.focus();
+      inp.setSelectionRange(0, inp.value.length);
+    }, 250);
   }
 
   if (priceFromQR && priceFromQR > 0) {

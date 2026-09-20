@@ -11,7 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0f0d; color: #e8f5f0; min-height: 100vh; padding-bottom: 64px; font-size: 14px; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0f0d; color: #e8f5f0; overflow: hidden; font-size: 14px; }
 .accent { color: #10b981; }
 .header { padding: 14px 44px 10px 14px; display: flex; justify-content: space-between; align-items: center; }
 .header h1 { font-size: 19px; font-weight: 700; }
@@ -50,12 +50,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .badge-ad { display: inline-block; padding: 2px 6px; background: #ef4444; color: #fff; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
 .history-item .edit { margin-left: 8px; background: none; border: none; color: #10b981; font-size: 17px; cursor: pointer; padding: 2px 6px; }
 .history-item .delete { margin-left: 4px; background: none; border: none; color: #ef4444; font-size: 17px; cursor: pointer; padding: 2px 6px; }
-.nav { position: fixed; bottom: 0; left: 0; right: 0; background: #121a16; border-top: 1px solid #1e2b24; display: flex; justify-content: space-around; padding: 8px 0 14px; z-index: 100; }
-.nav button { background: none; border: none; color: #6b8a7d; font-size: 9px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; padding: 2px 4px; flex: 1; }
-.nav button.active { color: #10b981; }
-.nav button.ad.active { color: #ef4444; }
 .screen { display: none; }
-.screen.active { display: block; }
 .empty { text-align: center; color: #6b8a7d; padding: 24px 12px; font-size: 13px; }
 .record-badge { display: inline-block; padding: 4px 12px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0a0f0d; border-radius: 16px; font-size: 11px; font-weight: 700; margin-top: 8px; }
 .about-icon { text-align: center; font-size: 52px; margin: 16px 0 8px; }
@@ -70,13 +65,74 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 #versionLink { text-align: center; color: #6b8a7d; font-size: 12px; padding: 16px; cursor: pointer; }
 .date-display { padding: 12px; background: #0a0f0d; border: 1px solid #1e2b24; border-radius: 10px; color: #e8f5f0; font-size: 15px; cursor: pointer; }
 .date-display:active { background: #1e2b24; }
-.chart-wrap { margin-top: 8px; overflow-x: auto; padding-bottom: 4px; }
-.chart { display: flex; align-items: flex-end; gap: 3px; height: 90px; padding: 4px 0; min-width: 100%; }
-.bar-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; min-width: 8px; height: 100%; }
-.bar { width: 100%; background: linear-gradient(180deg, #10b981, #059669); border-radius: 3px 3px 0 0; min-height: 2px; transition: height 0.3s; }
-.bar-day { font-size: 8px; color: #6b8a7d; margin-top: 2px; }
 .compare-up { color: #10b981; font-weight: 700; }
 .compare-down { color: #ef4444; font-weight: 700; }
+
+/* СВАЙП-КОНТЕЙНЕР */
+#swipeContainer {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  height: 100vh;
+  width: 100vw;
+}
+#swipeContainer::-webkit-scrollbar { display: none; }
+.swipe-screen {
+  min-width: 100vw;
+  width: 100vw;
+  height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 0;
+  padding-bottom: 60px;
+  box-sizing: border-box;
+}
+
+/* МОДАЛЬНЫЕ ЭКРАНЫ */
+.modal-screen {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #0a0f0d;
+  overflow-y: auto;
+  z-index: 200;
+  padding-bottom: 40px;
+}
+.modal-screen.active { display: block; }
+
+/* ТОЧКИ-ИНДИКАТОР */
+#dots {
+  position: fixed;
+  bottom: 6px;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  z-index: 150;
+  pointer-events: none;
+}
+#dots span {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #334155;
+  transition: all 0.35s ease;
+  pointer-events: auto;
+  cursor: pointer;
+}
+#dots span.active {
+  background: #10b981;
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* TOAST */
 .toast { position: fixed; top: 20px; left: 14px; right: 14px; padding: 14px 16px; border-radius: 12px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; z-index: 99999; opacity: 0; transform: translateY(-20px); transition: all 0.3s ease; box-shadow: 0 6px 20px rgba(0,0,0,0.5); color: #0a0f0d; }
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast.success { background: linear-gradient(135deg, #10b981, #059669); }
@@ -84,6 +140,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
 .toast.record { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
 .toast .icon { font-size: 20px; }
+
+/* ЖИВОЙ СКАНЕР */
 #liveQRModal { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#000; z-index:99998; display:none; flex-direction:column; }
 #liveQRModal.show { display: flex; }
 .qr-cam-wrap { position: relative; flex: 1; overflow: hidden; background: #000; }
@@ -110,68 +168,193 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 
 <button id="aboutBtn">ⓘ</button>
 
-<div id="screen-home" class="screen active">
-  <div class="header"><h1>Трекер продаж</h1><div class="date" id="currentDate"></div></div>
-  <div class="card">
-    <div class="card-title">План на месяц</div>
-    <div class="big-number" id="monthPlan">0 ₽</div>
-    <div class="sub-text"><span id="monthPercent">0.0%</span> выполнено · осталось <span id="daysLeft">0</span> дн.</div>
-    <div class="progress-bg">
-      <div class="progress-fill" id="monthProgress"></div>
-      <div class="progress-mark" style="left: 80%;"></div>
-    </div>
-    <div class="sub-text" id="minThreshold">Минимум 80% — не выполнен</div>
-  </div>
-  <div class="grid-2">
-    <div class="card"><div class="card-title">Продано сегодня</div><div class="big-number" style="font-size:22px" id="todaySales">0 ₽</div><div class="sub-text" id="todayCount">0 продаж</div></div>
-    <div class="card"><div class="card-title">Отчисления сегодня</div><div class="big-number" style="font-size:22px;color:#34d399" id="todayCommission">0 ₽</div></div>
-  </div>
-  <div class="card"><div class="card-title">Отчисления за месяц</div><div class="big-number" style="font-size:25px" id="monthCommission">0 ₽</div><div class="sub-text">Всего процентов за текущий месяц</div></div>
-  <div class="card"><div class="card-title">Осталось до плана</div><div class="big-number" style="font-size:22px;color:#f59e0b" id="remaining">0 ₽</div><div class="sub-text"><span id="remainingPercent">100.0%</span> от плана</div></div>
-  <div class="card">
-    <div class="card-title">Прогноз до конца месяца</div>
-    <div class="big-number" style="font-size:22px;color:#fbbf24" id="forecastPercent">0%</div>
-    <div class="sub-text" id="forecastText">при текущем темпе</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Продажи по дням месяца</div>
-    <div class="chart-wrap"><div class="chart" id="daysChart"></div></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Рекорд месяца</div>
-    <div class="grid-2 inside">
-      <div><div class="sub-text">По сумме</div><div class="big-number" style="font-size:20px;color:#fbbf24" id="recordSum">0 ₽</div><div class="sub-text" id="recordDate">—</div></div>
-      <div><div class="sub-text">По отчислениям</div><div class="big-number" style="font-size:20px;color:#34d399" id="recordComm">0 ₽</div><div class="sub-text" id="recordCommDate">—</div></div>
-    </div>
-    <div id="recordBadge"></div>
-  </div>
-</div>
+<div id="swipeContainer">
 
-<div id="screen-add" class="screen">
-  <div class="header"><h1>Новая продажа</h1></div>
-  <div class="card">
-    <div class="form-group"><label>Поиск товара (артикул или название)</label>
-      <div class="search-row">
-        <input type="text" id="searchProduct" placeholder="Начни вводить...">
-        <button class="btn-cam" id="btnScanQR" type="button" title="Сканировать QR">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg>
-        </button>
+  <div class="swipe-screen" id="screen-home">
+    <div class="header"><h1>Трекер продаж</h1><div class="date" id="currentDate"></div></div>
+    <div class="card">
+      <div class="card-title">План на месяц</div>
+      <div class="big-number" id="monthPlan">0 ₽</div>
+      <div class="sub-text"><span id="monthPercent">0.0%</span> выполнено · осталось <span id="daysLeft">0</span> дн.</div>
+      <div class="progress-bg">
+        <div class="progress-fill" id="monthProgress"></div>
+        <div class="progress-mark" style="left: 80%;"></div>
       </div>
-      <div id="searchResults"></div>
+      <div class="sub-text" id="minThreshold">Минимум 80% — не выполнен</div>
     </div>
-    <div class="form-group"><label>Дата</label>
-      <input type="date" id="inputDate" max="" style="display:none;">
-      <div class="date-display" id="inputDateDisplay">Сегодня</div>
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Продано сегодня</div><div class="big-number" style="font-size:22px" id="todaySales">0 ₽</div><div class="sub-text" id="todayCount">0 продаж</div></div>
+      <div class="card"><div class="card-title">Отчисления сегодня</div><div class="big-number" style="font-size:22px;color:#34d399" id="todayCommission">0 ₽</div></div>
     </div>
-    <div class="form-group"><label>Товар</label><input type="text" id="inputName" placeholder="Название товара"></div>
-    <div class="form-group"><label>Количество</label><input type="number" id="inputQty" value="1" min="1"></div>
-    <div class="form-group"><label>Цена за штуку (₽)</label><input type="number" id="inputSum" placeholder="0" min="0"></div>
-    <div class="form-group"><label>Процент отчисления (%)</label><input type="number" id="inputPercent" value="1.5" min="0" max="100" step="0.1"></div>
-    <button class="btn" id="btnAdd">Сохранить</button>
+    <div class="card"><div class="card-title">Отчисления за месяц</div><div class="big-number" style="font-size:25px" id="monthCommission">0 ₽</div><div class="sub-text">Всего процентов за текущий месяц</div></div>
+    <div class="card">
+      <div class="card-title">Осталось до плана</div>
+      <div class="big-number" style="font-size:22px;color:#f59e0b" id="remaining">0 ₽</div>
+      <div class="sub-text"><span id="remainingPercent">100.0%</span> от плана</div>
+      <div class="sub-text" style="margin-top:8px;padding-top:8px;border-top:1px solid #1e2b24;">Нужно продавать в день: <span class="accent" id="dailyNeeded">0 ₽</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Прогноз до конца месяца</div>
+      <div class="big-number" style="font-size:22px;color:#fbbf24" id="forecastPercent">0%</div>
+      <div class="sub-text" id="forecastText">при текущем темпе</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Рекорд месяца</div>
+      <div class="grid-2 inside">
+        <div><div class="sub-text">По сумме</div><div class="big-number" style="font-size:20px;color:#fbbf24" id="recordSum">0 ₽</div><div class="sub-text" id="recordDate">—</div></div>
+        <div><div class="sub-text">По отчислениям</div><div class="big-number" style="font-size:20px;color:#34d399" id="recordComm">0 ₽</div><div class="sub-text" id="recordCommDate">—</div></div>
+      </div>
+      <div id="recordBadge"></div>
+    </div>
   </div>
+
+  <div class="swipe-screen" id="screen-add">
+    <div class="header"><h1>Новая продажа</h1></div>
+    <div class="card">
+      <div class="form-group"><label>Поиск товара (артикул или название)</label>
+        <div class="search-row">
+          <input type="text" id="searchProduct" placeholder="Начни вводить...">
+          <button class="btn-cam" id="btnScanQR" type="button" title="Сканировать QR">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg>
+          </button>
+        </div>
+        <div id="searchResults"></div>
+      </div>
+      <div class="form-group"><label>Дата</label>
+        <input type="date" id="inputDate" max="" style="display:none;">
+        <div class="date-display" id="inputDateDisplay">Сегодня</div>
+      </div>
+      <div class="form-group"><label>Товар</label><input type="text" id="inputName" placeholder="Название товара"></div>
+      <div class="form-group"><label>Количество</label><input type="number" id="inputQty" value="1" min="1"></div>
+      <div class="form-group"><label>Цена за штуку (₽)</label><input type="number" id="inputSum" placeholder="0" min="0"></div>
+      <div class="form-group"><label>Процент отчисления (%)</label><input type="number" id="inputPercent" value="1.5" min="0" max="100" step="0.1"></div>
+      <button class="btn" id="btnAdd">Сохранить</button>
+    </div>
+  </div>
+
+  <div class="swipe-screen" id="screen-history">
+    <div class="header"><h1 id="histTitle">Сегодня</h1></div>
+    <div class="card">
+      <div class="form-group" style="margin-bottom:0;">
+        <label>Выбрать дату</label>
+        <input type="date" id="historyDatePicker" max="" style="display:none;">
+        <div class="date-display" id="historyDateDisplay">Сегодня</div>
+      </div>
+    </div>
+    <div class="card"><div id="historyList"><div class="empty">Нет продаж за этот день</div></div></div>
+    <div class="card">
+      <div class="card-title">Итог за день</div>
+      <div class="sub-text">Сумма: <span class="accent" id="histTotal">0 ₽</span></div>
+      <div class="sub-text">Отчисления: <span class="accent" id="histCommission">0 ₽</span></div>
+    </div>
+  </div>
+
+  <div class="swipe-screen" id="screen-totals">
+    <div class="header"><h1 id="totalsTitle">Итоги</h1></div>
+    <div class="card">
+      <div class="card-title">План на месяц</div>
+      <div class="big-number" id="totalsPlan">0 ₽</div>
+      <div class="sub-text" id="totalsPercent">0.0% выполнено</div>
+      <div class="progress-bg">
+        <div class="progress-fill" id="totalsProgress"></div>
+        <div class="progress-mark" style="left: 80%;"></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Продано</div><div class="big-number" style="font-size:22px" id="totalsSum">0 ₽</div><div class="sub-text" id="totalsCount">0 продаж</div></div>
+      <div class="card"><div class="card-title">Отчисления</div><div class="big-number" style="font-size:22px;color:#34d399" id="totalsComm">0 ₽</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Возвраты (АД)</div>
+      <div class="big-number" style="font-size:22px;color:#ef4444" id="totalsAD">0 ₽</div>
+      <div class="sub-text" id="totalsADCount">0 записей</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Чистый оборот</div>
+      <div class="big-number" style="font-size:25px" id="totalsNet">0 ₽</div>
+      <div class="sub-text">Продажи минус возвраты</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Сравнение с прошлым месяцем</div>
+      <div class="big-number" style="font-size:22px" id="totalsCompare">0%</div>
+      <div class="sub-text" id="totalsCompareDetail">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Средний чек</div>
+      <div class="big-number" style="font-size:22px;color:#fbbf24" id="totalsAvgSum">0 ₽</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Фокусные товары</div>
+      <div class="sub-text">Продано: <span class="accent" id="totalsFocusSum">0 ₽</span></div>
+      <div class="sub-text">Отчисления: <span class="accent" id="totalsFocusComm">0 ₽</span></div>
+      <div class="sub-text">Количество: <span class="accent" id="totalsFocusCount">0 шт</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Регулярные товары</div>
+      <div class="sub-text">Продано: <span class="accent" id="totalsRegSum">0 ₽</span></div>
+      <div class="sub-text">Отчисления: <span class="accent" id="totalsRegComm">0 ₽</span></div>
+      <div class="sub-text">Количество: <span class="accent" id="totalsRegCount">0 шт</span></div>
+    </div>
+    <div class="card"><div class="card-title">Лучший день по сумме</div><div class="big-number" style="font-size:22px;color:#fbbf24" id="totalsBestSum">0 ₽</div><div class="sub-text" id="totalsBestSumDate">—</div></div>
+  </div>
+
+  <div class="swipe-screen" id="screen-plan">
+    <div class="header"><h1>Мой план</h1></div>
+    <div class="card">
+      <div class="form-group"><label>План на текущий месяц (₽)</label><input type="number" id="inputPlan" placeholder="0" min="0"></div>
+      <button class="btn" id="btnPlan">Сохранить план</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Текущий прогресс</div>
+      <div class="big-number" style="font-size:22px" id="planProgress">0 ₽</div>
+      <div class="sub-text"><span id="planPercent">0.0%</span> выполнено</div>
+      <div class="progress-bg">
+        <div class="progress-fill" id="planProgressBar"></div>
+        <div class="progress-mark" style="left: 80%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="swipe-screen" id="screen-ad">
+    <div class="header"><h1>Акт дефектовки (АД)</h1></div>
+    <div class="card">
+      <div class="form-group"><label>Поиск товара (артикул или название)</label>
+        <div class="search-row">
+          <input type="text" id="adSearchProduct" placeholder="Начни вводить...">
+          <button class="btn-cam" id="adScanQR" type="button" title="Сканировать QR">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg>
+          </button>
+        </div>
+        <div id="adSearchResults"></div>
+      </div>
+      <div class="form-group"><label>Дата возврата</label>
+        <input type="date" id="adDate" max="" style="display:none;">
+        <div class="date-display" id="adDateDisplay">Сегодня</div>
+      </div>
+      <div class="form-group"><label>Товар</label><input type="text" id="adName" placeholder="Название товара"></div>
+      <div class="form-group"><label>Количество</label><input type="number" id="adQty" value="1" min="1"></div>
+      <div class="form-group"><label>Сумма возврата за штуку (₽)</label><input type="number" id="adSum" placeholder="0" min="0"></div>
+      <button class="btn danger" id="btnAddAD">Сохранить возврат</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Возвраты за текущий месяц</div>
+      <div class="big-number" style="font-size:22px;color:#ef4444" id="adMonthSum">0 ₽</div>
+      <div class="sub-text" id="adMonthCount">0 записей</div>
+    </div>
+  </div>
+
 </div>
 
-<div id="screen-edit" class="screen">
+<div id="dots">
+  <span data-screen="home" class="active"></span>
+  <span data-screen="add"></span>
+  <span data-screen="history"></span>
+  <span data-screen="totals"></span>
+  <span data-screen="plan"></span>
+  <span data-screen="ad"></span>
+</div>
+
+<div id="screen-edit" class="modal-screen">
   <div class="header"><h1>Редактировать</h1></div>
   <div class="card">
     <div class="form-group"><label>Дата</label>
@@ -183,126 +366,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <div class="form-group"><label>Цена за штуку (₽)</label><input type="number" id="editSum" min="0"></div>
     <div class="form-group"><label>Процент отчисления (%)</label><input type="number" id="editPercent" min="0" max="100" step="0.1"></div>
     <button class="btn" id="btnUpdate">Обновить</button>
+    <button class="btn" id="btnEditCancel" style="background:#1e2b24;color:#e8f5f0;">Отмена</button>
   </div>
 </div>
 
-<div id="screen-history" class="screen">
-  <div class="header"><h1 id="histTitle">Сегодня</h1></div>
-  <div class="card">
-    <div class="form-group" style="margin-bottom:0;">
-      <label>Выбрать дату</label>
-      <input type="date" id="historyDatePicker" max="" style="display:none;">
-      <div class="date-display" id="historyDateDisplay">Сегодня</div>
-    </div>
-  </div>
-  <div class="card"><div id="historyList"><div class="empty">Нет продаж за этот день</div></div></div>
-  <div class="card">
-    <div class="card-title">Итог за день</div>
-    <div class="sub-text">Сумма: <span class="accent" id="histTotal">0 ₽</span></div>
-    <div class="sub-text">Отчисления: <span class="accent" id="histCommission">0 ₽</span></div>
-  </div>
-</div>
-
-<div id="screen-totals" class="screen">
-  <div class="header"><h1 id="totalsTitle">Итоги</h1></div>
-  <div class="card">
-    <div class="card-title">План на месяц</div>
-    <div class="big-number" id="totalsPlan">0 ₽</div>
-    <div class="sub-text" id="totalsPercent">0.0% выполнено</div>
-    <div class="progress-bg">
-      <div class="progress-fill" id="totalsProgress"></div>
-      <div class="progress-mark" style="left: 80%;"></div>
-    </div>
-  </div>
-  <div class="grid-2">
-    <div class="card"><div class="card-title">Продано</div><div class="big-number" style="font-size:22px" id="totalsSum">0 ₽</div><div class="sub-text" id="totalsCount">0 продаж</div></div>
-    <div class="card"><div class="card-title">Отчисления</div><div class="big-number" style="font-size:22px;color:#34d399" id="totalsComm">0 ₽</div></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Возвраты (АД)</div>
-    <div class="big-number" style="font-size:22px;color:#ef4444" id="totalsAD">0 ₽</div>
-    <div class="sub-text" id="totalsADCount">0 записей</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Чистый оборот</div>
-    <div class="big-number" style="font-size:25px" id="totalsNet">0 ₽</div>
-    <div class="sub-text">Продажи минус возвраты</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Сравнение с прошлым месяцем</div>
-    <div class="big-number" style="font-size:22px" id="totalsCompare">0%</div>
-    <div class="sub-text" id="totalsCompareDetail">—</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Средний чек</div>
-    <div class="big-number" style="font-size:22px;color:#fbbf24" id="totalsAvgSum">0 ₽</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Фокусные товары</div>
-    <div class="sub-text">Продано: <span class="accent" id="totalsFocusSum">0 ₽</span></div>
-    <div class="sub-text">Отчисления: <span class="accent" id="totalsFocusComm">0 ₽</span></div>
-    <div class="sub-text">Количество: <span class="accent" id="totalsFocusCount">0 шт</span></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Регулярные товары</div>
-    <div class="sub-text">Продано: <span class="accent" id="totalsRegSum">0 ₽</span></div>
-    <div class="sub-text">Отчисления: <span class="accent" id="totalsRegComm">0 ₽</span></div>
-    <div class="sub-text">Количество: <span class="accent" id="totalsRegCount">0 шт</span></div>
-  </div>
-  <div class="card"><div class="card-title">Лучший день по сумме</div><div class="big-number" style="font-size:22px;color:#fbbf24" id="totalsBestSum">0 ₽</div><div class="sub-text" id="totalsBestSumDate">—</div></div>
-</div>
-
-<div id="screen-plan" class="screen">
-  <div class="header"><h1>Мой план</h1></div>
-  <div class="card">
-    <div class="form-group"><label>План на текущий месяц (₽)</label><input type="number" id="inputPlan" placeholder="0" min="0"></div>
-    <button class="btn" id="btnPlan">Сохранить план</button>
-  </div>
-  <div class="card">
-    <div class="card-title">Текущий прогресс</div>
-    <div class="big-number" style="font-size:22px" id="planProgress">0 ₽</div>
-    <div class="sub-text"><span id="planPercent">0.0%</span> выполнено</div>
-    <div class="progress-bg">
-      <div class="progress-fill" id="planProgressBar"></div>
-      <div class="progress-mark" style="left: 80%;"></div>
-    </div>
-  </div>
-</div>
-
-<div id="screen-ad" class="screen">
-  <div class="header"><h1>Акт дефектовки (АД)</h1></div>
-  <div class="card">
-    <div class="form-group"><label>Поиск товара (артикул или название)</label>
-      <div class="search-row">
-        <input type="text" id="adSearchProduct" placeholder="Начни вводить...">
-        <button class="btn-cam" id="adScanQR" type="button" title="Сканировать QR">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg>
-        </button>
-      </div>
-      <div id="adSearchResults"></div>
-    </div>
-    <div class="form-group"><label>Дата возврата</label>
-      <input type="date" id="adDate" max="" style="display:none;">
-      <div class="date-display" id="adDateDisplay">Сегодня</div>
-    </div>
-    <div class="form-group"><label>Товар</label><input type="text" id="adName" placeholder="Название товара"></div>
-    <div class="form-group"><label>Количество</label><input type="number" id="adQty" value="1" min="1"></div>
-    <div class="form-group"><label>Сумма возврата за штуку (₽)</label><input type="number" id="adSum" placeholder="0" min="0"></div>
-    <button class="btn danger" id="btnAddAD">Сохранить возврат</button>
-  </div>
-  <div class="card">
-    <div class="card-title">Возвраты за текущий месяц</div>
-    <div class="big-number" style="font-size:22px;color:#ef4444" id="adMonthSum">0 ₽</div>
-    <div class="sub-text" id="adMonthCount">0 записей</div>
-  </div>
-</div>
-
-<div id="screen-about" class="screen">
+<div id="screen-about" class="modal-screen">
   <div class="header"><h1>О приложении</h1></div>
   <div class="card">
     <div class="about-icon">📊</div>
     <div class="about-name">Трекер продаж</div>
-    <div class="about-version">Версия 1.2</div>
+    <div class="about-version">Версия 1.3</div>
     <div class="about-desc">Простое приложение для учёта личных продаж.</div>
   </div>
   <div class="card">
@@ -315,10 +388,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <button class="btn" id="btnShareBackup" style="background:#334155;color:#fff;">📤 Отправить бэкап (Telegram)</button>
   <button class="btn" id="btnDedup" style="background:#1e2b24;color:#e8f5f0;">Удалить дубли товаров</button>
   <button class="btn" id="btnSyncFocus" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">Обновить фокус-лист из сети</button>
-  <div id="versionLink">Версия 1.2.0</div>
+  <button class="btn" id="btnAboutClose" style="background:#1e2b24;color:#e8f5f0;">Закрыть</button>
+  <div id="versionLink">Версия 1.3.0</div>
 </div>
 
-<div id="screen-backup" class="screen">
+<div id="screen-backup" class="modal-screen">
   <div class="header"><h1>Данные</h1></div>
   <div class="card">
     <div class="card-title">Экспорт (сохрани себе)</div>
@@ -328,7 +402,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <div class="card">
     <div class="card-title">Импорт из файла</div>
     <div class="sub-text" style="margin-bottom:8px">Выбери файл бэкапа (tracker_backup.json) из Загрузок.</div>
-    <input type="file" id="restoreFileInput" accept=".json,application/json" style="display:none;">
+    <input type="file" id="restoreFileInput" accept="*/*" style="display:none;">
     <button class="btn" id="btnFileRestore">📁 Выбрать файл бэкапа</button>
   </div>
   <div class="card">
@@ -336,9 +410,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <textarea id="importText2" placeholder="Вставь данные сюда..." style="width:100%;height:140px;padding:10px;background:#0a0f0d;border:1px solid #1e2b24;border-radius:10px;color:#e8f5f0;font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea>
     <button class="btn" id="btnRestore">Восстановить из текста</button>
   </div>
+  <button class="btn" id="btnBackupClose" style="background:#1e2b24;color:#e8f5f0;">Закрыть</button>
 </div>
 
-<div id="screen-import" class="screen">
+<div id="screen-import" class="modal-screen">
   <div class="header"><h1>Импорт товаров</h1></div>
   <div class="card">
     <div class="form-group">
@@ -346,16 +421,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
       <textarea id="importText" style="width:100%;height:300px;padding:12px;background:#0a0f0d;border:1px solid #1e2b24;border-radius:10px;color:#e8f5f0;font-size:13px;font-family:monospace;outline:none;resize:none;"></textarea>
     </div>
     <button class="btn" id="btnImport">Сохранить</button>
+    <button class="btn" id="btnImportClose" style="background:#1e2b24;color:#e8f5f0;">Закрыть</button>
   </div>
-</div>
-
-<div class="nav">
-  <button class="active" data-screen="home">Главная</button>
-  <button data-screen="add">Добавить</button>
-  <button data-screen="history">История</button>
-  <button data-screen="totals">Итоги</button>
-  <button data-screen="plan">План</button>
-  <button data-screen="ad" class="ad">АД</button>
 </div>
 
 <div id="liveQRModal">
@@ -380,7 +447,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 </div>
 
 <script>
-  var sales = [];
+var sales = [];
 var plans = {};
 var products = [];
 var editingId = null;
@@ -388,6 +455,8 @@ var historyDate = new Date();
 var totalsMonth = new Date();
 var wrongAttempts = 0;
 var passwordBlocked = false;
+
+var screenOrder = ['home', 'add', 'history', 'totals', 'plan', 'ad'];
 
 try {
   sales = JSON.parse(localStorage.getItem('sales') || '[]');
@@ -426,11 +495,58 @@ function showToast(message, type) {
   }, 2400);
 }
 
+// ===== АВТОПОЛНОЭКРАН =====
+function goFullscreen() {
+  var el = document.documentElement;
+  try {
+    if (el.requestFullscreen) el.requestFullscreen().catch(function(){});
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  } catch(e) {}
+}
+
+document.addEventListener('click', function() {
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    goFullscreen();
+  }
+}, { passive: true });
+
+// ===== СВАЙП МЕЖДУ ЭКРАНАМИ =====
+function scrollToScreen(name) {
+  var container = document.getElementById('swipeContainer');
+  var idx = screenOrder.indexOf(name);
+  if (idx === -1) return;
+  container.scrollTo({ left: idx * window.innerWidth, behavior: 'smooth' });
+}
+
+function updateDots() {
+  var container = document.getElementById('swipeContainer');
+  var idx = Math.round(container.scrollLeft / window.innerWidth);
+  if (idx < 0) idx = 0;
+  if (idx >= screenOrder.length) idx = screenOrder.length - 1;
+  document.querySelectorAll('#dots span').forEach(function(s, i) {
+    s.classList.toggle('active', i === idx);
+  });
+}
+
+var scrollTimeout = null;
+document.getElementById('swipeContainer').addEventListener('scroll', function() {
+  if (scrollTimeout) clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(updateDots, 50);
+});
+
+document.querySelectorAll('#dots span').forEach(function(dot) {
+  dot.addEventListener('click', function() {
+    var name = this.getAttribute('data-screen');
+    scrollToScreen(name);
+  });
+});
+
+// ===== АВТОБЭКАП =====
 function getBackupJSON() {
   return JSON.stringify({
     sales: sales, plans: plans, products: products,
     exportDate: new Date().toISOString(),
-    version: '1.2'
+    version: '1.3'
   }, null, 2);
 }
 
@@ -464,17 +580,14 @@ function maybeAutoBackup() {
 function shareBackup() {
   var data = getBackupJSON();
   if (navigator.share) {
-    navigator.share({
-      title: 'Бэкап трекера продаж',
-      text: data
-    }).then(function() {
+    navigator.share({ title: 'Бэкап трекера продаж', text: data }).then(function() {
       localStorage.setItem('lastBackupDate', today());
       showToast('Бэкап отправлен', 'success');
     }).catch(function(){});
   } else {
     navigator.clipboard.writeText(data).then(function() {
       localStorage.setItem('lastBackupDate', today());
-      showToast('Скопировано — вставь в Telegram себе', 'success');
+      showToast('Скопировано — вставь в Telegram', 'success');
     }).catch(function() {
       showToast('Не удалось скопировать', 'error');
     });
@@ -484,12 +597,9 @@ function shareBackup() {
 function checkBackupReminder() {
   var last = localStorage.getItem('lastBackupDate');
   if (!last) return;
-  var lastD = new Date(last);
-  var diffDays = Math.floor((new Date() - lastD) / 86400000);
+  var diffDays = Math.floor((new Date() - new Date(last)) / 86400000);
   if (diffDays >= 7) {
-    setTimeout(function() {
-      showToast('⚠️ Бэкап не делался ' + diffDays + ' дн.', 'warn');
-    }, 3000);
+    setTimeout(function() { showToast('⚠️ Бэкап не делался ' + diffDays + ' дн.', 'warn'); }, 3000);
   }
 }
 
@@ -599,7 +709,7 @@ function addSale() {
   showToast('Продажа сохранена', 'success');
   maybeAutoBackup();
   if (wasRecord) setTimeout(function() { showToast('🏆 Новый рекорд дня!', 'record'); }, 800);
-  showScreen('home');
+  scrollToScreen('home');
 }
 
 function checkIfWillBeRecord(newSum, date) {
@@ -607,8 +717,7 @@ function checkIfWillBeRecord(newSum, date) {
   sales.forEach(function(s) { if (!s.isAD) daySums[s.date] = (daySums[s.date] || 0) + s.sum; });
   var currentBest = 0;
   Object.keys(daySums).forEach(function(d) { if (daySums[d] > currentBest) currentBest = daySums[d]; });
-  var afterSum = (daySums[date] || 0) + newSum;
-  return afterSum > currentBest;
+  return ((daySums[date] || 0) + newSum) > currentBest;
 }
 
 function addAD() {
@@ -620,8 +729,7 @@ function addAD() {
   if (!name) { showToast('Заполни поле «Товар»', 'warn'); return; }
   if (price <= 0) { showToast('Укажи сумму возврата', 'warn'); return; }
   if (qty < 1) { showToast('Количество не меньше 1', 'warn'); return; }
-  var sum = -(price * qty);
-  sales.push({ id: Date.now(), date: date, name: name, qty: qty, sum: sum, percent: 0, commission: 0, isAD: true });
+  sales.push({ id: Date.now(), date: date, name: name, qty: qty, sum: -(price * qty), percent: 0, commission: 0, isAD: true });
   save();
   document.getElementById('adName').value = '';
   document.getElementById('adSum').value = '';
@@ -632,7 +740,7 @@ function addAD() {
   updateDateDisplay('adDate', 'adDateDisplay');
   showToast('Возврат сохранён', 'success');
   maybeAutoBackup();
-  showScreen('home');
+  scrollToScreen('home');
 }
 
 function openEdit(id) {
@@ -645,7 +753,12 @@ function openEdit(id) {
   document.getElementById('editSum').value = Math.abs(s.sum) / s.qty;
   document.getElementById('editPercent').value = s.percent;
   updateDateDisplay('editDate', 'editDateDisplay');
-  showScreen('edit');
+  document.getElementById('screen-edit').classList.add('active');
+}
+
+function closeEdit() {
+  document.getElementById('screen-edit').classList.remove('active');
+  editingId = null;
 }
 
 function updateSale() {
@@ -665,8 +778,8 @@ function updateSale() {
   var prod = products.find(function(p) { return normalizeName(p.name) === normalizeName(name); });
   if (prod && prod.type === 'conditional') recalcConditional(name, date);
   save();
-  editingId = null;
-  showScreen('history');
+  closeEdit();
+  render();
 }
 
 function deleteSale(id) {
@@ -685,21 +798,6 @@ function savePlan() {
   save(); render();
   showToast('План сохранён', 'success');
 }
-function changeDay(d) { historyDate.setDate(historyDate.getDate() + d); render(); }
-function changeMonth(d) { totalsMonth.setMonth(totalsMonth.getMonth() + d); render(); }
-
-var touchStartX = 0, touchStartY = 0;
-document.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; touchStartY = e.changedTouches[0].screenY; }, { passive: true });
-document.addEventListener('touchend', function(e) {
-  var dx = touchStartX - e.changedTouches[0].screenX;
-  var dy = touchStartY - e.changedTouches[0].screenY;
-  if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy)) {
-    var h = document.getElementById('screen-history').classList.contains('active');
-    var t = document.getElementById('screen-totals').classList.contains('active');
-    if (h) { dx > 0 ? changeDay(1) : changeDay(-1); }
-    else if (t) { dx > 0 ? changeMonth(1) : changeMonth(-1); }
-  }
-}, { passive: true });
 
 function render() {
   var t = today(), m = currentMonth();
@@ -717,6 +815,7 @@ function render() {
   var rem = Math.max(0, mPlan - netTurnover);
   var remPct = mPlan > 0 ? (rem / mPlan * 100) : 100;
   var dl = daysLeft();
+
   var bar = document.getElementById('monthProgress');
   if (bar) {
     bar.style.width = Math.min(100, pct) + '%';
@@ -739,6 +838,8 @@ function render() {
   document.getElementById('monthCommission').textContent = fmt(mComm);
   document.getElementById('remaining').textContent = fmt(rem);
   document.getElementById('remainingPercent').textContent = remPct.toFixed(1) + '%';
+  document.getElementById('dailyNeeded').textContent = fmt(dl > 0 ? rem / dl : 0);
+
   var dom = dayOfMonth();
   var totalDays = daysInMonth(new Date());
   var forecast = dom > 0 ? (netTurnover / dom * totalDays) : 0;
@@ -754,7 +855,7 @@ function render() {
     else if (forecastPct >= 80) ftEl.textContent = 'при текущем темпе — минимум будет';
     else ftEl.textContent = 'при текущем темпе — не дотянешь';
   }
-  renderChart(mSales, mAD, m);
+
   var bdS = {}, bdC = {};
   mSales.forEach(function(s) { bdS[s.date] = (bdS[s.date] || 0) + s.sum; bdC[s.date] = (bdC[s.date] || 0) + s.commission; });
   var ds = Object.keys(bdS);
@@ -773,6 +874,7 @@ function render() {
     document.getElementById('recordCommDate').textContent = '—';
     document.getElementById('recordBadge').innerHTML = '';
   }
+
   document.getElementById('planProgress').textContent = fmt(netTurnover);
   document.getElementById('planPercent').textContent = pct.toFixed(1) + '%';
   var pb = document.getElementById('planProgressBar');
@@ -781,6 +883,7 @@ function render() {
   if (pct >= 100) pb.classList.add('gold');
   else if (pct >= 80) pb.classList.add('ok');
   document.getElementById('inputPlan').value = mPlan || '';
+
   var hDate = dateStr(historyDate);
   var hSales = sales.filter(function(s) { return s.date === hDate; });
   var ht = document.getElementById('histTitle');
@@ -790,6 +893,7 @@ function render() {
   document.getElementById('historyDatePicker').value = hDate;
   document.getElementById('historyDatePicker').max = today();
   updateDateDisplay('historyDatePicker', 'historyDateDisplay');
+
   var list = document.getElementById('historyList');
   if (hSales.length === 0) list.innerHTML = '<div class="empty">Нет записей за этот день</div>';
   else {
@@ -809,6 +913,7 @@ function render() {
   hSales.forEach(function(s) { hS += s.sum; hC += s.commission; });
   document.getElementById('histTotal').textContent = fmt(hS);
   document.getElementById('histCommission').textContent = fmt(hC);
+
   var tm = monthStr(totalsMonth);
   var tot = sales.filter(function(s) { return s.date.indexOf(tm) === 0; });
   var totSales = tot.filter(function(s) { return !s.isAD; });
@@ -837,12 +942,13 @@ function render() {
   document.getElementById('totalsAD').textContent = '−' + fmt(adS);
   document.getElementById('totalsADCount').textContent = totAD.length + ' записей';
   document.getElementById('totalsNet').textContent = fmt(netT);
+
   var pm = monthStr(prevMonth(totalsMonth));
-  var pmSales = sales.filter(function(s) { return s.date.indexOf(pm) === 0 && !s.isAD; });
-  var pmAD = sales.filter(function(s) { return s.date.indexOf(pm) === 0 && s.isAD; });
   var pmSum = 0, pmADSum = 0;
-  pmSales.forEach(function(s) { pmSum += s.sum; });
-  pmAD.forEach(function(s) { pmADSum += Math.abs(s.sum); });
+  sales.forEach(function(s) {
+    if (s.date.indexOf(pm) !== 0) return;
+    if (s.isAD) pmADSum += Math.abs(s.sum); else pmSum += s.sum;
+  });
   var pmNet = pmSum - pmADSum;
   var cmpEl = document.getElementById('totalsCompare');
   var cmpDetail = document.getElementById('totalsCompareDetail');
@@ -864,6 +970,7 @@ function render() {
   document.getElementById('totalsRegSum').textContent = fmt(rS);
   document.getElementById('totalsRegComm').textContent = fmt(rC);
   document.getElementById('totalsRegCount').textContent = rQ + ' шт';
+
   var tdS = {};
   totSales.forEach(function(s) { tdS[s.date] = (tdS[s.date] || 0) + s.sum; });
   var td = Object.keys(tdS);
@@ -875,59 +982,32 @@ function render() {
     document.getElementById('totalsBestSum').textContent = '0 ₽';
     document.getElementById('totalsBestSumDate').textContent = '—';
   }
+
   document.getElementById('adMonthSum').textContent = '−' + fmt(mADSum);
   document.getElementById('adMonthCount').textContent = mAD.length + ' записей';
 }
 
-function renderChart(monthSales, monthAD, m) {
-  var chartEl = document.getElementById('daysChart');
-  if (!chartEl) return;
-  var parts = m.split('-');
-  var year = parseInt(parts[0]), mon = parseInt(parts[1]) - 1;
-  var totalDays = daysInMonth(new Date(year, mon, 1));
-  var sums = {};
-  for (var i = 1; i <= totalDays; i++) sums[i] = 0;
-  monthSales.forEach(function(s) {
-    var d = parseInt(s.date.split('-')[2]);
-    sums[d] = (sums[d] || 0) + s.sum;
-  });
-  var maxSum = 0;
-  Object.keys(sums).forEach(function(d) { if (sums[d] > maxSum) maxSum = sums[d]; });
-  var today_ = new Date();
-  var isCurrentMonth = (today_.getFullYear() === year && today_.getMonth() === mon);
-  var limit = isCurrentMonth ? today_.getDate() : totalDays;
-  var maxBarHeight = 70;
-  var html = '';
-  for (var d = 1; d <= limit; d++) {
-    var val = sums[d] || 0;
-    var barHeight = maxSum > 0 ? Math.max(3, Math.round(val / maxSum * maxBarHeight)) : 3;
-    var barStyle = 'height: ' + barHeight + 'px;';
-    if (val === 0) barStyle = 'height: 3px; background: #1e2b24;';
-    var title = 'title="' + d + ': ' + Math.round(val).toLocaleString('ru-RU') + ' ₽"';
-    html += '<div class="bar-col"><div class="bar" ' + title + ' style="' + barStyle + '"></div><div class="bar-day">' + d + '</div></div>';
-  }
-  chartEl.innerHTML = html;
-}
-
-function showScreen(name) {
-  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-  var scr = document.getElementById('screen-' + name);
-  if (scr) scr.classList.add('active');
-  document.querySelectorAll('.nav button').forEach(function(b) { b.classList.remove('active'); });
-  var btn = document.querySelector('.nav button[data-screen="' + name + '"]');
-  if (btn) btn.classList.add('active');
-  render();
-}
-
-document.querySelectorAll('.nav button').forEach(function(btn) {
-  btn.onclick = function() { showScreen(this.getAttribute('data-screen')); };
-});
+// ===== НАВИГАЦИЯ КНОПКАМИ ВНУТРИ (для кнопок) =====
 document.getElementById('btnAdd').onclick = addSale;
 document.getElementById('btnUpdate').onclick = updateSale;
+document.getElementById('btnEditCancel').onclick = closeEdit;
 document.getElementById('btnPlan').onclick = savePlan;
 document.getElementById('btnAddAD').onclick = addAD;
-document.getElementById('aboutBtn').onclick = function() { showScreen('about'); };
 
+document.getElementById('aboutBtn').onclick = function() {
+  document.getElementById('screen-about').classList.add('active');
+};
+document.getElementById('btnAboutClose').onclick = function() {
+  document.getElementById('screen-about').classList.remove('active');
+};
+document.getElementById('btnBackupClose').onclick = function() {
+  document.getElementById('screen-backup').classList.remove('active');
+};
+document.getElementById('btnImportClose').onclick = function() {
+  document.getElementById('screen-import').classList.remove('active');
+};
+
+// ===== ПОИСК =====
 document.getElementById('searchProduct').oninput = function() {
   var q = this.value.trim();
   var res = document.getElementById('searchResults');
@@ -978,6 +1058,7 @@ document.getElementById('adSearchProduct').oninput = function() {
   });
 };
 
+// ===== ДАТЫ =====
 document.getElementById('inputDateDisplay').onclick = function() {
   var inp = document.getElementById('inputDate');
   if (inp.showPicker) inp.showPicker(); else inp.click();
@@ -1005,6 +1086,7 @@ document.getElementById('adDateDisplay').onclick = function() {
 };
 document.getElementById('adDate').addEventListener('change', function() { updateDateDisplay('adDate', 'adDateDisplay'); });
 
+// ===== СКАНЕР =====
 var liveStream = null;
 var liveScanning = false;
 var torchOn = false;
@@ -1147,11 +1229,12 @@ function handleQRDataAD(data) {
   showToast('Возврат · ' + r.article, 'success');
 }
 
+// ===== ПАРОЛЬ / ИМПОРТ ТОВАРОВ =====
 document.getElementById('versionLink').onclick = function() {
   if (passwordBlocked) return;
   var pwd = prompt('Для обновления приложения переведите разработчику 100 руб. Чек на почту.\n\nВведите пароль:');
   if (pwd === null) return;
-  if (pwd === '5246') { wrongAttempts = 0; showScreen('import'); }
+  if (pwd === '5246') { wrongAttempts = 0; document.getElementById('screen-import').classList.add('active'); }
   else {
     wrongAttempts++;
     if (wrongAttempts >= 3) { passwordBlocked = true; showToast('Неверный пароль. Кнопка заблокирована.', 'error'); }
@@ -1164,7 +1247,7 @@ document.getElementById('btnImport').onclick = function() {
   if (!val) { showToast('Вставьте данные', 'warn'); return; }
   parseData(val);
   document.getElementById('importText').value = '';
-  showScreen('about');
+  document.getElementById('screen-import').classList.remove('active');
 };
 
 function parseData(input) {
@@ -1257,7 +1340,7 @@ document.getElementById('btnDedup').onclick = function() {
 document.getElementById('btnBackup').onclick = function() {
   document.getElementById('exportText').value = getBackupJSON();
   document.getElementById('importText2').value = '';
-  showScreen('backup');
+  document.getElementById('screen-backup').classList.add('active');
 };
 
 document.getElementById('btnSaveFile').onclick = function() {
@@ -1293,7 +1376,8 @@ document.getElementById('restoreFileInput').addEventListener('change', function(
     save();
     showToast('Восстановлено: ' + sales.length + ' записей', 'success');
     event.target.value = '';
-    showScreen('home');
+    document.getElementById('screen-backup').classList.remove('active');
+    render();
   };
   reader.readAsText(file);
 });
@@ -1311,7 +1395,8 @@ document.getElementById('btnRestore').onclick = function() {
   save();
   showToast('Восстановлено: ' + sales.length + ' записей', 'success');
   document.getElementById('importText2').value = '';
-  showScreen('home');
+  document.getElementById('screen-backup').classList.remove('active');
+  render();
 };
 
 document.getElementById('btnSyncFocus').onclick = function() {
@@ -1385,12 +1470,14 @@ document.getElementById('btnSyncFocus').onclick = function() {
     .catch(function(e) { showToast('Ошибка загрузки: ' + e.message, 'error'); });
 };
 
+// ===== SERVICE WORKER =====
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js').catch(function(){});
   });
 }
 
+// ===== INIT =====
 document.getElementById('inputDate').value = today();
 document.getElementById('inputDate').max = today();
 document.getElementById('editDate').max = today();
@@ -1402,6 +1489,8 @@ updateDateDisplay('adDate', 'adDateDisplay');
 document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' });
 checkBackupReminder();
 render();
+updateDots();
 </script>
 </body>
 </html>
+  

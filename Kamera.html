@@ -16,17 +16,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .header { padding: 14px 44px 10px 14px; display: flex; justify-content: space-between; align-items: center; }
 .header h1 { font-size: 19px; font-weight: 700; }
 .header .date { font-size: 12px; color: #6b8a7d; }
-.card { background: #121a16; border-radius: 12px; margin: 0 14px 10px; padding: 12px 14px; border: 1px solid #1e2b24; animation: cardIn 0.45s ease-out backwards; }
-.card:nth-child(2) { animation-delay: 0.05s; }
-.card:nth-child(3) { animation-delay: 0.1s; }
-.card:nth-child(4) { animation-delay: 0.15s; }
-.card:nth-child(5) { animation-delay: 0.2s; }
-.card:nth-child(6) { animation-delay: 0.25s; }
-.card:nth-child(7) { animation-delay: 0.3s; }
-.card:nth-child(8) { animation-delay: 0.35s; }
+.card { background: #121a16; border-radius: 12px; margin: 0 14px 10px; padding: 12px 14px; border: 1px solid #1e2b24; animation: cardIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
 @keyframes cardIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 .card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b8a7d; margin-bottom: 5px; }
 .big-number { font-size: 25px; font-weight: 800; color: #10b981; }
@@ -97,14 +90,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 #dots span { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: all 0.35s ease; pointer-events: auto; cursor: pointer; }
 #dots span.active { background: #10b981; width: 24px; border-radius: 4px; }
 
-/* Спиннер загрузки камеры */
 .qr-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; z-index: 10; gap: 20px; transition: opacity 0.4s ease; }
 .qr-loading.hidden { opacity: 0; pointer-events: none; }
 .qr-spinner { width: 50px; height: 50px; border: 4px solid #1e2b24; border-top-color: #10b981; border-radius: 50%; animation: qrSpin 0.9s linear infinite; }
 @keyframes qrSpin { to { transform: rotate(360deg); } }
 .qr-loading-text { color: #6b8a7d; font-size: 14px; }
 
-/* Тост */
 .toast { position: fixed; top: 20px; left: 14px; right: 14px; padding: 14px 16px; border-radius: 12px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; z-index: 99999; opacity: 0; transform: translateY(-20px); transition: all 0.3s ease; box-shadow: 0 6px 20px rgba(0,0,0,0.5); color: #0a0f0d; }
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast.success { background: linear-gradient(135deg, #10b981, #059669); }
@@ -113,7 +104,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .toast.record { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
 .toast .icon { font-size: 20px; }
 
-/* Модалка с галочкой */
 #successOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: center; justify-content: center; z-index: 99997; }
 #successOverlay.show { display: flex; }
 .success-checkmark { width: 120px; height: 120px; }
@@ -122,7 +112,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 @keyframes strokeCircle { to { stroke-dashoffset: 0; } }
 @keyframes strokeMark { to { stroke-dashoffset: 0; } }
 
-/* Живой сканер */
 #liveQRModal { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#000; z-index:99998; display:none; flex-direction:column; }
 #liveQRModal.show { display: flex; }
 .qr-cam-wrap { position: relative; flex: 1; overflow: hidden; background: #000; }
@@ -144,7 +133,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 #liveStatus { display: none; }
 .btn-cam svg { display: block; }
 
-/* Достижения */
 .ach-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1e2b24; }
 .ach-item:last-child { border-bottom: none; }
 .ach-icon { font-size: 32px; width: 44px; text-align: center; }
@@ -154,6 +142,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .ach-locked { opacity: 0.4; }
 .ach-locked .ach-icon { filter: grayscale(1); }
 .ach-count { text-align: center; color: #6b8a7d; font-size: 12px; margin-top: 10px; }
+
+#celebrationFlash { position: fixed; inset: 0; background: radial-gradient(circle, rgba(16,185,129,0.95), rgba(16,185,129,0.4)); z-index: 99996; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 20px; pointer-events: none; }
+#celebrationFlash.show { display: flex; animation: celebratePulse 1.2s ease-out; }
+@keyframes celebratePulse { 0% { opacity: 0; transform: scale(1.2); } 15% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
+.celebrate-emoji { font-size: 120px; animation: celebrateBounce 1.2s ease-out; filter: drop-shadow(0 0 30px rgba(255,255,255,0.8)); }
+@keyframes celebrateBounce { 0% { transform: scale(0.3) rotate(-20deg); } 40% { transform: scale(1.3) rotate(10deg); } 70% { transform: scale(1) rotate(-5deg); } 100% { transform: scale(1) rotate(0); opacity: 0; } }
+.celebrate-text { color: #fff; font-size: 22px; font-weight: 800; text-shadow: 0 3px 12px rgba(0,0,0,0.5); text-align: center; padding: 0 20px; }
 </style>
 </head>
 <body>
@@ -367,7 +362,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <div class="card">
     <div class="about-icon">📊</div>
     <div class="about-name">Трекер продаж</div>
-    <div class="about-version">Версия 1.4</div>
+    <div class="about-version">Версия 1.5</div>
     <div class="about-desc">Простое приложение для учёта личных продаж.</div>
   </div>
   <div class="card">
@@ -382,7 +377,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <button class="btn" id="btnDedup" style="background:#1e2b24;color:#e8f5f0;">Удалить дубли товаров</button>
   <button class="btn" id="btnSyncFocus" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">Обновить фокус-лист из сети</button>
   <button class="btn" id="btnAboutClose" style="background:#1e2b24;color:#e8f5f0;">Закрыть</button>
-  <div id="versionLink">Версия 1.4.0</div>
+  <div id="versionLink">Версия 1.5.0</div>
 </div>
 
 <div id="screen-achievements" class="modal-screen">
@@ -453,7 +448,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 </div>
 
 <script>
-  var sales = [];
+var sales = [];
 var plans = {};
 var products = [];
 var editingId = null;
@@ -461,6 +456,7 @@ var historyDate = new Date();
 var totalsMonth = new Date();
 var wrongAttempts = 0;
 var passwordBlocked = false;
+var animatingIds = {};
 
 var screenOrder = ['home', 'add', 'history', 'totals', 'plan', 'ad'];
 
@@ -523,7 +519,6 @@ function playBeep() {
 function playDing() {
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
-    // Двойной аккорд — приятный «дзинь»
     [880, 1320].forEach(function(freq, idx) {
       var osc = ctx.createOscillator();
       var gain = ctx.createGain();
@@ -541,12 +536,33 @@ function playDing() {
   } catch(e) {}
 }
 
+function playFanfare() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var notes = [523, 659, 784, 1047];
+    notes.forEach(function(freq, i) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      var start = ctx.currentTime + i * 0.1;
+      gain.gain.setValueAtTime(0.001, start);
+      gain.gain.exponentialRampToValueAtTime(0.25, start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.5);
+      osc.start(start);
+      osc.stop(start + 0.55);
+    });
+    setTimeout(function() { ctx.close(); }, 1500);
+  } catch(e) {}
+}
+
 // ===== ВИБРАЦИЯ =====
 function vibrateLight() { if (navigator.vibrate) navigator.vibrate(30); }
 function vibrateSuccess() { if (navigator.vibrate) navigator.vibrate([40, 30, 40]); }
 function vibrateRecord() { if (navigator.vibrate) navigator.vibrate([80, 40, 80, 40, 120]); }
 
-// ===== RIPPLE ЭФФЕКТ =====
+// ===== RIPPLE =====
 function attachRipple() {
   document.querySelectorAll('.btn').forEach(function(btn) {
     if (btn.dataset.ripple) return;
@@ -569,11 +585,13 @@ function attachRipple() {
 
 // ===== АНИМАЦИЯ ЦИФР =====
 function animateNumber(el, target) {
-  if (!el) return;
-  var isMoney = /₽/.test(el.textContent) || true;
-  var start = 0;
+  if (!el || !el.id) return;
+  var id = el.id;
+  if (animatingIds[id]) return;
+  if (target <= 0) { el.textContent = fmt(target); return; }
+  animatingIds[id] = true;
+  var duration = 900;
   var startTime = null;
-  var duration = 700;
   el.textContent = '0 ₽';
   function step(ts) {
     if (!startTime) startTime = ts;
@@ -582,7 +600,10 @@ function animateNumber(el, target) {
     var val = Math.round(target * eased);
     el.textContent = val.toLocaleString('ru-RU') + ' ₽';
     if (p < 1) requestAnimationFrame(step);
-    else el.textContent = Math.round(target).toLocaleString('ru-RU') + ' ₽';
+    else {
+      el.textContent = Math.round(target).toLocaleString('ru-RU') + ' ₽';
+      delete animatingIds[id];
+    }
   }
   requestAnimationFrame(step);
 }
@@ -599,49 +620,56 @@ function showSuccessCheckmark() {
     void circle.offsetWidth; void mark.offsetWidth;
     circle.style.animation = ''; mark.style.animation = '';
   }
-  setTimeout(function() { el.classList.remove('show'); }, 900);
+  setTimeout(function() { el.classList.remove('show'); }, 1000);
 }
 
 // ===== ДОСТИЖЕНИЯ =====
 var ACHIEVEMENTS = [
-  { id: 'first_sale', icon: '🎯', name: 'Первая продажа', desc: 'Сохранена первая продажа', check: function() { return sales.filter(function(s){return !s.isAD;}).length >= 1; } },
-  { id: 'day_100k', icon: '💰', name: '100 000 ₽ за день', desc: 'Продать на 100 000 ₽ за один день', check: function() { return getBestDaySum() >= 100000; } },
-  { id: 'day_500k', icon: '🏆', name: 'Полмиллиона за день', desc: 'Продать на 500 000 ₽ за один день', check: function() { return getBestDaySum() >= 500000; } },
-  { id: 'ten_sales_day', icon: '🔥', name: '10 продаж за день', desc: '10 продаж за один день', check: function() { return getBestDayCount() >= 10; } },
-  { id: 'month_1m', icon: '💎', name: 'Миллион за месяц', desc: 'Продать на 1 000 000 ₽ за месяц', check: function() { return getBestMonthSum() >= 1000000; } },
-  { id: 'plan_done', icon: '🎖️', name: 'План выполнен', desc: 'Достичь 100% плана месяца', check: function() {
-      var m = currentMonth(); var plan = getPlan(m);
-      if (plan <= 0) return false;
-      var sum = 0; sales.forEach(function(s){ if (s.date.indexOf(m)===0 && !s.isAD) sum += s.sum; });
-      return sum >= plan;
-  } },
-  { id: 'focus_10', icon: '⭐', name: '10 фокусных', desc: 'Продать 10 фокусных товаров', check: function() {
-      var q = 0;
-      sales.forEach(function(s){ if (!s.isAD && s.percent > 1.5) q += s.qty; });
-      return q >= 10;
-  } }
+  { id: 'day_100k', icon: '💰', name: '100 000 ₽ за день', desc: 'Продать на 100 000 ₽ за один день', type: 'daily', check: function() { return getDaySumToday() >= 100000; } },
+  { id: 'day_10_focus', icon: '⭐', name: '10 фокусных за день', desc: 'Продать 10 фокусных товаров за день', type: 'daily', check: function() { return getFocusQtyToday() >= 10; } },
+  { id: 'month_500k', icon: '🥉', name: '500 000 ₽ за месяц', desc: 'Оборот 500K за месяц', type: 'monthly', check: function() { return getMonthNetTurnover() >= 500000; } },
+  { id: 'month_1m', icon: '🥈', name: '1 000 000 ₽ за месяц', desc: 'Оборот 1M за месяц', type: 'monthly', check: function() { return getMonthNetTurnover() >= 1000000; } },
+  { id: 'month_2m', icon: '🥇', name: '2 000 000 ₽ за месяц', desc: 'Оборот 2M за месяц', type: 'monthly', check: function() { return getMonthNetTurnover() >= 2000000; } },
+  { id: 'month_3m', icon: '💎', name: '3 000 000 ₽ за месяц', desc: 'Оборот 3M за месяц', type: 'monthly', check: function() { return getMonthNetTurnover() >= 3000000; } },
+  { id: 'month_5m', icon: '👑', name: '5 000 000 ₽ за месяц', desc: 'Оборот 5M за месяц', type: 'monthly', check: function() { return getMonthNetTurnover() >= 5000000; } },
+  { id: 'month_record', icon: '🏆', name: 'Рекорд дня побит', desc: 'Побить личный рекорд по дню в этом месяце', type: 'monthly', check: function() { return isNewDayRecordThisMonth(); } }
 ];
 
-function getBestDaySum() {
-  var d = {}; sales.forEach(function(s){ if(!s.isAD) d[s.date] = (d[s.date]||0) + s.sum; });
-  var best = 0; Object.keys(d).forEach(function(k){ if (d[k] > best) best = d[k]; });
-  return best;
+function getDaySumToday() {
+  var t = today(), sum = 0;
+  sales.forEach(function(s) { if (!s.isAD && s.date === t) sum += s.sum; });
+  return sum;
 }
-function getBestDayCount() {
-  var d = {}; sales.forEach(function(s){ if(!s.isAD) d[s.date] = (d[s.date]||0) + s.qty; });
-  var best = 0; Object.keys(d).forEach(function(k){ if (d[k] > best) best = d[k]; });
-  return best;
+
+function getFocusQtyToday() {
+  var t = today(), q = 0;
+  sales.forEach(function(s) { if (!s.isAD && s.date === t && s.percent > 1.5) q += s.qty; });
+  return q;
 }
-function getBestMonthSum() {
-  var d = {}; sales.forEach(function(s){ if(!s.isAD) { var m = s.date.substring(0,7); d[m] = (d[m]||0) + s.sum; } });
-  var best = 0; Object.keys(d).forEach(function(k){ if (d[k] > best) best = d[k]; });
-  return best;
+
+function getMonthNetTurnover() {
+  var m = currentMonth(), sum = 0, ad = 0;
+  sales.forEach(function(s) {
+    if (s.date.indexOf(m) !== 0) return;
+    if (s.isAD) ad += Math.abs(s.sum); else sum += s.sum;
+  });
+  return sum - ad;
+}
+
+function isNewDayRecordThisMonth() {
+  var m = currentMonth();
+  var daySums = {};
+  sales.forEach(function(s) { if (!s.isAD) daySums[s.date] = (daySums[s.date] || 0) + s.sum; });
+  var bestThisMonth = 0, bestAllTime = 0;
+  Object.keys(daySums).forEach(function(d) {
+    if (d.indexOf(m) === 0) { if (daySums[d] > bestThisMonth) bestThisMonth = daySums[d]; }
+    if (daySums[d] > bestAllTime) bestAllTime = daySums[d];
+  });
+  return bestThisMonth > 0 && bestThisMonth >= bestAllTime;
 }
 
 function getUnlockedAchievements() {
-  var unlocked = [];
-  try { unlocked = JSON.parse(localStorage.getItem('achievements') || '[]'); } catch(e) {}
-  return unlocked;
+  try { return JSON.parse(localStorage.getItem('achievements') || '[]'); } catch(e) { return []; }
 }
 
 function checkAchievements() {
@@ -650,12 +678,33 @@ function checkAchievements() {
     if (unlocked.indexOf(a.id) === -1 && a.check()) {
       unlocked.push(a.id);
       localStorage.setItem('achievements', JSON.stringify(unlocked));
-      setTimeout(function() {
-        showToast('🏆 Достижение: ' + a.name, 'record');
-        vibrateRecord();
-      }, 1500);
+      if (a.type === 'monthly') {
+        setTimeout(function() { bigCelebration(a); }, 900);
+      } else {
+        setTimeout(function() {
+          showToast('🏆 ' + a.name, 'record');
+          vibrateRecord();
+        }, 1500);
+      }
     }
   });
+}
+
+function bigCelebration(a) {
+  playFanfare();
+  if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 150]);
+  var flash = document.getElementById('celebrationFlash');
+  if (!flash) {
+    flash = document.createElement('div');
+    flash.id = 'celebrationFlash';
+    document.body.appendChild(flash);
+  }
+  flash.innerHTML = '<div class="celebrate-emoji">' + a.icon + '</div><div class="celebrate-text">' + a.name + '</div>';
+  flash.classList.remove('show');
+  void flash.offsetWidth;
+  flash.classList.add('show');
+  setTimeout(function() { flash.classList.remove('show'); }, 1500);
+  setTimeout(function() { showToast('🔥 ' + a.name + '!', 'record'); }, 600);
 }
 
 function renderAchievements() {
@@ -676,7 +725,7 @@ function renderAchievements() {
 
 // ===== АВТОБЭКАП =====
 function getBackupJSON() {
-  return JSON.stringify({ sales: sales, plans: plans, products: products, achievements: getUnlockedAchievements(), exportDate: new Date().toISOString(), version: '1.4' }, null, 2);
+  return JSON.stringify({ sales: sales, plans: plans, products: products, achievements: getUnlockedAchievements(), exportDate: new Date().toISOString(), version: '1.5' }, null, 2);
 }
 function saveBackupToFile() {
   try {
@@ -802,7 +851,6 @@ function addSale() {
   document.getElementById('inputDate').value = today();
   updateDateDisplay('inputDate', 'inputDateDisplay');
 
-  // Звук + вибрация + галочка
   playDing();
   showSuccessCheckmark();
   if (wasRecord) {
@@ -935,14 +983,14 @@ function render() {
     else if (pct >= 80) minEl.innerHTML = '🟢 <span class="accent">Минимум 80% — выполнен</span>';
     else minEl.innerHTML = '🔴 Минимум 80% — не выполнен (' + pct.toFixed(0) + '%)';
   }
-  document.getElementById('monthPlan').textContent = fmt(mPlan);
+  if (!animatingIds['monthPlan']) document.getElementById('monthPlan').textContent = fmt(mPlan);
+  if (!animatingIds['todaySales']) document.getElementById('todaySales').textContent = fmt(tSum);
+  if (!animatingIds['todayCommission']) document.getElementById('todayCommission').textContent = fmt(tComm);
+  if (!animatingIds['monthCommission']) document.getElementById('monthCommission').textContent = fmt(mComm);
+  if (!animatingIds['remaining']) document.getElementById('remaining').textContent = fmt(rem);
   document.getElementById('monthPercent').textContent = pct.toFixed(1) + '%';
   document.getElementById('daysLeft').textContent = dl;
-  document.getElementById('todaySales').textContent = fmt(tSum);
   document.getElementById('todayCount').textContent = tSales.length + ' продаж';
-  document.getElementById('todayCommission').textContent = fmt(tComm);
-  document.getElementById('monthCommission').textContent = fmt(mComm);
-  document.getElementById('remaining').textContent = fmt(rem);
   document.getElementById('remainingPercent').textContent = remPct.toFixed(1) + '%';
   document.getElementById('dailyNeeded').textContent = fmt(dl > 0 ? rem / dl : 0);
 
@@ -1090,6 +1138,30 @@ function render() {
 
   document.getElementById('adMonthSum').textContent = '−' + fmt(mADSum);
   document.getElementById('adMonthCount').textContent = mAD.length + ' записей';
+
+  // Анимация цифр — только при первом рендере
+  if (!window._firstRenderDone) {
+    window._firstRenderDone = true;
+    var startAnim = function() {
+      setTimeout(function() {
+        animateNumber(document.getElementById('monthPlan'), mPlan);
+        animateNumber(document.getElementById('todaySales'), tSum);
+        animateNumber(document.getElementById('todayCommission'), tComm);
+        animateNumber(document.getElementById('monthCommission'), mComm);
+        animateNumber(document.getElementById('remaining'), rem);
+      }, 300);
+    };
+    if (document.visibilityState === 'visible') {
+      setTimeout(startAnim, 1200);
+    } else {
+      document.addEventListener('visibilitychange', function once() {
+        if (document.visibilityState === 'visible') {
+          document.removeEventListener('visibilitychange', once);
+          setTimeout(startAnim, 1200);
+        }
+      });
+    }
+  }
 }
 
 // ===== СВАЙП =====
@@ -1098,7 +1170,21 @@ function scrollToScreen(name) {
   var idx = screenOrder.indexOf(name);
   if (idx === -1) return;
   container.scrollTo({ left: idx * window.innerWidth, behavior: 'smooth' });
+  replayScreenAnimation(idx);
 }
+
+function replayScreenAnimation(idx) {
+  var screen = document.querySelectorAll('.swipe-screen')[idx];
+  if (!screen) return;
+  var cards = screen.querySelectorAll('.card');
+  cards.forEach(function(card, i) {
+    card.style.animation = 'none';
+    void card.offsetWidth;
+    card.style.animation = '';
+    card.style.animationDelay = (i * 0.08) + 's';
+  });
+}
+
 function updateDots() {
   var container = document.getElementById('swipeContainer');
   var idx = Math.round(container.scrollLeft / window.innerWidth);
@@ -1106,11 +1192,18 @@ function updateDots() {
   if (idx >= screenOrder.length) idx = screenOrder.length - 1;
   document.querySelectorAll('#dots span').forEach(function(s, i) { s.classList.toggle('active', i === idx); });
 }
+
 var scrollTimeout = null;
 document.getElementById('swipeContainer').addEventListener('scroll', function() {
   if (scrollTimeout) clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(updateDots, 50);
+  scrollTimeout = setTimeout(function() {
+    updateDots();
+    var container = document.getElementById('swipeContainer');
+    var idx = Math.round(container.scrollLeft / window.innerWidth);
+    replayScreenAnimation(idx);
+  }, 200);
 });
+
 document.querySelectorAll('#dots span').forEach(function(dot) {
   dot.addEventListener('click', function() { scrollToScreen(this.getAttribute('data-screen')); });
 });
@@ -1321,14 +1414,13 @@ document.getElementById('btnImportClose').onclick = function() { document.getEle
 document.getElementById('btnAchievements').onclick = function() { renderAchievements(); document.getElementById('screen-achievements').classList.add('active'); };
 document.getElementById('btnAchClose').onclick = function() { document.getElementById('screen-achievements').classList.remove('active'); };
 
-// ===== КНОПКИ ДЕЙСТВИЙ =====
+// ===== КНОПКИ =====
 document.getElementById('btnAdd').onclick = addSale;
 document.getElementById('btnUpdate').onclick = updateSale;
 document.getElementById('btnEditCancel').onclick = closeEdit;
 document.getElementById('btnPlan').onclick = savePlan;
 document.getElementById('btnAddAD').onclick = addAD;
 
-// ===== ПАРОЛЬ / ИМПОРТ =====
 document.getElementById('versionLink').onclick = function() {
   if (passwordBlocked) return;
   var pwd = prompt('Пароль:');
@@ -1536,4 +1628,4 @@ render();
 updateDots();
 </script>
 </body>
-</html> 
+</html>

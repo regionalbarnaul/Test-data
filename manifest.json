@@ -7,16 +7,16 @@
   "orientation": "portrait",
   "background_color": "#0a0f0d",
   "theme_color": "#10b981",
-  "description": "Личный трекер продаж для продавца-консультанта",
+  "description": "Личный трекер продаж",
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "./icon-512.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icon-192.png",
+      "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

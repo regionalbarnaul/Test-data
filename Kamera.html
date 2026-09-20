@@ -16,10 +16,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .header { padding: 14px 44px 10px 14px; display: flex; justify-content: space-between; align-items: center; }
 .header h1 { font-size: 19px; font-weight: 700; }
 .header .date { font-size: 12px; color: #6b8a7d; }
-.card { background: #121a16; border-radius: 12px; margin: 0 14px 10px; padding: 12px 14px; border: 1px solid #1e2b24; animation: cardIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+.card { background: #121a16; border-radius: 12px; margin: 0 14px 10px; padding: 12px 14px; border: 1px solid #1e2b24; }
+#screen-home .card { animation: cardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards; will-change: transform, opacity; backface-visibility: hidden; }
+#screen-home .card:nth-child(2) { animation-delay: 0.05s; }
+#screen-home .card:nth-child(3) { animation-delay: 0.1s; }
+#screen-home .card:nth-child(4) { animation-delay: 0.15s; }
+#screen-home .card:nth-child(5) { animation-delay: 0.2s; }
+#screen-home .card:nth-child(6) { animation-delay: 0.25s; }
+#screen-home .card:nth-child(7) { animation-delay: 0.3s; }
+#screen-home .card:nth-child(8) { animation-delay: 0.35s; }
 @keyframes cardIn {
-  from { opacity: 0; transform: translateY(28px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 .card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b8a7d; margin-bottom: 5px; }
 .big-number { font-size: 25px; font-weight: 800; color: #10b981; }
@@ -74,11 +82,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .about-row .value { color: #e8f5f0; }
 .about-mail { display: block; text-align: center; margin: 16px 14px 10px; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; }
 #aboutBtn { position: fixed; top: 14px; right: 14px; background: none; border: none; color: #6b8a7d; font-size: 22px; cursor: pointer; z-index: 10; padding: 4px; }
-#versionLink { text-align: center; color: #6b8a7d; font-size: 12px; padding: 16px; cursor: pointer; }
 .date-display { padding: 12px; background: #0a0f0d; border: 1px solid #1e2b24; border-radius: 10px; color: #e8f5f0; font-size: 15px; cursor: pointer; }
 .date-display:active { background: #1e2b24; }
 .compare-up { color: #10b981; font-weight: 700; }
 .compare-down { color: #ef4444; font-weight: 700; }
+
+.percent-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e2b24; font-size: 13px; }
+.percent-row:last-child { border-bottom: none; }
+.percent-badge { display: inline-block; min-width: 44px; padding: 4px 10px; background: #10b981; color: #0a0f0d; border-radius: 6px; font-size: 13px; font-weight: 800; text-align: center; }
+.percent-info { flex: 1; margin-left: 12px; font-size: 13px; color: #a8c5b8; }
+.percent-sum { font-size: 14px; font-weight: 700; color: #10b981; text-align: right; }
+.percent-comm { font-size: 11px; color: #6b8a7d; margin-top: 2px; text-align: right; }
 
 #swipeContainer { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; height: 100vh; width: 100vw; }
 #swipeContainer::-webkit-scrollbar { display: none; }
@@ -261,6 +275,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
       <div class="big-number" style="font-size:25px" id="totalsNet">0 ₽</div>
       <div class="sub-text">Продажи минус возвраты</div>
     </div>
+    <div class="card" id="percentCard">
+      <div class="card-title">Продажи по процентам</div>
+      <div id="percentBreakdown"><div class="empty">Нет продаж за этот месяц</div></div>
+    </div>
     <div class="card">
       <div class="card-title">Сравнение с прошлым месяцем</div>
       <div class="big-number" style="font-size:22px" id="totalsCompare">0%</div>
@@ -362,7 +380,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <div class="card">
     <div class="about-icon">📊</div>
     <div class="about-name">Трекер продаж</div>
-    <div class="about-version">Версия 1.5</div>
+    <div class="about-version">Версия 1.6</div>
     <div class="about-desc">Простое приложение для учёта личных продаж.</div>
   </div>
   <div class="card">
@@ -375,9 +393,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <button class="btn" id="btnSaveFile" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">💾 Скачать бэкап в файл</button>
   <button class="btn" id="btnShareBackup" style="background:#334155;color:#fff;">📤 Отправить бэкап (Telegram)</button>
   <button class="btn" id="btnDedup" style="background:#1e2b24;color:#e8f5f0;">Удалить дубли товаров</button>
+  <button class="btn" id="btnImportManual" style="background:#334155;color:#fff;">📝 Обновить фокус-лист вручную</button>
   <button class="btn" id="btnSyncFocus" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">Обновить фокус-лист из сети</button>
   <button class="btn" id="btnAboutClose" style="background:#1e2b24;color:#e8f5f0;">Закрыть</button>
-  <div id="versionLink">Версия 1.5.0</div>
 </div>
 
 <div id="screen-achievements" class="modal-screen">
@@ -510,8 +528,7 @@ function playBeep() {
     gain.gain.setValueAtTime(0.001, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.3, ctx.currentTime + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.16);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.16);
     setTimeout(function() { ctx.close(); }, 300);
   } catch(e) {}
 }
@@ -523,14 +540,12 @@ function playDing() {
       var osc = ctx.createOscillator();
       var gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
-      osc.type = 'sine';
-      osc.frequency.value = freq;
+      osc.type = 'sine'; osc.frequency.value = freq;
       var start = ctx.currentTime + idx * 0.08;
       gain.gain.setValueAtTime(0.001, start);
       gain.gain.exponentialRampToValueAtTime(0.25, start + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
-      osc.start(start);
-      osc.stop(start + 0.4);
+      osc.start(start); osc.stop(start + 0.4);
     });
     setTimeout(function() { ctx.close(); }, 800);
   } catch(e) {}
@@ -544,20 +559,17 @@ function playFanfare() {
       var osc = ctx.createOscillator();
       var gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
-      osc.type = 'triangle';
-      osc.frequency.value = freq;
+      osc.type = 'triangle'; osc.frequency.value = freq;
       var start = ctx.currentTime + i * 0.1;
       gain.gain.setValueAtTime(0.001, start);
       gain.gain.exponentialRampToValueAtTime(0.25, start + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.001, start + 0.5);
-      osc.start(start);
-      osc.stop(start + 0.55);
+      osc.start(start); osc.stop(start + 0.55);
     });
     setTimeout(function() { ctx.close(); }, 1500);
   } catch(e) {}
 }
 
-// ===== ВИБРАЦИЯ =====
 function vibrateLight() { if (navigator.vibrate) navigator.vibrate(30); }
 function vibrateSuccess() { if (navigator.vibrate) navigator.vibrate([40, 30, 40]); }
 function vibrateRecord() { if (navigator.vibrate) navigator.vibrate([80, 40, 80, 40, 120]); }
@@ -575,8 +587,7 @@ function attachRipple() {
       var ripple = document.createElement('span');
       ripple.className = 'ripple';
       ripple.style.width = ripple.style.height = size + 'px';
-      ripple.style.left = x + 'px';
-      ripple.style.top = y + 'px';
+      ripple.style.left = x + 'px'; ripple.style.top = y + 'px';
       this.appendChild(ripple);
       setTimeout(function() { ripple.remove(); }, 700);
     });
@@ -590,8 +601,7 @@ function animateNumber(el, target) {
   if (animatingIds[id]) return;
   if (target <= 0) { el.textContent = fmt(target); return; }
   animatingIds[id] = true;
-  var duration = 900;
-  var startTime = null;
+  var duration = 900, startTime = null;
   el.textContent = '0 ₽';
   function step(ts) {
     if (!startTime) startTime = ts;
@@ -600,10 +610,7 @@ function animateNumber(el, target) {
     var val = Math.round(target * eased);
     el.textContent = val.toLocaleString('ru-RU') + ' ₽';
     if (p < 1) requestAnimationFrame(step);
-    else {
-      el.textContent = Math.round(target).toLocaleString('ru-RU') + ' ₽';
-      delete animatingIds[id];
-    }
+    else { el.textContent = Math.round(target).toLocaleString('ru-RU') + ' ₽'; delete animatingIds[id]; }
   }
   requestAnimationFrame(step);
 }
@@ -640,13 +647,11 @@ function getDaySumToday() {
   sales.forEach(function(s) { if (!s.isAD && s.date === t) sum += s.sum; });
   return sum;
 }
-
 function getFocusQtyToday() {
   var t = today(), q = 0;
   sales.forEach(function(s) { if (!s.isAD && s.date === t && s.percent > 1.5) q += s.qty; });
   return q;
 }
-
 function getMonthNetTurnover() {
   var m = currentMonth(), sum = 0, ad = 0;
   sales.forEach(function(s) {
@@ -655,7 +660,6 @@ function getMonthNetTurnover() {
   });
   return sum - ad;
 }
-
 function isNewDayRecordThisMonth() {
   var m = currentMonth();
   var daySums = {};
@@ -725,7 +729,7 @@ function renderAchievements() {
 
 // ===== АВТОБЭКАП =====
 function getBackupJSON() {
-  return JSON.stringify({ sales: sales, plans: plans, products: products, achievements: getUnlockedAchievements(), exportDate: new Date().toISOString(), version: '1.5' }, null, 2);
+  return JSON.stringify({ sales: sales, plans: plans, products: products, achievements: getUnlockedAchievements(), exportDate: new Date().toISOString(), version: '1.6' }, null, 2);
 }
 function saveBackupToFile() {
   try {
@@ -873,7 +877,6 @@ function checkIfWillBeRecord(newSum, date) {
   return ((daySums[date] || 0) + newSum) > currentBest;
 }
 
-// ===== ВОЗВРАТ =====
 function addAD() {
   var date = document.getElementById('adDate').value || today();
   if (date > today()) { showToast('Дата не может быть в будущем', 'warn'); return; }
@@ -1038,6 +1041,7 @@ function render() {
   else if (pct >= 80) pb.classList.add('ok');
   document.getElementById('inputPlan').value = mPlan || '';
 
+  // ===== ИСТОРИЯ =====
   var hDate = dateStr(historyDate);
   var hSales = sales.filter(function(s) { return s.date === hDate; });
   var ht = document.getElementById('histTitle');
@@ -1067,6 +1071,7 @@ function render() {
   document.getElementById('histTotal').textContent = fmt(hS);
   document.getElementById('histCommission').textContent = fmt(hC);
 
+  // ===== ИТОГИ =====
   var tm = monthStr(totalsMonth);
   var tot = sales.filter(function(s) { return s.date.indexOf(tm) === 0; });
   var totSales = tot.filter(function(s) { return !s.isAD; });
@@ -1095,6 +1100,9 @@ function render() {
   document.getElementById('totalsAD').textContent = '−' + fmt(adS);
   document.getElementById('totalsADCount').textContent = totAD.length + ' записей';
   document.getElementById('totalsNet').textContent = fmt(netT);
+
+  // ===== РАЗБИВКА ПО ПРОЦЕНТАМ =====
+  renderPercentBreakdown(totSales);
 
   var pm = monthStr(prevMonth(totalsMonth));
   var pmSum = 0, pmADSum = 0;
@@ -1139,7 +1147,7 @@ function render() {
   document.getElementById('adMonthSum').textContent = '−' + fmt(mADSum);
   document.getElementById('adMonthCount').textContent = mAD.length + ' записей';
 
-  // Анимация цифр — только при первом рендере
+  // ===== АНИМАЦИЯ ЦИФР — только при первом рендере =====
   if (!window._firstRenderDone) {
     window._firstRenderDone = true;
     var startAnim = function() {
@@ -1164,25 +1172,46 @@ function render() {
   }
 }
 
+// ===== РАЗБИВКА ПО ПРОЦЕНТАМ =====
+function renderPercentBreakdown(monthSales) {
+  var el = document.getElementById('percentBreakdown');
+  if (!el) return;
+  if (!monthSales || monthSales.length === 0) {
+    el.innerHTML = '<div class="empty">Нет продаж за этот месяц</div>';
+    return;
+  }
+  // Группируем по проценту
+  var groups = {};
+  monthSales.forEach(function(s) {
+    var key = (Math.round(s.percent * 10) / 10).toString();
+    if (!groups[key]) groups[key] = { qty: 0, sum: 0, comm: 0 };
+    groups[key].qty += s.qty;
+    groups[key].sum += s.sum;
+    groups[key].comm += s.commission;
+  });
+  // Сортируем по возрастанию процента
+  var keys = Object.keys(groups).sort(function(a, b) { return parseFloat(a) - parseFloat(b); });
+  var html = '';
+  keys.forEach(function(k) {
+    var g = groups[k];
+    html += '<div class="percent-row">' +
+      '<span class="percent-badge">' + k + '%</span>' +
+      '<div class="percent-info">' + g.qty + ' шт</div>' +
+      '<div>' +
+        '<div class="percent-sum">' + fmt(g.sum) + '</div>' +
+        '<div class="percent-comm">отч. ' + fmt(g.comm) + '</div>' +
+      '</div>' +
+    '</div>';
+  });
+  el.innerHTML = html;
+}
+
 // ===== СВАЙП =====
 function scrollToScreen(name) {
   var container = document.getElementById('swipeContainer');
   var idx = screenOrder.indexOf(name);
   if (idx === -1) return;
   container.scrollTo({ left: idx * window.innerWidth, behavior: 'smooth' });
-  replayScreenAnimation(idx);
-}
-
-function replayScreenAnimation(idx) {
-  var screen = document.querySelectorAll('.swipe-screen')[idx];
-  if (!screen) return;
-  var cards = screen.querySelectorAll('.card');
-  cards.forEach(function(card, i) {
-    card.style.animation = 'none';
-    void card.offsetWidth;
-    card.style.animation = '';
-    card.style.animationDelay = (i * 0.08) + 's';
-  });
 }
 
 function updateDots() {
@@ -1196,12 +1225,7 @@ function updateDots() {
 var scrollTimeout = null;
 document.getElementById('swipeContainer').addEventListener('scroll', function() {
   if (scrollTimeout) clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(function() {
-    updateDots();
-    var container = document.getElementById('swipeContainer');
-    var idx = Math.round(container.scrollLeft / window.innerWidth);
-    replayScreenAnimation(idx);
-  }, 200);
+  scrollTimeout = setTimeout(updateDots, 100);
 });
 
 document.querySelectorAll('#dots span').forEach(function(dot) {
@@ -1421,18 +1445,64 @@ document.getElementById('btnEditCancel').onclick = closeEdit;
 document.getElementById('btnPlan').onclick = savePlan;
 document.getElementById('btnAddAD').onclick = addAD;
 
-document.getElementById('versionLink').onclick = function() {
-  if (passwordBlocked) return;
-  var pwd = prompt('Пароль:');
-  if (pwd === null) return;
-  if (pwd === '5246') { wrongAttempts = 0; document.getElementById('screen-import').classList.add('active'); }
-  else {
-    wrongAttempts++;
-    if (wrongAttempts >= 3) { passwordBlocked = true; showToast('Неверный пароль. Кнопка заблокирована.', 'error'); }
-    else showToast('Неверный пароль. Осталось: ' + (3 - wrongAttempts), 'warn');
-  }
+// ===== ФОКУС-ЛИСТ ВРУЧНУЮ (без пароля) =====
+document.getElementById('btnImportManual').onclick = function() {
+  document.getElementById('screen-import').classList.add('active');
 };
 
+// ===== ФОКУС-ЛИСТ ИЗ СЕТИ (без пароля) =====
+document.getElementById('btnSyncFocus').onclick = function() {
+  var ok = confirm('Тест с сервера, бесплатный пробный период.\n\nЗагрузить фокус-лист?');
+  if (!ok) return;
+  var url = 'https://raw.githubusercontent.com/regionalbarnaul/Test-data/main/Test.csv';
+  showToast('Загружаю фокус-лист...', 'warn');
+  fetch(url)
+    .then(function(r) { return r.text(); })
+    .then(function(text) {
+      if (text.charCodeAt(0) === 0xFEFF) text = text.substring(1);
+      function parseCSV(str) {
+        var rows = [], row = [], cur = '', q = false;
+        for (var i = 0; i < str.length; i++) {
+          var ch = str[i];
+          if (q) {
+            if (ch === '"') { if (str[i+1] === '"') { cur += '"'; i++; } else q = false; }
+            else cur += ch;
+          } else {
+            if (ch === '"') q = true;
+            else if (ch === ',') { row.push(cur); cur = ''; }
+            else if (ch === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; }
+            else if (ch === '\r') { }
+            else cur += ch;
+          }
+        }
+        if (cur !== '' || row.length > 0) { row.push(cur); rows.push(row); }
+        return rows;
+      }
+      var rows = parseCSV(text); var np = [];
+      for (var i = 1; i < rows.length; i++) {
+        var r = rows[i]; if (r.length < 3) continue;
+        var art = (r[0] || '').trim(), name = (r[1] || '').trim(), pr = (r[2] || '').trim();
+        if (!art || !name) continue;
+        var type = 'focus', percent = 0;
+        if (pr.indexOf('при продажах') !== -1) { type = 'conditional'; var mm = pr.match(/(\d+)/); percent = mm ? parseInt(mm[1]) : 3; }
+        else { var m2 = pr.match(/(\d+(?:[.,]\d+)?)/); percent = m2 ? parseFloat(m2[1].replace(',', '.')) : 0; }
+        np.push({ art: art, name: name, percent: percent, type: type });
+      }
+      if (np.length === 0) { showToast('Товары не найдены', 'warn'); return; }
+      products = products.filter(function(p) { return p.type === 'regular'; });
+      np.forEach(function(x) {
+        var ex = products.find(function(p) { if (x.art && p.art && p.art === x.art) return true; return normalizeName(p.name) === normalizeName(x.name); });
+        if (ex) { ex.percent = x.percent; ex.type = x.type; if (x.art) ex.art = x.art; if (x.name) ex.name = x.name; }
+        else products.push(x);
+      });
+      save();
+      showToast('Загружено: ' + np.length + ' товаров', 'success');
+      render();
+    })
+    .catch(function(e) { showToast('Ошибка загрузки: ' + e.message, 'error'); });
+};
+
+// ===== ИМПОРТ ТОВАРОВ =====
 document.getElementById('btnImport').onclick = function() {
   var val = document.getElementById('importText').value.trim();
   if (!val) { showToast('Вставьте данные', 'warn'); return; }
@@ -1550,60 +1620,6 @@ document.getElementById('btnRestore').onclick = function() {
   document.getElementById('importText2').value = '';
   document.getElementById('screen-backup').classList.remove('active');
   render();
-};
-
-document.getElementById('btnSyncFocus').onclick = function() {
-  var ok = confirm('Нет финансов на онлайн.\n\nСбор средств на приложение — нажми OK');
-  if (!ok) return;
-  var pwd = prompt('Пароль:');
-  if (pwd === null) return;
-  if (pwd !== '5246') { showToast('Неверный пароль', 'error'); return; }
-  var url = 'https://raw.githubusercontent.com/regionalbarnaul/Test-data/main/Test.csv';
-  showToast('Загружаю фокус-лист...', 'warn');
-  fetch(url)
-    .then(function(r) { return r.text(); })
-    .then(function(text) {
-      if (text.charCodeAt(0) === 0xFEFF) text = text.substring(1);
-      function parseCSV(str) {
-        var rows = [], row = [], cur = '', q = false;
-        for (var i = 0; i < str.length; i++) {
-          var ch = str[i];
-          if (q) {
-            if (ch === '"') { if (str[i+1] === '"') { cur += '"'; i++; } else q = false; }
-            else cur += ch;
-          } else {
-            if (ch === '"') q = true;
-            else if (ch === ',') { row.push(cur); cur = ''; }
-            else if (ch === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; }
-            else if (ch === '\r') { }
-            else cur += ch;
-          }
-        }
-        if (cur !== '' || row.length > 0) { row.push(cur); rows.push(row); }
-        return rows;
-      }
-      var rows = parseCSV(text); var np = [];
-      for (var i = 1; i < rows.length; i++) {
-        var r = rows[i]; if (r.length < 3) continue;
-        var art = (r[0] || '').trim(), name = (r[1] || '').trim(), pr = (r[2] || '').trim();
-        if (!art || !name) continue;
-        var type = 'focus', percent = 0;
-        if (pr.indexOf('при продажах') !== -1) { type = 'conditional'; var mm = pr.match(/(\d+)/); percent = mm ? parseInt(mm[1]) : 3; }
-        else { var m2 = pr.match(/(\d+(?:[.,]\d+)?)/); percent = m2 ? parseFloat(m2[1].replace(',', '.')) : 0; }
-        np.push({ art: art, name: name, percent: percent, type: type });
-      }
-      if (np.length === 0) { showToast('Товары не найдены', 'warn'); return; }
-      products = products.filter(function(p) { return p.type === 'regular'; });
-      np.forEach(function(x) {
-        var ex = products.find(function(p) { if (x.art && p.art && p.art === x.art) return true; return normalizeName(p.name) === normalizeName(x.name); });
-        if (ex) { ex.percent = x.percent; ex.type = x.type; if (x.art) ex.art = x.art; if (x.name) ex.name = x.name; }
-        else products.push(x);
-      });
-      save();
-      showToast('Загружено: ' + np.length + ' товаров', 'success');
-      render();
-    })
-    .catch(function(e) { showToast('Ошибка загрузки: ' + e.message, 'error'); });
 };
 
 // ===== SERVICE WORKER =====

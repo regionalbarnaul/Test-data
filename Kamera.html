@@ -302,7 +302,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <div class="card">
     <div class="about-icon">📊</div>
     <div class="about-name">Трекер продаж</div>
-    <div class="about-version">Версия 1.1</div>
+    <div class="about-version">Версия 1.2</div>
     <div class="about-desc">Простое приложение для учёта личных продаж.</div>
   </div>
   <div class="card">
@@ -315,7 +315,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <button class="btn" id="btnShareBackup" style="background:#334155;color:#fff;">📤 Отправить бэкап (Telegram)</button>
   <button class="btn" id="btnDedup" style="background:#1e2b24;color:#e8f5f0;">Удалить дубли товаров</button>
   <button class="btn" id="btnSyncFocus" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">Обновить фокус-лист из сети</button>
-  <div id="versionLink">Версия 1.1.0</div>
+  <div id="versionLink">Версия 1.2.0</div>
 </div>
 
 <div id="screen-backup" class="screen">
@@ -326,10 +326,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <textarea id="exportText" readonly style="width:100%;height:180px;padding:10px;background:#0a0f0d;border:1px solid #1e2b24;border-radius:10px;color:#e8f5f0;font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea>
   </div>
   <div class="card">
-    <div class="card-title">Импорт (восстановить)</div>
-    <div class="sub-text" style="margin-bottom:8px">Вставь сохранённый текст и нажми «Восстановить».</div>
-    <textarea id="importText2" placeholder="Вставь данные сюда..." style="width:100%;height:180px;padding:10px;background:#0a0f0d;border:1px solid #1e2b24;border-radius:10px;color:#e8f5f0;font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea>
-    <button class="btn" id="btnRestore">Восстановить</button>
+    <div class="card-title">Импорт из файла</div>
+    <div class="sub-text" style="margin-bottom:8px">Выбери файл бэкапа (tracker_backup.json) из Загрузок.</div>
+    <input type="file" id="restoreFileInput" accept=".json,application/json" style="display:none;">
+    <button class="btn" id="btnFileRestore">📁 Выбрать файл бэкапа</button>
+  </div>
+  <div class="card">
+    <div class="card-title">Или вставь текст вручную</div>
+    <textarea id="importText2" placeholder="Вставь данные сюда..." style="width:100%;height:140px;padding:10px;background:#0a0f0d;border:1px solid #1e2b24;border-radius:10px;color:#e8f5f0;font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea>
+    <button class="btn" id="btnRestore">Восстановить из текста</button>
   </div>
 </div>
 
@@ -375,7 +380,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 </div>
 
 <script>
-var sales = [];
+  var sales = [];
 var plans = {};
 var products = [];
 var editingId = null;
@@ -421,19 +426,18 @@ function showToast(message, type) {
   }, 2400);
 }
 
-// ===== АВТОБЭКАП =====
 function getBackupJSON() {
   return JSON.stringify({
     sales: sales, plans: plans, products: products,
     exportDate: new Date().toISOString(),
-    version: '1.1'
+    version: '1.2'
   }, null, 2);
 }
 
 function saveBackupToFile() {
   try {
     var data = getBackupJSON();
-    var filename = 'tracker_backup_' + today() + '.json';
+    var filename = 'tracker_backup.json';
     var blob = new Blob([data], {type: 'application/json'});
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
@@ -1262,6 +1266,37 @@ document.getElementById('btnSaveFile').onclick = function() {
 };
 
 document.getElementById('btnShareBackup').onclick = shareBackup;
+
+document.getElementById('btnFileRestore').onclick = function() {
+  document.getElementById('restoreFileInput').click();
+};
+
+document.getElementById('restoreFileInput').addEventListener('change', function(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var data;
+    try { data = JSON.parse(e.target.result); }
+    catch(err) { showToast('Файл повреждён', 'error'); event.target.value = ''; return; }
+    if (!data.sales && !data.plans && !data.products) {
+      showToast('Нет данных в файле', 'error'); event.target.value = ''; return;
+    }
+    var info = 'Продаж: ' + (data.sales ? data.sales.length : 0) +
+               '\nТоваров: ' + (data.products ? data.products.length : 0);
+    if (!confirm('Восстановить?\n\n' + info + '\n\nТекущие данные будут заменены.')) {
+      event.target.value = ''; return;
+    }
+    if (data.sales) sales = data.sales;
+    if (data.plans) plans = data.plans;
+    if (data.products) products = data.products;
+    save();
+    showToast('Восстановлено: ' + sales.length + ' записей', 'success');
+    event.target.value = '';
+    showScreen('home');
+  };
+  reader.readAsText(file);
+});
 
 document.getElementById('btnRestore').onclick = function() {
   var val = document.getElementById('importText2').value.trim();

@@ -472,8 +472,6 @@ var products = [];
 var editingId = null;
 var historyDate = new Date();
 var totalsMonth = new Date();
-var wrongAttempts = 0;
-var passwordBlocked = false;
 var animatingIds = {};
 
 var screenOrder = ['home', 'add', 'history', 'totals', 'plan', 'ad'];
@@ -523,8 +521,7 @@ function playBeep() {
     var osc = ctx.createOscillator();
     var gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
-    osc.type = 'sine';
-    osc.frequency.value = 1800;
+    osc.type = 'sine'; osc.frequency.value = 1800;
     gain.gain.setValueAtTime(0.001, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.3, ctx.currentTime + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
@@ -678,6 +675,8 @@ function getUnlockedAchievements() {
 
 function checkAchievements() {
   var unlocked = getUnlockedAchievements();
+  var validIds = ACHIEVEMENTS.map(function(a) { return a.id; });
+  unlocked = unlocked.filter(function(id) { return validIds.indexOf(id) !== -1; });
   ACHIEVEMENTS.forEach(function(a) {
     if (unlocked.indexOf(a.id) === -1 && a.check()) {
       unlocked.push(a.id);
@@ -713,6 +712,9 @@ function bigCelebration(a) {
 
 function renderAchievements() {
   var unlocked = getUnlockedAchievements();
+  var validIds = ACHIEVEMENTS.map(function(a) { return a.id; });
+  unlocked = unlocked.filter(function(id) { return validIds.indexOf(id) !== -1; });
+  localStorage.setItem('achievements', JSON.stringify(unlocked));
   var el = document.getElementById('achievementsList');
   if (!el) return;
   var html = '';
@@ -866,6 +868,7 @@ function addSale() {
   }
   maybeAutoBackup();
   checkAchievements();
+  render();
   scrollToScreen('home');
 }
 
@@ -898,6 +901,7 @@ function addAD() {
   vibrateLight();
   showToast('Возврат сохранён', 'success');
   maybeAutoBackup();
+  render();
   scrollToScreen('home');
 }
 
@@ -1041,7 +1045,6 @@ function render() {
   else if (pct >= 80) pb.classList.add('ok');
   document.getElementById('inputPlan').value = mPlan || '';
 
-  // ===== ИСТОРИЯ =====
   var hDate = dateStr(historyDate);
   var hSales = sales.filter(function(s) { return s.date === hDate; });
   var ht = document.getElementById('histTitle');
@@ -1071,7 +1074,6 @@ function render() {
   document.getElementById('histTotal').textContent = fmt(hS);
   document.getElementById('histCommission').textContent = fmt(hC);
 
-  // ===== ИТОГИ =====
   var tm = monthStr(totalsMonth);
   var tot = sales.filter(function(s) { return s.date.indexOf(tm) === 0; });
   var totSales = tot.filter(function(s) { return !s.isAD; });
@@ -1101,7 +1103,6 @@ function render() {
   document.getElementById('totalsADCount').textContent = totAD.length + ' записей';
   document.getElementById('totalsNet').textContent = fmt(netT);
 
-  // ===== РАЗБИВКА ПО ПРОЦЕНТАМ =====
   renderPercentBreakdown(totSales);
 
   var pm = monthStr(prevMonth(totalsMonth));
@@ -1147,7 +1148,6 @@ function render() {
   document.getElementById('adMonthSum').textContent = '−' + fmt(mADSum);
   document.getElementById('adMonthCount').textContent = mAD.length + ' записей';
 
-  // ===== АНИМАЦИЯ ЦИФР — только при первом рендере =====
   if (!window._firstRenderDone) {
     window._firstRenderDone = true;
     var startAnim = function() {
@@ -1180,7 +1180,6 @@ function renderPercentBreakdown(monthSales) {
     el.innerHTML = '<div class="empty">Нет продаж за этот месяц</div>';
     return;
   }
-  // Группируем по проценту
   var groups = {};
   monthSales.forEach(function(s) {
     var key = (Math.round(s.percent * 10) / 10).toString();
@@ -1189,7 +1188,6 @@ function renderPercentBreakdown(monthSales) {
     groups[key].sum += s.sum;
     groups[key].comm += s.commission;
   });
-  // Сортируем по возрастанию процента
   var keys = Object.keys(groups).sort(function(a, b) { return parseFloat(a) - parseFloat(b); });
   var html = '';
   keys.forEach(function(k) {
@@ -1445,12 +1443,10 @@ document.getElementById('btnEditCancel').onclick = closeEdit;
 document.getElementById('btnPlan').onclick = savePlan;
 document.getElementById('btnAddAD').onclick = addAD;
 
-// ===== ФОКУС-ЛИСТ ВРУЧНУЮ (без пароля) =====
 document.getElementById('btnImportManual').onclick = function() {
   document.getElementById('screen-import').classList.add('active');
 };
 
-// ===== ФОКУС-ЛИСТ ИЗ СЕТИ (без пароля) =====
 document.getElementById('btnSyncFocus').onclick = function() {
   var ok = confirm('Тест с сервера, бесплатный пробный период.\n\nЗагрузить фокус-лист?');
   if (!ok) return;
@@ -1502,7 +1498,6 @@ document.getElementById('btnSyncFocus').onclick = function() {
     .catch(function(e) { showToast('Ошибка загрузки: ' + e.message, 'error'); });
 };
 
-// ===== ИМПОРТ ТОВАРОВ =====
 document.getElementById('btnImport').onclick = function() {
   var val = document.getElementById('importText').value.trim();
   if (!val) { showToast('Вставьте данные', 'warn'); return; }

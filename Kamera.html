@@ -529,7 +529,6 @@ function playBeep() {
     setTimeout(function() { ctx.close(); }, 300);
   } catch(e) {}
 }
-
 function playDing() {
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -547,12 +546,10 @@ function playDing() {
     setTimeout(function() { ctx.close(); }, 800);
   } catch(e) {}
 }
-
 function playFanfare() {
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
-    var notes = [523, 659, 784, 1047];
-    notes.forEach(function(freq, i) {
+    [523, 659, 784, 1047].forEach(function(freq, i) {
       var osc = ctx.createOscillator();
       var gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
@@ -566,7 +563,6 @@ function playFanfare() {
     setTimeout(function() { ctx.close(); }, 1500);
   } catch(e) {}
 }
-
 function vibrateLight() { if (navigator.vibrate) navigator.vibrate(30); }
 function vibrateSuccess() { if (navigator.vibrate) navigator.vibrate([40, 30, 40]); }
 function vibrateRecord() { if (navigator.vibrate) navigator.vibrate([80, 40, 80, 40, 120]); }
@@ -668,11 +664,9 @@ function isNewDayRecordThisMonth() {
   });
   return bestThisMonth > 0 && bestThisMonth >= bestAllTime;
 }
-
 function getUnlockedAchievements() {
   try { return JSON.parse(localStorage.getItem('achievements') || '[]'); } catch(e) { return []; }
 }
-
 function checkAchievements() {
   var unlocked = getUnlockedAchievements();
   var validIds = ACHIEVEMENTS.map(function(a) { return a.id; });
@@ -684,15 +678,11 @@ function checkAchievements() {
       if (a.type === 'monthly') {
         setTimeout(function() { bigCelebration(a); }, 900);
       } else {
-        setTimeout(function() {
-          showToast('🏆 ' + a.name, 'record');
-          vibrateRecord();
-        }, 1500);
+        setTimeout(function() { showToast('🏆 ' + a.name, 'record'); vibrateRecord(); }, 1500);
       }
     }
   });
 }
-
 function bigCelebration(a) {
   playFanfare();
   if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 150]);
@@ -709,7 +699,6 @@ function bigCelebration(a) {
   setTimeout(function() { flash.classList.remove('show'); }, 1500);
   setTimeout(function() { showToast('🔥 ' + a.name + '!', 'record'); }, 600);
 }
-
 function renderAchievements() {
   var unlocked = getUnlockedAchievements();
   var validIds = ACHIEVEMENTS.map(function(a) { return a.id; });
@@ -792,9 +781,7 @@ function save() {
     localStorage.setItem('products', JSON.stringify(products));
   } catch(e) {}
 }
-
 function getPlan(month) { return plans[month] || 0; }
-
 function findProduct(query) {
   var q = normalizeName(query);
   return products.filter(function(p) {
@@ -802,9 +789,31 @@ function findProduct(query) {
   }).slice(0, 20);
 }
 
+// ===== УЛУЧШЕННАЯ ЗАЩИТА ОТ ДУБЛЕЙ =====
 function saveRegularProduct(name) {
   var key = normalizeName(name);
+  if (!key) return;
+
+  // 1. Точное совпадение имени
   if (products.find(function(p) { return normalizeName(p.name) === key; })) return;
+
+  // 2. Совпадение по артикулу (6-8 цифр в имени)
+  var artMatch = key.match(/\b(\d{6,8})\b/);
+  if (artMatch) {
+    var art = artMatch[1];
+    if (products.find(function(p) {
+      return (p.art && p.art === art) || normalizeName(p.name).indexOf(art) !== -1;
+    })) return;
+  }
+
+  // 3. Совпадение первых 30 символов
+  var shortKey = key.substring(0, 30);
+  if (shortKey.length > 10) {
+    if (products.find(function(p) {
+      return normalizeName(p.name).substring(0, 30) === shortKey;
+    })) return;
+  }
+
   products.push({ art: '', name: name, percent: 1.5, type: 'regular' });
   save();
 }
@@ -818,7 +827,6 @@ function getProductPercent(product, dateStrVal) {
   }
   return product.percent;
 }
-
 function recalcConditional(productName, dateStrVal) {
   var key = normalizeName(productName);
   var ws = sales.filter(function(s) { return !s.isAD && normalizeName(s.name) === key && inSameWeek(s.date, dateStrVal); });
@@ -871,7 +879,6 @@ function addSale() {
   render();
   scrollToScreen('home');
 }
-
 function checkIfWillBeRecord(newSum, date) {
   var daySums = {};
   sales.forEach(function(s) { if (!s.isAD) daySums[s.date] = (daySums[s.date] || 0) + s.sum; });
@@ -919,7 +926,6 @@ function openEdit(id) {
   document.getElementById('screen-edit').classList.add('active');
 }
 function closeEdit() { document.getElementById('screen-edit').classList.remove('active'); editingId = null; }
-
 function updateSale() {
   var s = sales.find(function(x) { return x.id === editingId; });
   if (!s) return;
@@ -940,7 +946,6 @@ function updateSale() {
   closeEdit();
   render();
 }
-
 function deleteSale(id) {
   var s = sales.find(function(x) { return x.id === id; });
   sales = sales.filter(function(x) { return x.id !== id; });
@@ -950,7 +955,6 @@ function deleteSale(id) {
   }
   save(); render();
 }
-
 function savePlan() {
   var m = currentMonth();
   plans[m] = parseFloat(document.getElementById('inputPlan').value) || 0;
@@ -1172,7 +1176,6 @@ function render() {
   }
 }
 
-// ===== РАЗБИВКА ПО ПРОЦЕНТАМ =====
 function renderPercentBreakdown(monthSales) {
   var el = document.getElementById('percentBreakdown');
   if (!el) return;
@@ -1195,10 +1198,7 @@ function renderPercentBreakdown(monthSales) {
     html += '<div class="percent-row">' +
       '<span class="percent-badge">' + k + '%</span>' +
       '<div class="percent-info">' + g.qty + ' шт</div>' +
-      '<div>' +
-        '<div class="percent-sum">' + fmt(g.sum) + '</div>' +
-        '<div class="percent-comm">отч. ' + fmt(g.comm) + '</div>' +
-      '</div>' +
+      '<div><div class="percent-sum">' + fmt(g.sum) + '</div><div class="percent-comm">отч. ' + fmt(g.comm) + '</div></div>' +
     '</div>';
   });
   el.innerHTML = html;
@@ -1211,7 +1211,6 @@ function scrollToScreen(name) {
   if (idx === -1) return;
   container.scrollTo({ left: idx * window.innerWidth, behavior: 'smooth' });
 }
-
 function updateDots() {
   var container = document.getElementById('swipeContainer');
   var idx = Math.round(container.scrollLeft / window.innerWidth);
@@ -1219,13 +1218,11 @@ function updateDots() {
   if (idx >= screenOrder.length) idx = screenOrder.length - 1;
   document.querySelectorAll('#dots span').forEach(function(s, i) { s.classList.toggle('active', i === idx); });
 }
-
 var scrollTimeout = null;
 document.getElementById('swipeContainer').addEventListener('scroll', function() {
   if (scrollTimeout) clearTimeout(scrollTimeout);
   scrollTimeout = setTimeout(updateDots, 100);
 });
-
 document.querySelectorAll('#dots span').forEach(function(dot) {
   dot.addEventListener('click', function() { scrollToScreen(this.getAttribute('data-screen')); });
 });
@@ -1293,7 +1290,6 @@ document.getElementById('adDate').addEventListener('change', function() { update
 
 // ===== СКАНЕР =====
 var liveStream = null, liveScanning = false, torchOn = false, scanTarget = 'add';
-
 document.getElementById('btnScanQR').onclick = function() { scanTarget = 'add'; startLiveScanner(); };
 document.getElementById('adScanQR').onclick = function() { scanTarget = 'ad'; startLiveScanner(); };
 
@@ -1333,7 +1329,6 @@ function startLiveScanner() {
     }
   });
 }
-
 function stopLiveScanner() {
   liveScanning = false; torchOn = false;
   var sp = document.getElementById('qrLoading'); if (sp) sp.remove();
@@ -1341,7 +1336,6 @@ function stopLiveScanner() {
   var modal = document.getElementById('liveQRModal'); if (modal) modal.classList.remove('show');
   var tb = document.getElementById('liveTorchBtn'); if (tb) { tb.classList.remove('active'); tb.textContent = '🔦'; }
 }
-
 document.getElementById('liveCloseBtn').onclick = stopLiveScanner;
 document.getElementById('liveTorchBtn').onclick = function() {
   if (!liveStream) return;
@@ -1352,7 +1346,6 @@ document.getElementById('liveTorchBtn').onclick = function() {
     btn.classList.toggle('active', torchOn);
   }).catch(function() { showToast('Фонарик недоступен', 'warn'); });
 };
-
 function liveTick() {
   if (!liveScanning || !liveStream) return;
   var video = document.getElementById('liveVideo');
@@ -1379,7 +1372,6 @@ function liveTick() {
   }
   requestAnimationFrame(liveTick);
 }
-
 function extractArticle(data) {
   var article = null, price = null;
   var m = data.match(/\/catalog\/i(\d+)\/(?:&(\d+))?/);
@@ -1388,7 +1380,6 @@ function extractArticle(data) {
   else { var m2 = data.match(/(\d{6,8})/); if (m2) article = m2[1]; }
   return { article: article, price: price };
 }
-
 function handleQRData(data) {
   var r = extractArticle(data);
   if (!r.article) { showToast('Артикул не найден в QR', 'warn'); return; }
@@ -1412,7 +1403,6 @@ function handleQRData(data) {
   if (prod) msg += ' · ' + prod.name.substring(0, 30);
   showToast(msg, 'success');
 }
-
 function handleQRDataAD(data) {
   var r = extractArticle(data);
   if (!r.article) { showToast('Артикул не найден в QR', 'warn'); return; }
@@ -1447,6 +1437,7 @@ document.getElementById('btnImportManual').onclick = function() {
   document.getElementById('screen-import').classList.add('active');
 };
 
+// ===== ФОКУС-ЛИСТ ИЗ СЕТИ + ДЕДУПЛИКАЦИЯ =====
 document.getElementById('btnSyncFocus').onclick = function() {
   var ok = confirm('Тест с сервера, бесплатный пробный период.\n\nЗагрузить фокус-лист?');
   if (!ok) return;
@@ -1486,18 +1477,27 @@ document.getElementById('btnSyncFocus').onclick = function() {
       }
       if (np.length === 0) { showToast('Товары не найдены', 'warn'); return; }
       products = products.filter(function(p) { return p.type === 'regular'; });
+      // Дедупликация по артикулу
+      var seenArts = {};
+      var npUnique = [];
       np.forEach(function(x) {
+        if (x.art && seenArts[x.art]) return;
+        if (x.art) seenArts[x.art] = true;
+        npUnique.push(x);
+      });
+      npUnique.forEach(function(x) {
         var ex = products.find(function(p) { if (x.art && p.art && p.art === x.art) return true; return normalizeName(p.name) === normalizeName(x.name); });
         if (ex) { ex.percent = x.percent; ex.type = x.type; if (x.art) ex.art = x.art; if (x.name) ex.name = x.name; }
         else products.push(x);
       });
       save();
-      showToast('Загружено: ' + np.length + ' товаров', 'success');
+      showToast('Загружено: ' + npUnique.length + ' товаров', 'success');
       render();
     })
     .catch(function(e) { showToast('Ошибка загрузки: ' + e.message, 'error'); });
 };
 
+// ===== ИМПОРТ ТОВАРОВ =====
 document.getElementById('btnImport').onclick = function() {
   var val = document.getElementById('importText').value.trim();
   if (!val) { showToast('Вставьте данные', 'warn'); return; }
@@ -1505,7 +1505,6 @@ document.getElementById('btnImport').onclick = function() {
   document.getElementById('importText').value = '';
   document.getElementById('screen-import').classList.remove('active');
 };
-
 function parseData(input) {
   var np = [];
   if (input.indexOf('<td') !== -1) {
@@ -1553,13 +1552,30 @@ function parseData(input) {
   showToast('Обновлено: ' + np.length + ' товаров', 'success');
 }
 
+// ===== УЛУЧШЕННАЯ ДЕДУПЛИКАЦИЯ ТОВАРОВ =====
 document.getElementById('btnDedup').onclick = function() {
   var seen = {}, unique = [], removed = 0;
   products.forEach(function(p) {
     var k = normalizeName(p.name);
     if (!k) { unique.push(p); return; }
-    if (seen[k]) { var e = seen[k]; if (p.percent > e.percent) { e.percent = p.percent; e.type = p.type; } if (p.art && !e.art) e.art = p.art; removed++; }
-    else { seen[k] = p; unique.push(p); }
+    var shortKey = k.substring(0, 30);
+    var artMatch = k.match(/\b(\d{6,8})\b/);
+    var artKey = artMatch ? 'art_' + artMatch[1] : null;
+
+    var dupKey = null;
+    if (artKey && seen[artKey]) dupKey = artKey;
+    else if (seen['short_' + shortKey]) dupKey = 'short_' + shortKey;
+
+    if (dupKey) {
+      var e = seen[dupKey];
+      if (p.percent > e.percent) { e.percent = p.percent; e.type = p.type; }
+      if (p.art && !e.art) e.art = p.art;
+      removed++;
+    } else {
+      if (artKey) seen[artKey] = p;
+      seen['short_' + shortKey] = p;
+      unique.push(p);
+    }
   });
   products = unique; save();
   showToast('Удалено дублей: ' + removed, 'success'); render();

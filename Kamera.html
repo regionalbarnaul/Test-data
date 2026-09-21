@@ -5,19 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Трекер продаж</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#10b981">
+<meta name="theme-color" content="#060a08">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0f0d; color: #e8f5f0; overflow: hidden; font-size: 14px; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #060a08; color: #e8f5f0; overflow: hidden; font-size: 14px; position: relative; }
+body::before, body::after { content:''; position:fixed; border-radius:50%; filter:blur(80px); pointer-events:none; z-index:0; animation: bgFloat 14s ease-in-out infinite; }
+body::before { width:340px; height:340px; top:-80px; left:-100px; background: radial-gradient(circle, rgba(16,185,129,0.28), transparent 70%); }
+body::after { width:300px; height:300px; bottom:-100px; right:-80px; background: radial-gradient(circle, rgba(56,189,248,0.18), transparent 70%); animation-delay: -7s; }
+@keyframes bgFloat { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(30px,-20px) scale(1.1); } }
+
 .accent { color: #10b981; }
-.header { padding: 14px 44px 10px 14px; display: flex; justify-content: space-between; align-items: center; }
-.header h1 { font-size: 19px; font-weight: 700; }
-.header .date { font-size: 12px; color: #6b8a7d; }
-.card { background: #121a16; border-radius: 12px; margin: 0 14px 10px; padding: 12px 14px; border: 1px solid #1e2b24; }
-#screen-home .card { animation: cardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards; will-change: transform, opacity; backface-visibility: hidden; }
+
+/* ===== ШАПКИ ===== */
+.header { padding: 18px 44px 12px 16px; display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
+.header h1 { font-size: 26px; font-weight: 800; letter-spacing:-0.5px; line-height:1.15;
+  background: linear-gradient(135deg, #a7f3d0 0%, #10b981 60%, #059669 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.header .date { font-size: 12px; color: #5b7a6d; margin-top: 4px; display:flex; align-items:center; gap:6px; }
+.header .pulse-dot { width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 0 0 rgba(16,185,129,0.6); animation: pulseDot 2s ease-out infinite; flex-shrink:0; }
+@keyframes pulseDot { 0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); } 70% { box-shadow: 0 0 0 12px rgba(16,185,129,0); } 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); } }
+
+/* ===== КАРТОЧКИ ===== */
+.card {
+  background: linear-gradient(180deg, rgba(26,38,32,0.72) 0%, rgba(18,26,22,0.72) 100%);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
+  margin: 0 14px 12px; padding: 16px;
+  position: relative; overflow: hidden; z-index:1;
+  transition: transform 0.15s ease;
+}
+.card:active { transform: scale(0.985); }
+#screen-home .card { animation: cardIn 0.6s cubic-bezier(0.22,1,0.36,1) backwards; will-change: transform, opacity; }
 #screen-home .card:nth-child(2) { animation-delay: 0.05s; }
 #screen-home .card:nth-child(3) { animation-delay: 0.1s; }
 #screen-home .card:nth-child(4) { animation-delay: 0.15s; }
@@ -25,107 +48,121 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 #screen-home .card:nth-child(6) { animation-delay: 0.25s; }
 #screen-home .card:nth-child(7) { animation-delay: 0.3s; }
 #screen-home .card:nth-child(8) { animation-delay: 0.35s; }
-@keyframes cardIn {
-  from { opacity: 0; transform: translate3d(0, 18px, 0); }
-  to { opacity: 1; transform: translate3d(0, 0, 0); }
+@keyframes cardIn { from { opacity:0; transform: translateY(20px) scale(0.98); } to { opacity:1; transform: translateY(0) scale(1); } }
+
+.card-head {
+  display:flex; align-items:center; gap:8px;
+  font-size: 11px; text-transform: uppercase; letter-spacing:0.8px;
+  color:#7c9b8d; font-weight:600; margin-bottom:10px;
 }
-.card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b8a7d; margin-bottom: 5px; }
-.big-number { font-size: 25px; font-weight: 800; color: #10b981; }
-.sub-text { font-size: 12px; color: #6b8a7d; margin-top: 3px; }
-.progress-bg { background: #1e2b24; border-radius: 6px; height: 12px; margin-top: 10px; overflow: hidden; position: relative; }
-.progress-fill { height: 100%; border-radius: 6px; transition: width 0.4s ease; width: 0%; background: linear-gradient(90deg, #ef4444, #f59e0b); position: relative; overflow: hidden; }
-.progress-fill.ok { background: linear-gradient(90deg, #10b981, #34d399); }
-.progress-fill.gold { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
-.progress-fill::after { content: ''; position: absolute; top: 0; left: -50%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent); animation: shimmer 2.5s infinite; }
-@keyframes shimmer { to { left: 150%; } }
-.progress-mark { position: absolute; top: 0; bottom: 0; width: 2px; background: #e8f5f0; opacity: 0.7; z-index: 2; }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 14px 10px; }
+.card-head svg { flex-shrink:0; }
+.card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #7c9b8d; margin-bottom: 10px; font-weight:600; }
+
+.big-number { font-size: 30px; font-weight: 800; color: #10b981; letter-spacing:-0.5px; line-height:1.1; }
+.big-number.gold { color:#fbbf24; }
+.big-number.blue { color:#38bdf8; }
+.big-number.red { color:#ef4444; }
+.sub-text { font-size: 12px; color: #6b8a7d; margin-top: 6px; line-height:1.45; }
+.sub-text .accent { color: #10b981; font-weight:600; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 14px 12px; position:relative; z-index:1; }
 .grid-2 .card { margin: 0; }
-.grid-2.inside { margin: 0; gap: 8px; }
-.btn { display: block; width: calc(100% - 28px); margin: 12px auto; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; position: relative; overflow: hidden; }
-.btn.danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+.grid-2.inside { margin: 0; gap: 10px; }
+
+/* ===== ПРОГРЕСС ===== */
+.progress-bg { background: rgba(255,255,255,0.06); border-radius: 6px; height: 10px; margin-top: 14px; overflow: hidden; position: relative; }
+.progress-fill { height: 100%; border-radius: 6px; transition: width 0.4s ease; width: 0%; background: linear-gradient(90deg, #ef4444, #f59e0b); position: relative; overflow: hidden; box-shadow: 0 0 12px rgba(245,158,11,0.4); }
+.progress-fill.ok { background: linear-gradient(90deg, #10b981, #34d399); box-shadow: 0 0 12px rgba(16,185,129,0.5); }
+.progress-fill.gold { background: linear-gradient(90deg, #fbbf24, #f59e0b); box-shadow: 0 0 12px rgba(251,191,36,0.5); }
+.progress-fill::after { content: ''; position: absolute; top: 0; left: -50%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 2.5s infinite; }
+@keyframes shimmer { to { left: 150%; } }
+.progress-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: rgba(232,245,240,0.55); border-radius:2px; z-index: 2; }
+
+/* ===== КНОПКИ ===== */
+.btn { display: flex; align-items:center; justify-content:center; gap:10px; width: calc(100% - 28px); margin: 12px auto; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border: none; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; position: relative; overflow: hidden; box-shadow: 0 4px 16px rgba(16,185,129,0.25); }
+.btn svg { flex-shrink:0; }
+.btn.danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; box-shadow: 0 4px 16px rgba(239,68,68,0.25); }
+.btn.secondary { background: rgba(255,255,255,0.06); color:#e8f5f0; box-shadow:none; border:1px solid rgba(255,255,255,0.08); }
 .ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.55); transform: scale(0); animation: rippleAnim 0.65s ease-out; pointer-events: none; }
 @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
-.form-group { margin-bottom: 10px; }
-.form-group label { display: block; font-size: 11px; color: #6b8a7d; margin-bottom: 5px; text-transform: uppercase; }
-.form-group input { width: 100%; padding: 12px; background: #0a0f0d; border: 1px solid #1e2b24; border-radius: 10px; color: #e8f5f0; font-size: 15px; outline: none; }
+
+/* ===== ФОРМЫ ===== */
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 11px; color: #7c9b8d; margin-bottom: 6px; text-transform: uppercase; letter-spacing:0.5px; font-weight:600; }
+.form-group input { width: 100%; padding: 12px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #e8f5f0; font-size: 15px; outline: none; transition: border-color 0.2s; }
+.form-group input:focus { border-color: #10b981; }
 .search-row { display: flex; gap: 8px; align-items: stretch; }
 .search-row input { flex: 1; }
-.btn-cam { padding: 0 20px; background: #10b981; color: #0a0f0d; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; min-width: 56px; animation: pulseGreen 2.2s ease-in-out infinite; }
-@keyframes pulseGreen {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.55); }
-  50% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
-}
-#searchResults, #adSearchResults { background: #121a16; border: 1px solid #1e2b24; border-radius: 10px; max-height: 150px; overflow-y: auto; margin-top: 4px; }
-#searchResults div, #adSearchResults div { padding: 8px 12px; border-bottom: 1px solid #1e2b24; cursor: pointer; font-size: 13px; }
+.btn-cam { padding: 0 20px; background: linear-gradient(135deg,#10b981,#059669); color: #0a0f0d; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; min-width: 56px; animation: pulseGreen 2.2s ease-in-out infinite; box-shadow: 0 4px 14px rgba(16,185,129,0.35); }
+@keyframes pulseGreen { 0%, 100% { box-shadow: 0 4px 14px rgba(16,185,129,0.35), 0 0 0 0 rgba(16,185,129,0.55); } 50% { box-shadow: 0 4px 14px rgba(16,185,129,0.35), 0 0 0 10px rgba(16,185,129,0); } }
+.btn-cam svg { display: block; }
+
+/* ===== ПОИСК ===== */
+#searchResults, #adSearchResults { background: rgba(18,26,22,0.95); backdrop-filter:blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; max-height: 160px; overflow-y: auto; margin-top: 6px; }
+#searchResults div, #adSearchResults div { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; font-size: 13px; }
 #searchResults div:last-child, #adSearchResults div:last-child { border-bottom: none; }
-#searchResults div:active, #adSearchResults div:active { background: #1e2b24; }
-.history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e2b24; }
+#searchResults div:active, #adSearchResults div:active { background: rgba(255,255,255,0.06); }
+
+/* ===== ИСТОРИЯ ===== */
+.history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .history-item:last-child { border-bottom: none; }
 .history-item .info { flex: 1; }
-.history-item .name { font-size: 14px; font-weight: 600; }
-.history-item .meta { font-size: 12px; color: #6b8a7d; margin-top: 2px; }
-.history-item .sum { font-size: 15px; font-weight: 700; color: #10b981; }
+.history-item .name { font-size: 14px; font-weight: 600; line-height:1.3; }
+.history-item .meta { font-size: 12px; color: #6b8a7d; margin-top: 3px; }
+.history-item .sum { font-size: 15px; font-weight: 700; color: #10b981; white-space:nowrap; }
 .history-item.ad .sum { color: #ef4444; }
 .badge-ad { display: inline-block; padding: 2px 6px; background: #ef4444; color: #fff; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
-.history-item .edit { margin-left: 8px; background: none; border: none; color: #10b981; font-size: 17px; cursor: pointer; padding: 2px 6px; }
-.history-item .delete { margin-left: 4px; background: none; border: none; color: #ef4444; font-size: 17px; cursor: pointer; padding: 2px 6px; }
+.history-item .edit, .history-item .delete { margin-left: 6px; background: none; border: none; cursor: pointer; padding: 4px 8px; display:flex; align-items:center; }
+.history-item .edit { color: #10b981; }
+.history-item .delete { color: #ef4444; }
+
 .screen { display: none; }
 .empty { text-align: center; color: #6b8a7d; padding: 24px 12px; font-size: 13px; }
-.record-badge { display: inline-block; padding: 4px 12px; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #0a0f0d; border-radius: 16px; font-size: 11px; font-weight: 700; margin-top: 8px; }
+.record-badge { display: inline-flex; align-items:center; gap:6px; padding: 6px 14px; background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(245,158,11,0.1)); border:1px solid rgba(251,191,36,0.3); color: #fbbf24; border-radius: 16px; font-size: 11px; font-weight: 700; margin-top: 12px; letter-spacing:0.3px; }
+.record-badge svg { width:12px; height:12px; }
+
+/* ===== ABOUT ===== */
 .about-icon { text-align: center; font-size: 52px; margin: 16px 0 8px; }
-.about-name { text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.about-name { text-align: center; font-size: 22px; font-weight: 800; margin-bottom: 4px; background:linear-gradient(135deg,#a7f3d0,#10b981); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
 .about-version { text-align: center; font-size: 12px; color: #6b8a7d; margin-bottom: 16px; }
 .about-desc { font-size: 13px; color: #a8c5b8; line-height: 1.5; }
-.about-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1e2b24; font-size: 13px; }
+.about-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px; }
+.about-row:last-child { border-bottom:none; }
 .about-row .label { color: #6b8a7d; }
 .about-row .value { color: #e8f5f0; }
-.about-mail { display: block; text-align: center; margin: 16px 14px 10px; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; }
-#aboutBtn { position: fixed; top: 14px; right: 14px; background: none; border: none; color: #6b8a7d; font-size: 22px; cursor: pointer; z-index: 10; padding: 4px; }
-.date-display { padding: 12px; background: #0a0f0d; border: 1px solid #1e2b24; border-radius: 10px; color: #e8f5f0; font-size: 15px; cursor: pointer; }
-.date-display:active { background: #1e2b24; }
-.compare-up { color: #10b981; font-weight: 700; }
-.compare-down { color: #ef4444; font-weight: 700; }
+.about-mail { display: block; text-align: center; margin: 16px 14px 10px; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border-radius: 14px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 16px rgba(16,185,129,0.25); }
+#aboutBtn { position: fixed; top: 20px; right: 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #7c9b8d; font-size: 20px; cursor: pointer; z-index: 10; padding: 6px 8px; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; }
+.date-display { padding: 12px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #e8f5f0; font-size: 15px; cursor: pointer; }
+.date-display:active { background: rgba(255,255,255,0.06); }
+.compare-up { color: #10b981 !important; }
+.compare-down { color: #ef4444 !important; }
 
-.percent-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1e2b24; font-size: 13px; }
+/* ===== ПРОЦЕНТЫ ===== */
+.percent-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px; }
 .percent-row:last-child { border-bottom: none; }
-.percent-badge { display: inline-block; min-width: 44px; padding: 4px 10px; background: #10b981; color: #0a0f0d; border-radius: 6px; font-size: 13px; font-weight: 800; text-align: center; }
+.percent-badge { display: inline-block; min-width: 44px; padding: 5px 10px; background: linear-gradient(135deg,#10b981,#059669); color: #0a0f0d; border-radius: 8px; font-size: 12px; font-weight: 800; text-align: center; box-shadow:0 2px 8px rgba(16,185,129,0.3); }
 .percent-info { flex: 1; margin-left: 12px; font-size: 13px; color: #a8c5b8; }
 .percent-sum { font-size: 14px; font-weight: 700; color: #10b981; text-align: right; }
 .percent-comm { font-size: 11px; color: #6b8a7d; margin-top: 2px; text-align: right; }
 
-#swipeContainer { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; height: 100vh; width: 100vw; }
+/* ===== СВАЙП ===== */
+#swipeContainer { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; height: 100vh; width: 100vw; position:relative; z-index:1; }
 #swipeContainer::-webkit-scrollbar { display: none; }
-.swipe-screen { min-width: 100vw; width: 100vw; height: 100vh; scroll-snap-align: start; scroll-snap-stop: always; overflow-y: auto; overflow-x: hidden; flex-shrink: 0; padding-bottom: 60px; box-sizing: border-box; }
-.modal-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #0a0f0d; overflow-y: auto; z-index: 200; padding-bottom: 40px; }
+.swipe-screen { min-width: 100vw; width: 100vw; height: 100vh; scroll-snap-align: start; scroll-snap-stop: always; overflow-y: auto; overflow-x: hidden; flex-shrink: 0; padding-bottom: 60px; box-sizing: border-box; position:relative; }
+.modal-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #060a08; overflow-y: auto; z-index: 200; padding-bottom: 40px; }
 .modal-screen.active { display: block; }
 
+/* ===== ТОЧКИ ===== */
 #dots { position: fixed; bottom: 6px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px 0; z-index: 150; pointer-events: none; }
-#dots span { width: 8px; height: 8px; border-radius: 50%; background: #334155; transition: all 0.35s ease; pointer-events: auto; cursor: pointer; }
-#dots span.active { background: #10b981; width: 24px; border-radius: 4px; }
+#dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.15); transition: all 0.35s ease; pointer-events: auto; cursor: pointer; }
+#dots span.active { background: #10b981; width: 24px; border-radius: 4px; box-shadow:0 0 12px rgba(16,185,129,0.6); }
 
+/* ===== QR СКАНЕР ===== */
 .qr-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; z-index: 10; gap: 20px; transition: opacity 0.4s ease; }
 .qr-loading.hidden { opacity: 0; pointer-events: none; }
-.qr-spinner { width: 50px; height: 50px; border: 4px solid #1e2b24; border-top-color: #10b981; border-radius: 50%; animation: qrSpin 0.9s linear infinite; }
+.qr-spinner { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #10b981; border-radius: 50%; animation: qrSpin 0.9s linear infinite; }
 @keyframes qrSpin { to { transform: rotate(360deg); } }
 .qr-loading-text { color: #6b8a7d; font-size: 14px; }
-
-.toast { position: fixed; top: 20px; left: 14px; right: 14px; padding: 14px 16px; border-radius: 12px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; z-index: 99999; opacity: 0; transform: translateY(-20px); transition: all 0.3s ease; box-shadow: 0 6px 20px rgba(0,0,0,0.5); color: #0a0f0d; }
-.toast.show { opacity: 1; transform: translateY(0); }
-.toast.success { background: linear-gradient(135deg, #10b981, #059669); }
-.toast.warn { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
-.toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
-.toast.record { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
-.toast .icon { font-size: 20px; }
-
-#successOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: center; justify-content: center; z-index: 99997; }
-#successOverlay.show { display: flex; }
-.success-checkmark { width: 120px; height: 120px; }
-.success-checkmark .check-circle { stroke: #10b981; stroke-width: 3; fill: none; stroke-dasharray: 314; stroke-dashoffset: 314; animation: strokeCircle 0.5s ease-out forwards; }
-.success-checkmark .check-mark { stroke: #10b981; stroke-width: 5; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; animation: strokeMark 0.35s 0.4s ease-out forwards; }
-@keyframes strokeCircle { to { stroke-dashoffset: 0; } }
-@keyframes strokeMark { to { stroke-dashoffset: 0; } }
-
 #liveQRModal { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#000; z-index:99998; display:none; flex-direction:column; }
 #liveQRModal.show { display: flex; }
 .qr-cam-wrap { position: relative; flex: 1; overflow: hidden; background: #000; }
@@ -144,10 +181,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .qr-ctl { width: 56px; height: 56px; border-radius: 50%; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.6); color: #fff; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .qr-ctl.close { background: rgba(239,68,68,0.7); border-color: #fff; }
 .qr-ctl.active { background: #fbbf24; color: #0a0f0d; border-color: #fbbf24; }
-#liveStatus { display: none; }
-.btn-cam svg { display: block; }
 
-.ach-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1e2b24; }
+/* ===== ТОСТ ===== */
+.toast { position: fixed; top: 20px; left: 14px; right: 14px; padding: 14px 16px; border-radius: 14px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; z-index: 99999; opacity: 0; transform: translateY(-20px); transition: all 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.5); color: #0a0f0d; }
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: linear-gradient(135deg, #10b981, #059669); }
+.toast.warn { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+.toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+.toast.record { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+.toast .icon { font-size: 20px; }
+
+/* ===== ГАЛОЧКА ===== */
+#successOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: center; justify-content: center; z-index: 99997; }
+#successOverlay.show { display: flex; }
+.success-checkmark { width: 120px; height: 120px; }
+.success-checkmark .check-circle { stroke: #10b981; stroke-width: 3; fill: none; stroke-dasharray: 314; stroke-dashoffset: 314; animation: strokeCircle 0.5s ease-out forwards; }
+.success-checkmark .check-mark { stroke: #10b981; stroke-width: 5; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; animation: strokeMark 0.35s 0.4s ease-out forwards; }
+@keyframes strokeCircle { to { stroke-dashoffset: 0; } }
+@keyframes strokeMark { to { stroke-dashoffset: 0; } }
+
+/* ===== ДОСТИЖЕНИЯ ===== */
+.ach-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .ach-item:last-child { border-bottom: none; }
 .ach-icon { font-size: 32px; width: 44px; text-align: center; }
 .ach-info { flex: 1; }
@@ -157,12 +211,31 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 .ach-locked .ach-icon { filter: grayscale(1); }
 .ach-count { text-align: center; color: #6b8a7d; font-size: 12px; margin-top: 10px; }
 
+/* ===== ПРАЗДНИК ===== */
 #celebrationFlash { position: fixed; inset: 0; background: radial-gradient(circle, rgba(16,185,129,0.95), rgba(16,185,129,0.4)); z-index: 99996; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 20px; pointer-events: none; }
 #celebrationFlash.show { display: flex; animation: celebratePulse 1.2s ease-out; }
 @keyframes celebratePulse { 0% { opacity: 0; transform: scale(1.2); } 15% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
 .celebrate-emoji { font-size: 120px; animation: celebrateBounce 1.2s ease-out; filter: drop-shadow(0 0 30px rgba(255,255,255,0.8)); }
 @keyframes celebrateBounce { 0% { transform: scale(0.3) rotate(-20deg); } 40% { transform: scale(1.3) rotate(10deg); } 70% { transform: scale(1) rotate(-5deg); } 100% { transform: scale(1) rotate(0); opacity: 0; } }
 .celebrate-text { color: #fff; font-size: 22px; font-weight: 800; text-shadow: 0 3px 12px rgba(0,0,0,0.5); text-align: center; padding: 0 20px; }
+
+/* ===== ЗАРАБОТОК / ПРОГНОЗ ===== */
+.earn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+.earn-grid .lbl { font-size: 11px; color: #7c9b8d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.earn-grid .val { font-size: 22px; font-weight: 800; color: #fbbf24; letter-spacing:-0.3px; }
+.earn-grid .brk { font-size: 11px; color: #6b8a7d; margin-top: 4px; line-height:1.3; }
+.forecast-box { display:flex; align-items:center; justify-content:space-between; gap:14px; }
+.forecast-num { font-size:26px; font-weight:800; color:#10b981; letter-spacing:-0.5px; }
+.forecast-hint { font-size:12px; color:#6b8a7d; margin-top:6px; line-height:1.4; }
+.forecast-hint b { color:#10b981; font-weight:700; }
+.forecast-hint .down { color:#ef4444; }
+
+/* ===== МИНИ-ГРАФИК ===== */
+.mini-bars { display:flex; align-items:flex-end; gap:3px; height:44px; margin-top:12px; }
+.mini-bars span { flex:1; background: linear-gradient(180deg, rgba(16,185,129,0.9), rgba(16,185,129,0.2)); border-radius: 3px 3px 0 0; min-height:3px; animation: barGrow 0.7s cubic-bezier(0.22,1,0.36,1) backwards; }
+.mini-bars span.gold { background: linear-gradient(180deg, #fbbf24, rgba(251,191,36,0.25)); }
+.mini-bars span.empty-bar { background: rgba(255,255,255,0.05); }
+@keyframes barGrow { from { transform: scaleY(0); transform-origin: bottom; } to { transform: scaleY(1); } }
 </style>
 </head>
 <body>
@@ -172,9 +245,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 <div id="swipeContainer">
 
   <div class="swipe-screen" id="screen-home">
-    <div class="header"><h1>Трекер продаж</h1><div class="date" id="currentDate"></div></div>
+    <div class="header">
+      <div>
+        <h1>Трекер продаж</h1>
+        <div class="date"><span class="pulse-dot"></span><span id="currentDate"></span></div>
+      </div>
+    </div>
+
     <div class="card">
-      <div class="card-title">План на месяц</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        План на месяц
+      </div>
       <div class="big-number" id="monthPlan">0 ₽</div>
       <div class="sub-text"><span id="monthPercent">0.0%</span> выполнено · осталось <span id="daysLeft">0</span> дн.</div>
       <div class="progress-bg">
@@ -183,45 +265,118 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
       </div>
       <div class="sub-text" id="minThreshold">Минимум 80% — не выполнен</div>
     </div>
+
     <div class="grid-2">
-      <div class="card"><div class="card-title">Продано сегодня</div><div class="big-number" style="font-size:22px" id="todaySales">0 ₽</div><div class="sub-text" id="todayCount">0 продаж</div></div>
-      <div class="card"><div class="card-title">Отчисления сегодня</div><div class="big-number" style="font-size:22px;color:#34d399" id="todayCommission">0 ₽</div></div>
+      <div class="card">
+        <div class="card-head">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          Продано
+        </div>
+        <div class="big-number" style="font-size:22px" id="todaySales">0 ₽</div>
+        <div class="sub-text" id="todayCount">0 продаж</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+          Отчисления
+        </div>
+        <div class="big-number blue" style="font-size:22px" id="todayCommission">0 ₽</div>
+        <div class="sub-text">сегодня</div>
+      </div>
     </div>
+
     <div class="card">
-      <div class="card-title">💰 Заработано</div>
-      <div class="grid-2 inside">
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+        Заработано
+      </div>
+      <div class="earn-grid">
         <div>
-          <div class="sub-text">Сегодня</div>
-          <div class="big-number" style="font-size:22px;color:#fbbf24" id="todayEarned">0 ₽</div>
-          <div class="sub-text" id="todayEarnedBreak">—</div>
+          <div class="lbl">Сегодня</div>
+          <div class="val" id="todayEarned">0 ₽</div>
+          <div class="brk" id="todayEarnedBreak">—</div>
         </div>
         <div>
-          <div class="sub-text">За месяц</div>
-          <div class="big-number" style="font-size:22px;color:#fbbf24" id="monthEarned">0 ₽</div>
-          <div class="sub-text" id="monthEarnedBreak">—</div>
+          <div class="lbl">За месяц</div>
+          <div class="val" id="monthEarned">0 ₽</div>
+          <div class="brk" id="monthEarnedBreak">—</div>
         </div>
       </div>
     </div>
-    <div class="card"><div class="card-title">Отчисления за месяц</div><div class="big-number" style="font-size:25px" id="monthCommission">0 ₽</div><div class="sub-text">Всего процентов за текущий месяц</div></div>
+
     <div class="card">
-      <div class="card-title">Осталось до плана</div>
-      <div class="big-number" style="font-size:22px;color:#f59e0b" id="remaining">0 ₽</div>
-      <div class="sub-text"><span id="remainingPercent">100.0%</span> от плана</div>
-      <div class="sub-text" style="margin-top:8px;padding-top:8px;border-top:1px solid #1e2b24;">Нужно продавать в день: <span class="accent" id="dailyNeeded">0 ₽</span></div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Прогноз заработка
+      </div>
+      <div class="forecast-box">
+        <div>
+          <div class="forecast-num" id="forecastEarned">0 ₽</div>
+          <div class="forecast-hint">если темп сохранится</div>
+        </div>
+        <div style="font-size:26px">📈</div>
+      </div>
+      <div class="forecast-hint" id="forecastCompare" style="margin-top:10px;">—</div>
     </div>
+
     <div class="card">
-      <div class="card-title">Прогноз до конца месяца</div>
-      <div class="big-number" style="font-size:22px;color:#fbbf24" id="forecastPercent">0%</div>
-      <div class="sub-text" id="forecastText">при текущем темпе</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Дни месяца
+      </div>
+      <div class="sub-text" id="miniBarsBest">—</div>
+      <div class="mini-bars" id="miniBars"></div>
     </div>
+
     <div class="card">
-      <div class="card-title">Рекорд месяца</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        Возвраты за месяц
+      </div>
+      <div class="big-number red" style="font-size:22px" id="monthCommission_AD">−0 ₽</div>
+      <div class="sub-text" id="monthADCount">0 записей</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg>
+        Отчисления за месяц
+      </div>
+      <div class="big-number" style="font-size:25px" id="monthCommission">0 ₽</div>
+      <div class="sub-text">Всего процентов за текущий месяц</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        Рекорд месяца
+      </div>
       <div class="grid-2 inside">
-        <div><div class="sub-text">По сумме</div><div class="big-number" style="font-size:20px;color:#fbbf24" id="recordSum">0 ₽</div><div class="sub-text" id="recordDate">—</div></div>
+        <div><div class="sub-text">По сумме</div><div class="big-number gold" style="font-size:20px" id="recordSum">0 ₽</div><div class="sub-text" id="recordDate">—</div></div>
         <div><div class="sub-text">По отчислениям</div><div class="big-number" style="font-size:20px;color:#34d399" id="recordComm">0 ₽</div><div class="sub-text" id="recordCommDate">—</div></div>
       </div>
       <div id="recordBadge"></div>
     </div>
+
+    <div class="card">
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Осталось до плана
+      </div>
+      <div class="big-number gold" style="font-size:22px" id="remaining">0 ₽</div>
+      <div class="sub-text"><span id="remainingPercent">100.0%</span> от плана</div>
+      <div class="sub-text" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);">Нужно продавать в день: <span class="accent" id="dailyNeeded">0 ₽</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Прогноз плана
+      </div>
+      <div class="big-number" style="font-size:22px;color:#fbbf24" id="forecastPercent">0%</div>
+      <div class="sub-text" id="forecastText">при текущем темпе</div>
+    </div>
+
   </div>
 
   <div class="swipe-screen" id="screen-add">
@@ -249,7 +404,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   </div>
 
   <div class="swipe-screen" id="screen-history">
-    <div class="header"><h1 id="histTitle">Сегодня</h1></div>
+    <div class="header"><h1 id="histTitle">История продаж</h1></div>
     <div class="card">
       <div class="form-group" style="margin-bottom:0;">
         <label>Выбрать дату</label>
@@ -259,7 +414,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     </div>
     <div class="card"><div id="historyList"><div class="empty">Нет продаж за этот день</div></div></div>
     <div class="card">
-      <div class="card-title">Итог за день</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Итог за день
+      </div>
       <div class="sub-text">Сумма: <span class="accent" id="histTotal">0 ₽</span></div>
       <div class="sub-text">Отчисления: <span class="accent" id="histCommission">0 ₽</span></div>
     </div>
@@ -268,7 +426,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <div class="swipe-screen" id="screen-totals">
     <div class="header"><h1 id="totalsTitle">Итоги</h1></div>
     <div class="card">
-      <div class="card-title">План на месяц</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        План на месяц
+      </div>
       <div class="big-number" id="totalsPlan">0 ₽</div>
       <div class="sub-text" id="totalsPercent">0.0% выполнено</div>
       <div class="progress-bg">
@@ -277,51 +438,82 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
       </div>
     </div>
     <div class="grid-2">
-      <div class="card"><div class="card-title">Продано</div><div class="big-number" style="font-size:22px" id="totalsSum">0 ₽</div><div class="sub-text" id="totalsCount">0 продаж</div></div>
-      <div class="card"><div class="card-title">Отчисления</div><div class="big-number" style="font-size:22px;color:#34d399" id="totalsComm">0 ₽</div></div>
+      <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Продано</div><div class="big-number" style="font-size:22px" id="totalsSum">0 ₽</div><div class="sub-text" id="totalsCount">0 продаж</div></div>
+      <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Отчисления</div><div class="big-number blue" style="font-size:22px" id="totalsComm">0 ₽</div></div>
     </div>
     <div class="card">
-      <div class="card-title">💰 Заработок за месяц</div>
-      <div class="big-number" style="font-size:25px;color:#fbbf24" id="totalsEarned">0 ₽</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+        Заработок за месяц
+      </div>
+      <div class="big-number gold" style="font-size:25px" id="totalsEarned">0 ₽</div>
       <div class="sub-text">Оклад: <span class="accent" id="totalsOkladText">0 ₽</span></div>
       <div class="sub-text">Проценты: <span class="accent" id="totalsCommText">0 ₽</span></div>
     </div>
     <div class="card">
-      <div class="card-title">Возвраты (АД)</div>
-      <div class="big-number" style="font-size:22px;color:#ef4444" id="totalsAD">0 ₽</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        Возвраты (АД)
+      </div>
+      <div class="big-number red" style="font-size:22px" id="totalsAD">0 ₽</div>
       <div class="sub-text" id="totalsADCount">0 записей</div>
     </div>
     <div class="card">
-      <div class="card-title">Чистый оборот</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Чистый оборот
+      </div>
       <div class="big-number" style="font-size:25px" id="totalsNet">0 ₽</div>
       <div class="sub-text">Продажи минус возвраты</div>
     </div>
     <div class="card" id="percentCard">
-      <div class="card-title">Продажи по процентам</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+        Продажи по процентам
+      </div>
       <div id="percentBreakdown"><div class="empty">Нет продаж за этот месяц</div></div>
     </div>
     <div class="card">
-      <div class="card-title">Сравнение с прошлым месяцем</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        Сравнение с прошлым месяцем
+      </div>
       <div class="big-number" style="font-size:22px" id="totalsCompare">0%</div>
       <div class="sub-text" id="totalsCompareDetail">—</div>
     </div>
     <div class="card">
-      <div class="card-title">Средний чек</div>
-      <div class="big-number" style="font-size:22px;color:#fbbf24" id="totalsAvgSum">0 ₽</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Средний чек
+      </div>
+      <div class="big-number gold" style="font-size:22px" id="totalsAvgSum">0 ₽</div>
     </div>
     <div class="card">
-      <div class="card-title">Фокусные товары</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Фокусные товары
+      </div>
       <div class="sub-text">Продано: <span class="accent" id="totalsFocusSum">0 ₽</span></div>
       <div class="sub-text">Отчисления: <span class="accent" id="totalsFocusComm">0 ₽</span></div>
       <div class="sub-text">Количество: <span class="accent" id="totalsFocusCount">0 шт</span></div>
     </div>
     <div class="card">
-      <div class="card-title">Регулярные товары</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c9b8d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Регулярные товары
+      </div>
       <div class="sub-text">Продано: <span class="accent" id="totalsRegSum">0 ₽</span></div>
       <div class="sub-text">Отчисления: <span class="accent" id="totalsRegComm">0 ₽</span></div>
       <div class="sub-text">Количество: <span class="accent" id="totalsRegCount">0 шт</span></div>
     </div>
-    <div class="card"><div class="card-title">Лучший день по сумме</div><div class="big-number" style="font-size:22px;color:#fbbf24" id="totalsBestSum">0 ₽</div><div class="sub-text" id="totalsBestSumDate">—</div></div>
+    <div class="card">
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        Лучший день по сумме
+      </div>
+      <div class="big-number gold" style="font-size:22px" id="totalsBestSum">0 ₽</div>
+      <div class="sub-text" id="totalsBestSumDate">—</div>
+    </div>
   </div>
 
   <div class="swipe-screen" id="screen-plan">
@@ -335,7 +527,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
       <button class="btn" id="btnOklad">Сохранить оклад</button>
     </div>
     <div class="card">
-      <div class="card-title">Текущий прогресс</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        Текущий прогресс
+      </div>
       <div class="big-number" style="font-size:22px" id="planProgress">0 ₽</div>
       <div class="sub-text"><span id="planPercent">0.0%</span> выполнено</div>
       <div class="progress-bg">
@@ -367,8 +562,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
       <button class="btn danger" id="btnAddAD">Сохранить возврат</button>
     </div>
     <div class="card">
-      <div class="card-title">Возвраты за текущий месяц</div>
-      <div class="big-number" style="font-size:22px;color:#ef4444" id="adMonthSum">0 ₽</div>
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        Возвраты за текущий месяц
+      </div>
+      <div class="big-number red" style="font-size:22px" id="adMonthSum">0 ₽</div>
       <div class="sub-text" id="adMonthCount">0 записей</div>
     </div>
   </div>
@@ -396,7 +594,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <div class="form-group"><label>Цена за штуку (₽)</label><input type="number" id="editSum" min="0"></div>
     <div class="form-group"><label>Процент отчисления (%)</label><input type="number" id="editPercent" min="0" max="100" step="0.1"></div>
     <button class="btn" id="btnUpdate">Обновить</button>
-    <button class="btn" id="btnEditCancel" style="background:#1e2b24;color:#e8f5f0;">Отмена</button>
+    <button class="btn secondary" id="btnEditCancel">Отмена</button>
   </div>
 </div>
 
@@ -405,7 +603,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <div class="card">
     <div class="about-icon">📊</div>
     <div class="about-name">Трекер продаж</div>
-    <div class="about-version">Версия 1.7</div>
+    <div class="about-version">Версия 2.0 · флагманский дизайн</div>
     <div class="about-desc">Простое приложение для учёта личных продаж.</div>
   </div>
   <div class="card">
@@ -415,18 +613,24 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <a class="about-mail" href="mailto:regionalbarnaul@yandex.ru">Написать разработчику</a>
   <button class="btn" id="btnAchievements" style="background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0a0f0d;">🏆 Достижения</button>
   <button class="btn" id="btnBackup" style="margin-top:12px">Данные (бэкап)</button>
-  <button class="btn" id="btnSaveFile" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">💾 Скачать бэкап в файл</button>
-  <button class="btn" id="btnShareBackup" style="background:#334155;color:#fff;">📤 Отправить бэкап (Telegram)</button>
-  <button class="btn" id="btnDedup" style="background:#1e2b24;color:#e8f5f0;">Удалить дубли товаров</button>
-  <button class="btn" id="btnImportManual" style="background:#334155;color:#fff;">📝 Обновить фокус-лист вручную</button>
-  <button class="btn" id="btnSyncFocus" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">Обновить фокус-лист из сети</button>
-  <button class="btn" id="btnAboutClose" style="background:#1e2b24;color:#e8f5f0;">Закрыть</button>
+  <button class="btn" id="btnSaveFile" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Скачать бэкап в файл
+  </button>
+  <button class="btn secondary" id="btnShareBackup">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+    Отправить бэкап (Telegram)
+  </button>
+  <button class="btn secondary" id="btnDedup">Удалить дубли товаров</button>
+  <button class="btn secondary" id="btnImportManual">📝 Обновить фокус-лист вручную</button>
+  <button class="btn" id="btnSyncFocus">Обновить фокус-лист из сети</button>
+  <button class="btn secondary" id="btnAboutClose">Закрыть</button>
 </div>
 
 <div id="screen-achievements" class="modal-screen">
   <div class="header"><h1>🏆 Достижения</h1></div>
   <div class="card" id="achievementsList"></div>
-  <button class="btn" id="btnAchClose" style="background:#1e2b24;color:#e8f5f0;">Закрыть</button>
+  <button class="btn secondary" id="btnAchClose">Закрыть</button>
 </div>
 
 <div id="screen-backup" class="modal-screen">
@@ -434,7 +638,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <div class="card">
     <div class="card-title">Экспорт (сохрани себе)</div>
     <div class="sub-text" style="margin-bottom:8px">Скопируй всё и отправь себе в Telegram / заметки.</div>
-    <textarea id="exportText" readonly style="width:100%;height:180px;padding:10px;background:#0a0f0d;border:1px solid #1e2b24;border-radius:10px;color:#e8f5f0;font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea>
+    <textarea id="exportText" readonly style="width:100%;height:180px;padding:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:#e8f5f0;font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea>
   </div>
   <div class="card">
     <div class="card-title">Импорт из файла</div>
@@ -444,10 +648,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   </div>
   <div class="card">
     <div class="card-title">Или вставь текст вручную</div>
-    <textarea id="importText2" placeholder="Вставь данные сюда..." style="width:100%;height:140px;padding:10px;background:#0a0f0d;border:1px solid #1e2b24;border-radius:10px;color:#e8f5f0;font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea>
+    <textarea id="importText2" placeholder="Вставь данные сюда..." style="width:100%;height:140px;padding:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:#e8f5f0;font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea>
     <button class="btn" id="btnRestore">Восстановить из текста</button>
   </div>
-  <button class="btn" id="btnBackupClose" style="background:#1e2b24;color:#e8f5f0;">Закрыть</button>
+  <button class="btn secondary" id="btnBackupClose">Закрыть</button>
 </div>
 
 <div id="screen-import" class="modal-screen">
@@ -455,10 +659,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   <div class="card">
     <div class="form-group">
       <label>Вставьте HTML-код или текст таблицы</label>
-      <textarea id="importText" style="width:100%;height:300px;padding:12px;background:#0a0f0d;border:1px solid #1e2b24;border-radius:10px;color:#e8f5f0;font-size:13px;font-family:monospace;outline:none;resize:none;"></textarea>
+      <textarea id="importText" style="width:100%;height:300px;padding:12px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:#e8f5f0;font-size:13px;font-family:monospace;outline:none;resize:none;"></textarea>
     </div>
     <button class="btn" id="btnImport">Сохранить</button>
-    <button class="btn" id="btnImportClose" style="background:#1e2b24;color:#e8f5f0;">Закрыть</button>
+    <button class="btn secondary" id="btnImportClose">Закрыть</button>
   </div>
 </div>
 
@@ -498,6 +702,7 @@ var editingId = null;
 var historyDate = new Date();
 var totalsMonth = new Date();
 var animatingIds = {};
+var screenOrder = ['home', 'add', 'history', 'totals', 'plan', 'ad'];
 
 try {
   sales = JSON.parse(localStorage.getItem('sales') || '[]');
@@ -521,7 +726,6 @@ function inSameWeek(a, b) { return dateStr(weekStart(new Date(a))) === dateStr(w
 function normalizeName(n) { return (n || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
 function prevMonth(d) { var x = new Date(d); x.setMonth(x.getMonth() - 1); return x; }
 
-// ===== TOAST =====
 function showToast(message, type) {
   type = type || 'success';
   var old = document.getElementById('appToast');
@@ -539,7 +743,6 @@ function showToast(message, type) {
   }, 2400);
 }
 
-// ===== ЗВУКИ =====
 function playBeep() {
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -592,7 +795,6 @@ function vibrateLight() { if (navigator.vibrate) navigator.vibrate(30); }
 function vibrateSuccess() { if (navigator.vibrate) navigator.vibrate([40, 30, 40]); }
 function vibrateRecord() { if (navigator.vibrate) navigator.vibrate([80, 40, 80, 40, 120]); }
 
-// ===== RIPPLE =====
 function attachRipple() {
   document.querySelectorAll('.btn').forEach(function(btn) {
     if (btn.dataset.ripple) return;
@@ -612,7 +814,6 @@ function attachRipple() {
   });
 }
 
-// ===== АНИМАЦИЯ ЦИФР =====
 function animateNumber(el, target) {
   if (!el || !el.id) return;
   var id = el.id;
@@ -633,7 +834,6 @@ function animateNumber(el, target) {
   requestAnimationFrame(step);
 }
 
-// ===== ГАЛОЧКА =====
 function showSuccessCheckmark() {
   var el = document.getElementById('successOverlay');
   if (!el) return;
@@ -648,7 +848,6 @@ function showSuccessCheckmark() {
   setTimeout(function() { el.classList.remove('show'); }, 1000);
 }
 
-// ===== ДОСТИЖЕНИЯ =====
 var ACHIEVEMENTS = [
   { id: 'day_100k', icon: '💰', name: '100 000 ₽ за день', desc: 'Продать на 100 000 ₽ за один день', type: 'daily', check: function() { return getDaySumToday() >= 100000; } },
   { id: 'day_10_focus', icon: '⭐', name: '10 фокусных за день', desc: 'Продать 10 фокусных товаров за день', type: 'daily', check: function() { return getFocusQtyToday() >= 10; } },
@@ -700,11 +899,8 @@ function checkAchievements() {
     if (unlocked.indexOf(a.id) === -1 && a.check()) {
       unlocked.push(a.id);
       localStorage.setItem('achievements', JSON.stringify(unlocked));
-      if (a.type === 'monthly') {
-        setTimeout(function() { bigCelebration(a); }, 900);
-      } else {
-        setTimeout(function() { showToast('🏆 ' + a.name, 'record'); vibrateRecord(); }, 1500);
-      }
+      if (a.type === 'monthly') { setTimeout(function() { bigCelebration(a); }, 900); }
+      else { setTimeout(function() { showToast('🏆 ' + a.name, 'record'); vibrateRecord(); }, 1500); }
     }
   });
 }
@@ -712,15 +908,9 @@ function bigCelebration(a) {
   playFanfare();
   if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 150]);
   var flash = document.getElementById('celebrationFlash');
-  if (!flash) {
-    flash = document.createElement('div');
-    flash.id = 'celebrationFlash';
-    document.body.appendChild(flash);
-  }
+  if (!flash) { flash = document.createElement('div'); flash.id = 'celebrationFlash'; document.body.appendChild(flash); }
   flash.innerHTML = '<div class="celebrate-emoji">' + a.icon + '</div><div class="celebrate-text">' + a.name + '</div>';
-  flash.classList.remove('show');
-  void flash.offsetWidth;
-  flash.classList.add('show');
+  flash.classList.remove('show'); void flash.offsetWidth; flash.classList.add('show');
   setTimeout(function() { flash.classList.remove('show'); }, 1500);
   setTimeout(function() { showToast('🔥 ' + a.name + '!', 'record'); }, 600);
 }
@@ -734,18 +924,14 @@ function renderAchievements() {
   var html = '';
   ACHIEVEMENTS.forEach(function(a) {
     var isUnlocked = unlocked.indexOf(a.id) !== -1;
-    html += '<div class="ach-item ' + (isUnlocked ? '' : 'ach-locked') + '">' +
-      '<div class="ach-icon">' + a.icon + '</div>' +
-      '<div class="ach-info"><div class="ach-name">' + a.name + '</div><div class="ach-desc">' + a.desc + '</div></div>' +
-      '</div>';
+    html += '<div class="ach-item ' + (isUnlocked ? '' : 'ach-locked') + '"><div class="ach-icon">' + a.icon + '</div><div class="ach-info"><div class="ach-name">' + a.name + '</div><div class="ach-desc">' + a.desc + '</div></div></div>';
   });
   html += '<div class="ach-count">Открыто: ' + unlocked.length + ' из ' + ACHIEVEMENTS.length + '</div>';
   el.innerHTML = html;
 }
 
-// ===== АВТОБЭКАП =====
 function getBackupJSON() {
-  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, achievements: getUnlockedAchievements(), exportDate: new Date().toISOString(), version: '1.7' }, null, 2);
+  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, achievements: getUnlockedAchievements(), exportDate: new Date().toISOString(), version: '2.0' }, null, 2);
 }
 function saveBackupToFile() {
   try {
@@ -814,33 +1000,22 @@ function findProduct(query) {
     return (p.art && p.art.indexOf(q) !== -1) || normalizeName(p.name).indexOf(q) !== -1;
   }).slice(0, 20);
 }
-
-// ===== УЛУЧШЕННАЯ ЗАЩИТА ОТ ДУБЛЕЙ =====
 function saveRegularProduct(name) {
   var key = normalizeName(name);
   if (!key) return;
-
   if (products.find(function(p) { return normalizeName(p.name) === key; })) return;
-
   var artMatch = key.match(/\b(\d{6,8})\b/);
   if (artMatch) {
     var art = artMatch[1];
-    if (products.find(function(p) {
-      return (p.art && p.art === art) || normalizeName(p.name).indexOf(art) !== -1;
-    })) return;
+    if (products.find(function(p) { return (p.art && p.art === art) || normalizeName(p.name).indexOf(art) !== -1; })) return;
   }
-
   var shortKey = key.substring(0, 30);
   if (shortKey.length > 10) {
-    if (products.find(function(p) {
-      return normalizeName(p.name).substring(0, 30) === shortKey;
-    })) return;
+    if (products.find(function(p) { return normalizeName(p.name).substring(0, 30) === shortKey; })) return;
   }
-
   products.push({ art: '', name: name, percent: 1.5, type: 'regular' });
   save();
 }
-
 function getProductPercent(product, dateStrVal) {
   if (!product) return 1.5;
   if (product.type === 'conditional') {
@@ -858,7 +1033,6 @@ function recalcConditional(productName, dateStrVal) {
   ws.forEach(function(s) { s.percent = np; s.commission = s.sum * np / 100; });
 }
 
-// ===== ПРОДАЖА =====
 function addSale() {
   var date = document.getElementById('inputDate').value || today();
   if (date > today()) { showToast('Дата не может быть в будущем', 'warn'); return; }
@@ -869,7 +1043,6 @@ function addSale() {
   if (!name) { showToast('Заполни поле «Товар»', 'warn'); return; }
   if (price <= 0) { showToast('Укажи цену товара', 'warn'); return; }
   if (qty < 1) { showToast('Количество не меньше 1', 'warn'); return; }
-
   var sum = price * qty;
   var commission = sum * percent / 100;
   var wasRecord = checkIfWillBeRecord(sum, date);
@@ -878,7 +1051,6 @@ function addSale() {
   if (prod && prod.type === 'conditional') recalcConditional(name, date);
   if (!prod) saveRegularProduct(name);
   save();
-
   document.getElementById('inputName').value = '';
   document.getElementById('inputSum').value = '';
   document.getElementById('inputQty').value = '1';
@@ -887,16 +1059,10 @@ function addSale() {
   document.getElementById('searchResults').innerHTML = '';
   document.getElementById('inputDate').value = today();
   updateDateDisplay('inputDate', 'inputDateDisplay');
-
   playDing();
   showSuccessCheckmark();
-  if (wasRecord) {
-    vibrateRecord();
-    setTimeout(function() { showToast('🏆 Новый рекорд дня!', 'record'); }, 900);
-  } else {
-    vibrateSuccess();
-    showToast('Продажа сохранена', 'success');
-  }
+  if (wasRecord) { vibrateRecord(); setTimeout(function() { showToast('🏆 Новый рекорд дня!', 'record'); }, 900); }
+  else { vibrateSuccess(); showToast('Продажа сохранена', 'success'); }
   maybeAutoBackup();
   checkAchievements();
   render();
@@ -909,7 +1075,6 @@ function checkIfWillBeRecord(newSum, date) {
   Object.keys(daySums).forEach(function(d) { if (daySums[d] > currentBest) currentBest = daySums[d]; });
   return ((daySums[date] || 0) + newSum) > currentBest;
 }
-
 function addAD() {
   var date = document.getElementById('adDate').value || today();
   if (date > today()) { showToast('Дата не может быть в будущем', 'warn'); return; }
@@ -935,7 +1100,6 @@ function addAD() {
   scrollToScreen('home');
 }
 
-// ===== РЕДАКТИРОВАНИЕ =====
 function openEdit(id) {
   var s = sales.find(function(x) { return x.id === id; });
   if (!s) return;
@@ -992,7 +1156,44 @@ function saveOklad() {
   showToast('Оклад сохранён', 'success');
 }
 
-// ===== РЕНДЕР =====
+function renderMiniBars(mSales) {
+  var el = document.getElementById('miniBars');
+  if (!el) return;
+  var dom = dayOfMonth();
+  var totalDays = daysInMonth(new Date());
+  var showDays = Math.min(totalDays, 31);
+  var daySums = {};
+  mSales.forEach(function(s) { daySums[s.date] = (daySums[s.date] || 0) + s.sum; });
+  var maxSum = 0;
+  Object.keys(daySums).forEach(function(d) { if (daySums[d] > maxSum) maxSum = daySums[d]; });
+  var html = '';
+  var todayDay = new Date().getDate();
+  var m = currentMonth();
+  for (var i = 1; i <= showDays; i++) {
+    var d = m + '-' + (i < 10 ? '0' + i : i);
+    var val = daySums[d] || 0;
+    var pct = maxSum > 0 ? (val / maxSum * 100) : 0;
+    var h = val > 0 ? Math.max(6, pct) : 3;
+    var cls = '';
+    if (i > todayDay) cls = 'empty-bar';
+    else if (i === todayDay) cls = 'gold';
+    html += '<span class="' + cls + '" style="height:' + h + '%"></span>';
+  }
+  el.innerHTML = html;
+  var best = document.getElementById('miniBarsBest');
+  if (best) {
+    if (maxSum > 0) {
+      var bestDay = 1, bestVal = 0;
+      Object.keys(daySums).forEach(function(d) {
+        if (daySums[d] > bestVal) { bestVal = daySums[d]; bestDay = parseInt(d.split('-')[2]); }
+      });
+      best.innerHTML = 'Лучший день — <b style="color:#fbbf24">' + bestDay + ' ' + new Date().toLocaleDateString('ru-RU', { month: 'long' }) + '</b> · <b style="color:#fbbf24">' + fmt(bestVal) + '</b>';
+    } else {
+      best.innerHTML = 'Пока нет продаж в этом месяце';
+    }
+  }
+}
+
 function render() {
   var t = today(), m = currentMonth();
   var tSales = sales.filter(function(s) { return s.date === t && !s.isAD; });
@@ -1013,6 +1214,30 @@ function render() {
   var rem = Math.max(0, mPlan - netTurnover);
   var remPct = mPlan > 0 ? (rem / mPlan * 100) : 100;
   var dl = daysLeft();
+
+  // ПРОГНОЗ ЗАРАБОТКА
+  var dom = dayOfMonth();
+  var avgEarnPerDay = dom > 0 ? (earnedMonth / dom) : 0;
+  var forecastEarn = avgEarnPerDay * totalDaysInMonth;
+
+  // Прошлый месяц для сравнения прогноза
+  var pm = monthStr(prevMonth(new Date()));
+  var pmComm = 0;
+  sales.forEach(function(s) { if (s.date.indexOf(pm) === 0 && !s.isAD) pmComm += s.commission; });
+  var pmEarn = salary.oklad + pmComm;
+  var fcEl = document.getElementById('forecastEarned');
+  if (fcEl) fcEl.textContent = fmt(forecastEarn);
+  var fccEl = document.getElementById('forecastCompare');
+  if (fccEl) {
+    if (pmEarn > 0) {
+      var diffPct = ((forecastEarn - pmEarn) / pmEarn * 100);
+      var sign = diffPct >= 0 ? '+' : '';
+      var cls = diffPct >= 0 ? '' : ' style="color:#ef4444"';
+      fccEl.innerHTML = 'В прошлом месяце: <b' + cls + '>' + fmt(pmEarn) + '</b> · прогноз <b' + cls + '>' + sign + diffPct.toFixed(1) + '%</b>';
+    } else {
+      fccEl.textContent = 'Нет данных за прошлый месяц';
+    }
+  }
 
   var bar = document.getElementById('monthProgress');
   if (bar) {
@@ -1043,7 +1268,12 @@ function render() {
   document.getElementById('todayEarnedBreak').textContent = 'оклад ' + fmt(okladPerDay) + ' + % ' + fmt(tComm);
   document.getElementById('monthEarnedBreak').textContent = 'оклад ' + fmt(salary.oklad) + ' + % ' + fmt(mComm);
 
-  var dom = dayOfMonth();
+  // Возвраты на главной
+  var adEl = document.getElementById('monthCommission_AD');
+  if (adEl) adEl.textContent = '−' + fmt(mADSum);
+  var adCntEl = document.getElementById('monthADCount');
+  if (adCntEl) adCntEl.textContent = mAD.length + ' записей';
+
   var totalDays = daysInMonth(new Date());
   var forecast = dom > 0 ? (netTurnover / dom * totalDays) : 0;
   var forecastPct = mPlan > 0 ? (forecast / mPlan * 100) : 0;
@@ -1069,7 +1299,7 @@ function render() {
     document.getElementById('recordDate').textContent = new Date(bS).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
     document.getElementById('recordComm').textContent = fmt(bdC[bC]);
     document.getElementById('recordCommDate').textContent = new Date(bC).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-    document.getElementById('recordBadge').innerHTML = '<div class="record-badge">Личный рекорд</div>';
+    document.getElementById('recordBadge').innerHTML = '<div class="record-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Личный рекорд</div>';
   } else {
     document.getElementById('recordSum').textContent = '0 ₽';
     document.getElementById('recordDate').textContent = '—';
@@ -1077,6 +1307,9 @@ function render() {
     document.getElementById('recordCommDate').textContent = '—';
     document.getElementById('recordBadge').innerHTML = '';
   }
+
+  // Мини-график дней
+  renderMiniBars(mSales);
 
   document.getElementById('planProgress').textContent = fmt(netTurnover);
   document.getElementById('planPercent').textContent = pct.toFixed(1) + '%';
@@ -1090,10 +1323,8 @@ function render() {
 
   var hDate = dateStr(historyDate);
   var hSales = sales.filter(function(s) { return s.date === hDate; });
-  var ht = document.getElementById('histTitle');
-  if (hDate === t) ht.textContent = 'Сегодня';
-  else if (hDate === dateStr(new Date(Date.now() - 86400000))) ht.textContent = 'Вчера';
-  else ht.textContent = historyDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+  // Фиксированный заголовок
+  document.getElementById('histTitle').textContent = 'История продаж';
   document.getElementById('historyDatePicker').value = hDate;
   document.getElementById('historyDatePicker').max = today();
   updateDateDisplay('historyDatePicker', 'historyDateDisplay');
@@ -1131,7 +1362,8 @@ function render() {
   var netT = tS - adS;
   var tPlan = getPlan(tm);
   var tPct = tPlan > 0 ? (netT / tPlan * 100) : 0;
-  document.getElementById('totalsTitle').textContent = totalsMonth.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
+  // Заголовок Итоги — без года
+  document.getElementById('totalsTitle').textContent = 'Итоги за ' + totalsMonth.toLocaleDateString('ru-RU', { month: 'long' });
   document.getElementById('totalsPlan').textContent = fmt(tPlan);
   document.getElementById('totalsPercent').textContent = tPct.toFixed(1) + '% выполнено';
   var tb = document.getElementById('totalsProgress');
@@ -1151,10 +1383,10 @@ function render() {
 
   renderPercentBreakdown(totSales);
 
-  var pm = monthStr(prevMonth(totalsMonth));
+  var pm2 = monthStr(prevMonth(totalsMonth));
   var pmSum = 0, pmADSum = 0;
   sales.forEach(function(s) {
-    if (s.date.indexOf(pm) !== 0) return;
+    if (s.date.indexOf(pm2) !== 0) return;
     if (s.isAD) pmADSum += Math.abs(s.sum); else pmSum += s.sum;
   });
   var pmNet = pmSum - pmADSum;
@@ -1205,6 +1437,7 @@ function render() {
         animateNumber(document.getElementById('remaining'), rem);
         animateNumber(document.getElementById('todayEarned'), earnedToday);
         animateNumber(document.getElementById('monthEarned'), earnedMonth);
+        animateNumber(document.getElementById('forecastEarned'), forecastEarn);
       }, 300);
     };
     if (document.visibilityState === 'visible') {
@@ -1239,16 +1472,11 @@ function renderPercentBreakdown(monthSales) {
   var html = '';
   keys.forEach(function(k) {
     var g = groups[k];
-    html += '<div class="percent-row">' +
-      '<span class="percent-badge">' + k + '%</span>' +
-      '<div class="percent-info">' + g.qty + ' шт</div>' +
-      '<div><div class="percent-sum">' + fmt(g.sum) + '</div><div class="percent-comm">отч. ' + fmt(g.comm) + '</div></div>' +
-    '</div>';
+    html += '<div class="percent-row"><span class="percent-badge">' + k + '%</span><div class="percent-info">' + g.qty + ' шт</div><div><div class="percent-sum">' + fmt(g.sum) + '</div><div class="percent-comm">отч. ' + fmt(g.comm) + '</div></div></div>';
   });
   el.innerHTML = html;
 }
 
-// ===== СВАЙП =====
 function scrollToScreen(name) {
   var container = document.getElementById('swipeContainer');
   var idx = screenOrder.indexOf(name);
@@ -1271,7 +1499,6 @@ document.querySelectorAll('#dots span').forEach(function(dot) {
   dot.addEventListener('click', function() { scrollToScreen(this.getAttribute('data-screen')); });
 });
 
-// ===== ПОИСК =====
 document.getElementById('searchProduct').oninput = function() {
   var q = this.value.trim();
   var res = document.getElementById('searchResults');
@@ -1279,9 +1506,7 @@ document.getElementById('searchProduct').oninput = function() {
   var found = findProduct(q);
   if (found.length === 0) { res.innerHTML = ''; return; }
   var html = '';
-  found.forEach(function(p, i) {
-    html += '<div data-idx="' + i + '">' + (p.art ? p.art + ' — ' : '') + p.name.substring(0, 50) + '... (' + p.percent + '%)</div>';
-  });
+  found.forEach(function(p, i) { html += '<div data-idx="' + i + '">' + (p.art ? p.art + ' — ' : '') + p.name.substring(0, 50) + '... (' + p.percent + '%)</div>'; });
   res.innerHTML = html;
   res.querySelectorAll('div').forEach(function(el) {
     el.onclick = function() {
@@ -1302,9 +1527,7 @@ document.getElementById('adSearchProduct').oninput = function() {
   var found = findProduct(q);
   if (found.length === 0) { res.innerHTML = ''; return; }
   var html = '';
-  found.forEach(function(p, i) {
-    html += '<div data-idx="' + i + '">' + (p.art ? p.art + ' — ' : '') + p.name.substring(0, 50) + '...</div>';
-  });
+  found.forEach(function(p, i) { html += '<div data-idx="' + i + '">' + (p.art ? p.art + ' — ' : '') + p.name.substring(0, 50) + '...</div>'; });
   res.innerHTML = html;
   res.querySelectorAll('div').forEach(function(el) {
     el.onclick = function() {
@@ -1317,7 +1540,6 @@ document.getElementById('adSearchProduct').oninput = function() {
   });
 };
 
-// ===== ДАТЫ =====
 document.getElementById('inputDateDisplay').onclick = function() { var inp = document.getElementById('inputDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('editDateDisplay').onclick = function() { var inp = document.getElementById('editDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('inputDate').addEventListener('change', function() { updateDateDisplay('inputDate', 'inputDateDisplay'); });
@@ -1332,7 +1554,6 @@ document.getElementById('historyDatePicker').addEventListener('change', function
 document.getElementById('adDateDisplay').onclick = function() { var inp = document.getElementById('adDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('adDate').addEventListener('change', function() { updateDateDisplay('adDate', 'adDateDisplay'); });
 
-// ===== СКАНЕР =====
 var liveStream = null, liveScanning = false, torchOn = false, scanTarget = 'add';
 document.getElementById('btnScanQR').onclick = function() { scanTarget = 'add'; startLiveScanner(); };
 document.getElementById('adScanQR').onclick = function() { scanTarget = 'ad'; startLiveScanner(); };
@@ -1346,14 +1567,7 @@ function startLiveScanner() {
   spinner.id = 'qrLoading';
   spinner.innerHTML = '<div class="qr-spinner"></div><div class="qr-loading-text">Включаю камеру...</div>';
   document.querySelector('.qr-cam-wrap').appendChild(spinner);
-
-  if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-    navigator.mediaDevices.enumerateDevices().catch(function(){});
-  }
-  navigator.mediaDevices.getUserMedia({
-    video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } },
-    audio: false
-  }).then(function(stream) {
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false }).then(function(stream) {
     liveStream = stream;
     var track = stream.getVideoTracks()[0];
     if (track && track.applyConstraints) track.applyConstraints({ advanced: [{ focusMode: 'continuous' }] }).catch(function(){});
@@ -1386,9 +1600,7 @@ document.getElementById('liveTorchBtn').onclick = function() {
   var track = liveStream.getVideoTracks()[0]; if (!track) return;
   torchOn = !torchOn;
   var btn = this;
-  track.applyConstraints({ advanced: [{ torch: torchOn }] }).then(function() {
-    btn.classList.toggle('active', torchOn);
-  }).catch(function() { showToast('Фонарик недоступен', 'warn'); });
+  track.applyConstraints({ advanced: [{ torch: torchOn }] }).then(function() { btn.classList.toggle('active', torchOn); }).catch(function() { showToast('Фонарик недоступен', 'warn'); });
 };
 function liveTick() {
   if (!liveScanning || !liveStream) return;
@@ -1408,10 +1620,7 @@ function liveTick() {
     if (navigator.vibrate) navigator.vibrate(80);
     playBeep();
     var data = code.data; var target = scanTarget;
-    setTimeout(function() {
-      stopLiveScanner();
-      if (target === 'ad') handleQRDataAD(data); else handleQRData(data);
-    }, 300);
+    setTimeout(function() { stopLiveScanner(); if (target === 'ad') handleQRDataAD(data); else handleQRData(data); }, 300);
     return;
   }
   requestAnimationFrame(liveTick);
@@ -1462,7 +1671,6 @@ function handleQRDataAD(data) {
   showToast('Возврат · ' + r.article, 'success');
 }
 
-// ===== МОДАЛКИ =====
 document.getElementById('aboutBtn').onclick = function() { document.getElementById('screen-about').classList.add('active'); };
 document.getElementById('btnAboutClose').onclick = function() { document.getElementById('screen-about').classList.remove('active'); };
 document.getElementById('btnBackupClose').onclick = function() { document.getElementById('screen-backup').classList.remove('active'); };
@@ -1470,7 +1678,6 @@ document.getElementById('btnImportClose').onclick = function() { document.getEle
 document.getElementById('btnAchievements').onclick = function() { renderAchievements(); document.getElementById('screen-achievements').classList.add('active'); };
 document.getElementById('btnAchClose').onclick = function() { document.getElementById('screen-achievements').classList.remove('active'); };
 
-// ===== КНОПКИ =====
 document.getElementById('btnAdd').onclick = addSale;
 document.getElementById('btnUpdate').onclick = updateSale;
 document.getElementById('btnEditCancel').onclick = closeEdit;
@@ -1478,70 +1685,59 @@ document.getElementById('btnPlan').onclick = savePlan;
 document.getElementById('btnOklad').onclick = saveOklad;
 document.getElementById('btnAddAD').onclick = addAD;
 
-document.getElementById('btnImportManual').onclick = function() {
-  document.getElementById('screen-import').classList.add('active');
-};
+document.getElementById('btnImportManual').onclick = function() { document.getElementById('screen-import').classList.add('active'); };
 
-// ===== ФОКУС-ЛИСТ ИЗ СЕТИ + ДЕДУПЛИКАЦИЯ =====
 document.getElementById('btnSyncFocus').onclick = function() {
   var ok = confirm('Тест с сервера, бесплатный пробный период.\n\nЗагрузить фокус-лист?');
   if (!ok) return;
   var url = 'https://raw.githubusercontent.com/regionalbarnaul/Test-data/main/Test.csv';
   showToast('Загружаю фокус-лист...', 'warn');
-  fetch(url)
-    .then(function(r) { return r.text(); })
-    .then(function(text) {
-      if (text.charCodeAt(0) === 0xFEFF) text = text.substring(1);
-      function parseCSV(str) {
-        var rows = [], row = [], cur = '', q = false;
-        for (var i = 0; i < str.length; i++) {
-          var ch = str[i];
-          if (q) {
-            if (ch === '"') { if (str[i+1] === '"') { cur += '"'; i++; } else q = false; }
-            else cur += ch;
-          } else {
-            if (ch === '"') q = true;
-            else if (ch === ',') { row.push(cur); cur = ''; }
-            else if (ch === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; }
-            else if (ch === '\r') { }
-            else cur += ch;
-          }
+  fetch(url).then(function(r) { return r.text(); }).then(function(text) {
+    if (text.charCodeAt(0) === 0xFEFF) text = text.substring(1);
+    function parseCSV(str) {
+      var rows = [], row = [], cur = '', q = false;
+      for (var i = 0; i < str.length; i++) {
+        var ch = str[i];
+        if (q) {
+          if (ch === '"') { if (str[i+1] === '"') { cur += '"'; i++; } else q = false; }
+          else cur += ch;
+        } else {
+          if (ch === '"') q = true;
+          else if (ch === ',') { row.push(cur); cur = ''; }
+          else if (ch === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; }
+          else if (ch === '\r') { }
+          else cur += ch;
         }
-        if (cur !== '' || row.length > 0) { row.push(cur); rows.push(row); }
-        return rows;
       }
-      var rows = parseCSV(text); var np = [];
-      for (var i = 1; i < rows.length; i++) {
-        var r = rows[i]; if (r.length < 3) continue;
-        var art = (r[0] || '').trim(), name = (r[1] || '').trim(), pr = (r[2] || '').trim();
-        if (!art || !name) continue;
-        var type = 'focus', percent = 0;
-        if (pr.indexOf('при продажах') !== -1) { type = 'conditional'; var mm = pr.match(/(\d+)/); percent = mm ? parseInt(mm[1]) : 3; }
-        else { var m2 = pr.match(/(\d+(?:[.,]\d+)?)/); percent = m2 ? parseFloat(m2[1].replace(',', '.')) : 0; }
-        np.push({ art: art, name: name, percent: percent, type: type });
-      }
-      if (np.length === 0) { showToast('Товары не найдены', 'warn'); return; }
-      products = products.filter(function(p) { return p.type === 'regular'; });
-      var seenArts = {};
-      var npUnique = [];
-      np.forEach(function(x) {
-        if (x.art && seenArts[x.art]) return;
-        if (x.art) seenArts[x.art] = true;
-        npUnique.push(x);
-      });
-      npUnique.forEach(function(x) {
-        var ex = products.find(function(p) { if (x.art && p.art && p.art === x.art) return true; return normalizeName(p.name) === normalizeName(x.name); });
-        if (ex) { ex.percent = x.percent; ex.type = x.type; if (x.art) ex.art = x.art; if (x.name) ex.name = x.name; }
-        else products.push(x);
-      });
-      save();
-      showToast('Загружено: ' + npUnique.length + ' товаров', 'success');
-      render();
-    })
-    .catch(function(e) { showToast('Ошибка загрузки: ' + e.message, 'error'); });
+      if (cur !== '' || row.length > 0) { row.push(cur); rows.push(row); }
+      return rows;
+    }
+    var rows = parseCSV(text); var np = [];
+    for (var i = 1; i < rows.length; i++) {
+      var r = rows[i]; if (r.length < 3) continue;
+      var art = (r[0] || '').trim(), name = (r[1] || '').trim(), pr = (r[2] || '').trim();
+      if (!art || !name) continue;
+      var type = 'focus', percent = 0;
+      if (pr.indexOf('при продажах') !== -1) { type = 'conditional'; var mm = pr.match(/(\d+)/); percent = mm ? parseInt(mm[1]) : 3; }
+      else { var m2 = pr.match(/(\d+(?:[.,]\d+)?)/); percent = m2 ? parseFloat(m2[1].replace(',', '.')) : 0; }
+      np.push({ art: art, name: name, percent: percent, type: type });
+    }
+    if (np.length === 0) { showToast('Товары не найдены', 'warn'); return; }
+    products = products.filter(function(p) { return p.type === 'regular'; });
+    var seenArts = {};
+    var npUnique = [];
+    np.forEach(function(x) { if (x.art && seenArts[x.art]) return; if (x.art) seenArts[x.art] = true; npUnique.push(x); });
+    npUnique.forEach(function(x) {
+      var ex = products.find(function(p) { if (x.art && p.art && p.art === x.art) return true; return normalizeName(p.name) === normalizeName(x.name); });
+      if (ex) { ex.percent = x.percent; ex.type = x.type; if (x.art) ex.art = x.art; if (x.name) ex.name = x.name; }
+      else products.push(x);
+    });
+    save();
+    showToast('Загружено: ' + npUnique.length + ' товаров', 'success');
+    render();
+  }).catch(function(e) { showToast('Ошибка загрузки: ' + e.message, 'error'); });
 };
 
-// ===== ИМПОРТ ТОВАРОВ =====
 document.getElementById('btnImport').onclick = function() {
   var val = document.getElementById('importText').value.trim();
   if (!val) { showToast('Вставьте данные', 'warn'); return; }
@@ -1596,7 +1792,6 @@ function parseData(input) {
   showToast('Обновлено: ' + np.length + ' товаров', 'success');
 }
 
-// ===== УЛУЧШЕННАЯ ДЕДУПЛИКАЦИЯ ТОВАРОВ =====
 document.getElementById('btnDedup').onclick = function() {
   var seen = {}, unique = [], removed = 0;
   products.forEach(function(p) {
@@ -1605,11 +1800,9 @@ document.getElementById('btnDedup').onclick = function() {
     var shortKey = k.substring(0, 30);
     var artMatch = k.match(/\b(\d{6,8})\b/);
     var artKey = artMatch ? 'art_' + artMatch[1] : null;
-
     var dupKey = null;
     if (artKey && seen[artKey]) dupKey = artKey;
     else if (seen['short_' + shortKey]) dupKey = 'short_' + shortKey;
-
     if (dupKey) {
       var e = seen[dupKey];
       if (p.percent > e.percent) { e.percent = p.percent; e.type = p.type; }
@@ -1679,12 +1872,10 @@ document.getElementById('btnRestore').onclick = function() {
   render();
 };
 
-// ===== SERVICE WORKER =====
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() { navigator.serviceWorker.register('sw.js').catch(function(){}); });
 }
 
-// ===== INIT =====
 document.getElementById('inputDate').value = today();
 document.getElementById('inputDate').max = today();
 document.getElementById('editDate').max = today();

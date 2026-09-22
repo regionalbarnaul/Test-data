@@ -18,8 +18,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 @keyframes bgFloat { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(30px,-20px) scale(1.1); } }
 
 .accent { color: #10b981; }
-
-/* ===== ШАПКИ ===== */
 .header { padding: 18px 44px 12px 16px; display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
 .header h1 { font-size: 26px; font-weight: 800; letter-spacing:-0.5px; line-height:1.15;
   background: linear-gradient(135deg, #a7f3d0 0%, #10b981 60%, #059669 100%);
@@ -28,7 +26,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .header .pulse-dot { width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 0 0 rgba(16,185,129,0.6); animation: pulseDot 2s ease-out infinite; flex-shrink:0; }
 @keyframes pulseDot { 0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); } 70% { box-shadow: 0 0 0 12px rgba(16,185,129,0); } 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); } }
 
-/* ===== КАРТОЧКИ ===== */
 .card {
   background: linear-gradient(180deg, rgba(26,38,32,0.72) 0%, rgba(18,26,22,0.72) 100%);
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
@@ -50,11 +47,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 #screen-home .card:nth-child(8) { animation-delay: 0.35s; }
 @keyframes cardIn { from { opacity:0; transform: translateY(20px) scale(0.98); } to { opacity:1; transform: translateY(0) scale(1); } }
 
-.card-head {
-  display:flex; align-items:center; gap:8px;
-  font-size: 11px; text-transform: uppercase; letter-spacing:0.8px;
-  color:#7c9b8d; font-weight:600; margin-bottom:10px;
-}
+.card-head { display:flex; align-items:center; gap:8px; font-size: 11px; text-transform: uppercase; letter-spacing:0.8px; color:#7c9b8d; font-weight:600; margin-bottom:10px; }
 .card-head svg { flex-shrink:0; }
 .card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #7c9b8d; margin-bottom: 10px; font-weight:600; }
 
@@ -69,7 +62,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .grid-2 .card { margin: 0; }
 .grid-2.inside { margin: 0; gap: 10px; }
 
-/* ===== ПРОГРЕСС ===== */
 .progress-bg { background: rgba(255,255,255,0.06); border-radius: 6px; height: 10px; margin-top: 14px; overflow: hidden; position: relative; }
 .progress-fill { height: 100%; border-radius: 6px; transition: width 0.4s ease; width: 0%; background: linear-gradient(90deg, #ef4444, #f59e0b); position: relative; overflow: hidden; box-shadow: 0 0 12px rgba(245,158,11,0.4); }
 .progress-fill.ok { background: linear-gradient(90deg, #10b981, #34d399); box-shadow: 0 0 12px rgba(16,185,129,0.5); }
@@ -78,7 +70,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 @keyframes shimmer { to { left: 150%; } }
 .progress-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: rgba(232,245,240,0.55); border-radius:2px; z-index: 2; }
 
-/* ===== КНОПКИ ===== */
 .btn { display: flex; align-items:center; justify-content:center; gap:10px; width: calc(100% - 28px); margin: 12px auto; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border: none; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; position: relative; overflow: hidden; box-shadow: 0 4px 16px rgba(16,185,129,0.25); }
 .btn svg { flex-shrink:0; }
 .btn.danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; box-shadow: 0 4px 16px rgba(239,68,68,0.25); }
@@ -86,7 +77,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.55); transform: scale(0); animation: rippleAnim 0.65s ease-out; pointer-events: none; }
 @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
 
-/* ===== ФОРМЫ ===== */
 .form-group { margin-bottom: 12px; }
 .form-group label { display: block; font-size: 11px; color: #7c9b8d; margin-bottom: 6px; text-transform: uppercase; letter-spacing:0.5px; font-weight:600; }
 .form-group input { width: 100%; padding: 12px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #e8f5f0; font-size: 15px; outline: none; transition: border-color 0.2s; }
@@ -97,13 +87,11 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 @keyframes pulseGreen { 0%, 100% { box-shadow: 0 4px 14px rgba(16,185,129,0.35), 0 0 0 0 rgba(16,185,129,0.55); } 50% { box-shadow: 0 4px 14px rgba(16,185,129,0.35), 0 0 0 10px rgba(16,185,129,0); } }
 .btn-cam svg { display: block; }
 
-/* ===== ПОИСК ===== */
 #searchResults, #adSearchResults { background: rgba(18,26,22,0.95); backdrop-filter:blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; max-height: 160px; overflow-y: auto; margin-top: 6px; }
 #searchResults div, #adSearchResults div { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; font-size: 13px; }
 #searchResults div:last-child, #adSearchResults div:last-child { border-bottom: none; }
 #searchResults div:active, #adSearchResults div:active { background: rgba(255,255,255,0.06); }
 
-/* ===== ИСТОРИЯ ===== */
 .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .history-item:last-child { border-bottom: none; }
 .history-item .info { flex: 1; }
@@ -121,7 +109,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .record-badge { display: inline-flex; align-items:center; gap:6px; padding: 6px 14px; background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(245,158,11,0.1)); border:1px solid rgba(251,191,36,0.3); color: #fbbf24; border-radius: 16px; font-size: 11px; font-weight: 700; margin-top: 12px; letter-spacing:0.3px; }
 .record-badge svg { width:12px; height:12px; }
 
-/* ===== ABOUT ===== */
 .about-icon { text-align: center; font-size: 52px; margin: 16px 0 8px; }
 .about-name { text-align: center; font-size: 22px; font-weight: 800; margin-bottom: 4px; background:linear-gradient(135deg,#a7f3d0,#10b981); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
 .about-version { text-align: center; font-size: 12px; color: #6b8a7d; margin-bottom: 16px; }
@@ -137,7 +124,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .compare-up { color: #10b981 !important; }
 .compare-down { color: #ef4444 !important; }
 
-/* ===== ПРОЦЕНТЫ ===== */
 .percent-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px; }
 .percent-row:last-child { border-bottom: none; }
 .percent-badge { display: inline-block; min-width: 44px; padding: 5px 10px; background: linear-gradient(135deg,#10b981,#059669); color: #0a0f0d; border-radius: 8px; font-size: 12px; font-weight: 800; text-align: center; box-shadow:0 2px 8px rgba(16,185,129,0.3); }
@@ -145,19 +131,16 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .percent-sum { font-size: 14px; font-weight: 700; color: #10b981; text-align: right; }
 .percent-comm { font-size: 11px; color: #6b8a7d; margin-top: 2px; text-align: right; }
 
-/* ===== СВАЙП ===== */
 #swipeContainer { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; height: 100vh; width: 100vw; position:relative; z-index:1; }
 #swipeContainer::-webkit-scrollbar { display: none; }
 .swipe-screen { min-width: 100vw; width: 100vw; height: 100vh; scroll-snap-align: start; scroll-snap-stop: always; overflow-y: auto; overflow-x: hidden; flex-shrink: 0; padding-bottom: 60px; box-sizing: border-box; position:relative; }
 .modal-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #060a08; overflow-y: auto; z-index: 200; padding-bottom: 40px; }
 .modal-screen.active { display: block; }
 
-/* ===== ТОЧКИ ===== */
 #dots { position: fixed; bottom: 6px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px 0; z-index: 150; pointer-events: none; }
 #dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.15); transition: all 0.35s ease; pointer-events: auto; cursor: pointer; }
 #dots span.active { background: #10b981; width: 24px; border-radius: 4px; box-shadow:0 0 12px rgba(16,185,129,0.6); }
 
-/* ===== QR СКАНЕР ===== */
 .qr-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; z-index: 10; gap: 20px; transition: opacity 0.4s ease; }
 .qr-loading.hidden { opacity: 0; pointer-events: none; }
 .qr-spinner { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #10b981; border-radius: 50%; animation: qrSpin 0.9s linear infinite; }
@@ -182,7 +165,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .qr-ctl.close { background: rgba(239,68,68,0.7); border-color: #fff; }
 .qr-ctl.active { background: #fbbf24; color: #0a0f0d; border-color: #fbbf24; }
 
-/* ===== ТОСТ ===== */
 .toast { position: fixed; top: 20px; left: 14px; right: 14px; padding: 14px 16px; border-radius: 14px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; z-index: 99999; opacity: 0; transform: translateY(-20px); transition: all 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.5); color: #0a0f0d; }
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast.success { background: linear-gradient(135deg, #10b981, #059669); }
@@ -191,7 +173,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .toast.record { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
 .toast .icon { font-size: 20px; }
 
-/* ===== ГАЛОЧКА ===== */
 #successOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: center; justify-content: center; z-index: 99997; }
 #successOverlay.show { display: flex; }
 .success-checkmark { width: 120px; height: 120px; }
@@ -200,7 +181,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 @keyframes strokeCircle { to { stroke-dashoffset: 0; } }
 @keyframes strokeMark { to { stroke-dashoffset: 0; } }
 
-/* ===== ДОСТИЖЕНИЯ ===== */
 .ach-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .ach-item:last-child { border-bottom: none; }
 .ach-icon { font-size: 32px; width: 44px; text-align: center; }
@@ -211,7 +191,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .ach-locked .ach-icon { filter: grayscale(1); }
 .ach-count { text-align: center; color: #6b8a7d; font-size: 12px; margin-top: 10px; }
 
-/* ===== ПРАЗДНИК ===== */
 #celebrationFlash { position: fixed; inset: 0; background: radial-gradient(circle, rgba(16,185,129,0.95), rgba(16,185,129,0.4)); z-index: 99996; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 20px; pointer-events: none; }
 #celebrationFlash.show { display: flex; animation: celebratePulse 1.2s ease-out; }
 @keyframes celebratePulse { 0% { opacity: 0; transform: scale(1.2); } 15% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
@@ -219,7 +198,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 @keyframes celebrateBounce { 0% { transform: scale(0.3) rotate(-20deg); } 40% { transform: scale(1.3) rotate(10deg); } 70% { transform: scale(1) rotate(-5deg); } 100% { transform: scale(1) rotate(0); opacity: 0; } }
 .celebrate-text { color: #fff; font-size: 22px; font-weight: 800; text-shadow: 0 3px 12px rgba(0,0,0,0.5); text-align: center; padding: 0 20px; }
 
-/* ===== ЗАРАБОТОК / ПРОГНОЗ ===== */
 .earn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
 .earn-grid .lbl { font-size: 11px; color: #7c9b8d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
 .earn-grid .val { font-size: 22px; font-weight: 800; color: #fbbf24; letter-spacing:-0.3px; }
@@ -230,7 +208,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .forecast-hint b { color:#10b981; font-weight:700; }
 .forecast-hint .down { color:#ef4444; }
 
-/* ===== МИНИ-ГРАФИК ===== */
 .mini-bars { display:flex; align-items:flex-end; gap:3px; height:44px; margin-top:12px; }
 .mini-bars span { flex:1; background: linear-gradient(180deg, rgba(16,185,129,0.9), rgba(16,185,129,0.2)); border-radius: 3px 3px 0 0; min-height:3px; animation: barGrow 0.7s cubic-bezier(0.22,1,0.36,1) backwards; }
 .mini-bars span.gold { background: linear-gradient(180deg, #fbbf24, rgba(251,191,36,0.25)); }
@@ -603,7 +580,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
   <div class="card">
     <div class="about-icon">📊</div>
     <div class="about-name">Трекер продаж</div>
-    <div class="about-version">Версия 2.0 · флагманский дизайн</div>
+    <div class="about-version">Версия 2.1 · фикс дублей</div>
     <div class="about-desc">Простое приложение для учёта личных продаж.</div>
   </div>
   <div class="card">
@@ -725,6 +702,13 @@ function weekStart(d) { var day = d.getDay(); var diff = d.getDate() - day + (da
 function inSameWeek(a, b) { return dateStr(weekStart(new Date(a))) === dateStr(weekStart(new Date(b))); }
 function normalizeName(n) { return (n || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
 function prevMonth(d) { var x = new Date(d); x.setMonth(x.getMonth() - 1); return x; }
+
+// ФИКС #1: новая функция — извлечь артикул из имени
+function extractArticleFromName(name) {
+  if (!name) return '';
+  var m = name.match(/\b(\d{6,8})\b/);
+  return m ? m[1] : '';
+}
 
 function showToast(message, type) {
   type = type || 'success';
@@ -931,7 +915,7 @@ function renderAchievements() {
 }
 
 function getBackupJSON() {
-  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, achievements: getUnlockedAchievements(), exportDate: new Date().toISOString(), version: '2.0' }, null, 2);
+  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, achievements: getUnlockedAchievements(), exportDate: new Date().toISOString(), version: '2.1' }, null, 2);
 }
 function saveBackupToFile() {
   try {
@@ -997,25 +981,42 @@ function getPlan(month) { return plans[month] || 0; }
 function findProduct(query) {
   var q = normalizeName(query);
   return products.filter(function(p) {
-    return (p.art && p.art.indexOf(q) !== -1) || normalizeName(p.name).indexOf(q) !== -1;
+    if (p.art && p.art.indexOf(q) !== -1) return true;
+    return normalizeName(p.name).indexOf(q) !== -1;
   }).slice(0, 20);
 }
+
+// ФИКС #2: сохраняем артикул в p.art при создании регулярного товара
 function saveRegularProduct(name) {
   var key = normalizeName(name);
   if (!key) return;
-  if (products.find(function(p) { return normalizeName(p.name) === key; })) return;
-  var artMatch = key.match(/\b(\d{6,8})\b/);
-  if (artMatch) {
-    var art = artMatch[1];
-    if (products.find(function(p) { return (p.art && p.art === art) || normalizeName(p.name).indexOf(art) !== -1; })) return;
-  }
+
+  var artFromName = extractArticleFromName(name);
+
+  // Проверка на существующий товар — теперь и по артикулу, и по имени
+  var exists = products.find(function(p) {
+    // по артикулу (в поле)
+    if (artFromName && p.art && p.art === artFromName) return true;
+    // по артикулу в имени
+    if (artFromName && extractArticleFromName(p.name) === artFromName) return true;
+    // по имени
+    if (normalizeName(p.name) === key) return true;
+    return false;
+  });
+  if (exists) return;
+
+  // Дополнительная защита — по короткому ключу
   var shortKey = key.substring(0, 30);
   if (shortKey.length > 10) {
-    if (products.find(function(p) { return normalizeName(p.name).substring(0, 30) === shortKey; })) return;
+    if (products.find(function(p) {
+      return normalizeName(p.name).substring(0, 30) === shortKey;
+    })) return;
   }
-  products.push({ art: '', name: name, percent: 1.5, type: 'regular' });
+
+  products.push({ art: artFromName, name: name, percent: 1.5, type: 'regular' });
   save();
 }
+
 function getProductPercent(product, dateStrVal) {
   if (!product) return 1.5;
   if (product.type === 'conditional') {
@@ -1215,12 +1216,10 @@ function render() {
   var remPct = mPlan > 0 ? (rem / mPlan * 100) : 100;
   var dl = daysLeft();
 
-  // ПРОГНОЗ ЗАРАБОТКА
   var dom = dayOfMonth();
   var avgEarnPerDay = dom > 0 ? (earnedMonth / dom) : 0;
   var forecastEarn = avgEarnPerDay * totalDaysInMonth;
 
-  // Прошлый месяц для сравнения прогноза
   var pm = monthStr(prevMonth(new Date()));
   var pmComm = 0;
   sales.forEach(function(s) { if (s.date.indexOf(pm) === 0 && !s.isAD) pmComm += s.commission; });
@@ -1268,7 +1267,6 @@ function render() {
   document.getElementById('todayEarnedBreak').textContent = 'оклад ' + fmt(okladPerDay) + ' + % ' + fmt(tComm);
   document.getElementById('monthEarnedBreak').textContent = 'оклад ' + fmt(salary.oklad) + ' + % ' + fmt(mComm);
 
-  // Возвраты на главной
   var adEl = document.getElementById('monthCommission_AD');
   if (adEl) adEl.textContent = '−' + fmt(mADSum);
   var adCntEl = document.getElementById('monthADCount');
@@ -1308,7 +1306,6 @@ function render() {
     document.getElementById('recordBadge').innerHTML = '';
   }
 
-  // Мини-график дней
   renderMiniBars(mSales);
 
   document.getElementById('planProgress').textContent = fmt(netTurnover);
@@ -1323,7 +1320,6 @@ function render() {
 
   var hDate = dateStr(historyDate);
   var hSales = sales.filter(function(s) { return s.date === hDate; });
-  // Фиксированный заголовок
   document.getElementById('histTitle').textContent = 'История продаж';
   document.getElementById('historyDatePicker').value = hDate;
   document.getElementById('historyDatePicker').max = today();
@@ -1362,7 +1358,6 @@ function render() {
   var netT = tS - adS;
   var tPlan = getPlan(tm);
   var tPct = tPlan > 0 ? (netT / tPlan * 100) : 0;
-  // Заголовок Итоги — без года
   document.getElementById('totalsTitle').textContent = 'Итоги за ' + totalsMonth.toLocaleDateString('ru-RU', { month: 'long' });
   document.getElementById('totalsPlan').textContent = fmt(tPlan);
   document.getElementById('totalsPercent').textContent = tPct.toFixed(1) + '% выполнено';
@@ -1687,6 +1682,7 @@ document.getElementById('btnAddAD').onclick = addAD;
 
 document.getElementById('btnImportManual').onclick = function() { document.getElementById('screen-import').classList.add('active'); };
 
+// ФИКС #3: обновлённая синхронизация — сравнивает по артикулу из имени регулярных
 document.getElementById('btnSyncFocus').onclick = function() {
   var ok = confirm('Тест с сервера, бесплатный пробный период.\n\nЗагрузить фокус-лист?');
   if (!ok) return;
@@ -1723,17 +1719,40 @@ document.getElementById('btnSyncFocus').onclick = function() {
       np.push({ art: art, name: name, percent: percent, type: type });
     }
     if (np.length === 0) { showToast('Товары не найдены', 'warn'); return; }
-    products = products.filter(function(p) { return p.type === 'regular'; });
+
+    // ФИКС #3a: собираем все артикулы из CSV в Set
+    var csvArts = {};
+    np.forEach(function(x) { if (x.art) csvArts[x.art] = true; });
+
+    // ФИКС #3b: удаляем локальные товары, чей артикул (в поле или в имени) есть в CSV
+    // Это убирает дубли "регуляр vs фокусный"
+    var cleaned = [];
+    var removed = 0;
+    products.forEach(function(p) {
+      var artInField = p.art || '';
+      var artInName = extractArticleFromName(p.name);
+      if ((artInField && csvArts[artInField]) || (artInName && csvArts[artInName])) {
+        removed++;
+        return; // удаляем
+      }
+      cleaned.push(p);
+    });
+    products = cleaned;
+
+    // ФИКС #3c: загружаем CSV-товары, дедуп по артикулу внутри CSV
     var seenArts = {};
     var npUnique = [];
-    np.forEach(function(x) { if (x.art && seenArts[x.art]) return; if (x.art) seenArts[x.art] = true; npUnique.push(x); });
-    npUnique.forEach(function(x) {
-      var ex = products.find(function(p) { if (x.art && p.art && p.art === x.art) return true; return normalizeName(p.name) === normalizeName(x.name); });
-      if (ex) { ex.percent = x.percent; ex.type = x.type; if (x.art) ex.art = x.art; if (x.name) ex.name = x.name; }
-      else products.push(x);
+    np.forEach(function(x) {
+      if (x.art && seenArts[x.art]) return;
+      if (x.art) seenArts[x.art] = true;
+      npUnique.push(x);
     });
+    npUnique.forEach(function(x) { products.push(x); });
+
     save();
-    showToast('Загружено: ' + npUnique.length + ' товаров', 'success');
+    var msg = 'Загружено: ' + npUnique.length + ' товаров';
+    if (removed > 0) msg += ' · убрано дублей: ' + removed;
+    showToast(msg, 'success');
     render();
   }).catch(function(e) { showToast('Ошибка загрузки: ' + e.message, 'error'); });
 };
@@ -1792,21 +1811,47 @@ function parseData(input) {
   showToast('Обновлено: ' + np.length + ' товаров', 'success');
 }
 
+// ФИКС #4: улучшенная дедупликация — учитывает артикул из p.art И из имени,
+// и оставляет фокусный товар (а не того, у кого процент больше)
 document.getElementById('btnDedup').onclick = function() {
   var seen = {}, unique = [], removed = 0;
   products.forEach(function(p) {
     var k = normalizeName(p.name);
     if (!k) { unique.push(p); return; }
+
+    // ФИКС #4a: ключ по артикулу — сначала из p.art, потом из имени
+    var artKey = null;
+    if (p.art) artKey = 'art_' + p.art;
+    else {
+      var artInName = extractArticleFromName(p.name);
+      if (artInName) artKey = 'art_' + artInName;
+    }
+
     var shortKey = k.substring(0, 30);
-    var artMatch = k.match(/\b(\d{6,8})\b/);
-    var artKey = artMatch ? 'art_' + artMatch[1] : null;
     var dupKey = null;
     if (artKey && seen[artKey]) dupKey = artKey;
     else if (seen['short_' + shortKey]) dupKey = 'short_' + shortKey;
+
     if (dupKey) {
       var e = seen[dupKey];
-      if (p.percent > e.percent) { e.percent = p.percent; e.type = p.type; }
-      if (p.art && !e.art) e.art = p.art;
+      // ФИКС #4b: приоритет — фокусный товар (не по проценту, а по типу)
+      if (e.type !== 'focus' && p.type === 'focus') {
+        // p — фокусный, e — регулярный. Заменяем данные e на p.
+        e.art = p.art || e.art;
+        e.name = p.name;
+        e.percent = p.percent;
+        e.type = p.type;
+      } else if (e.type === 'focus' && p.type !== 'focus') {
+        // e уже фокусный — не трогаем, p удаляем
+      } else {
+        // оба одного типа — оставляем с большим процентом
+        if (p.percent > e.percent) {
+          e.art = p.art || e.art;
+          e.name = p.name;
+          e.percent = p.percent;
+          e.type = p.type;
+        }
+      }
       removed++;
     } else {
       if (artKey) seen[artKey] = p;

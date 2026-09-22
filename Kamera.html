@@ -208,10 +208,57 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .forecast-hint b { color:#10b981; font-weight:700; }
 .forecast-hint .down { color:#ef4444; }
 
-.mini-bars { display:flex; align-items:flex-end; gap:3px; height:44px; margin-top:12px; }
-.mini-bars span { flex:1; background: linear-gradient(180deg, rgba(16,185,129,0.9), rgba(16,185,129,0.2)); border-radius: 3px 3px 0 0; min-height:3px; animation: barGrow 0.7s cubic-bezier(0.22,1,0.36,1) backwards; }
-.mini-bars span.gold { background: linear-gradient(180deg, #fbbf24, rgba(251,191,36,0.25)); }
+/* ===== УЛУЧШЕННЫЙ МИНИ-ГРАФИК ===== */
+.chart-wrap {
+  margin-top: 14px;
+  position: relative;
+  padding: 0 4px;
+}
+.chart-grid {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+  padding: 2px 0 22px;
+}
+.chart-grid-line {
+  height: 1px;
+  background: rgba(255,255,255,0.04);
+}
+.mini-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 72px;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 22px;
+  box-sizing: border-box;
+}
+.mini-bars span {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  min-height: 3px;
+  animation: barGrow 0.7s cubic-bezier(0.22,1,0.36,1) backwards;
+  position: relative;
+}
+.mini-bars span.bar-fill-1 { background: linear-gradient(180deg, rgba(16,185,129,0.9), rgba(16,185,129,0.2)); }
+.mini-bars span.bar-fill-2 { background: linear-gradient(180deg, rgba(16,185,129,0.75), rgba(16,185,129,0.18)); }
+.mini-bars span.bar-fill-3 { background: linear-gradient(180deg, rgba(16,185,129,0.55), rgba(16,185,129,0.15)); }
+.mini-bars span.bar-today { background: linear-gradient(180deg, #fbbf24, rgba(251,191,36,0.3)); box-shadow: 0 0 12px rgba(251,191,36,0.4); }
 .mini-bars span.empty-bar { background: rgba(255,255,255,0.05); }
+.mini-bars span.future-bar { background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.05); }
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 9px;
+  color: #5b7a6d;
+  letter-spacing: 0.5px;
+  padding: 0 2px;
+}
 @keyframes barGrow { from { transform: scaleY(0); transform-origin: bottom; } to { transform: scaleY(1); } }
 </style>
 </head>
@@ -302,7 +349,23 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
         Дни месяца
       </div>
       <div class="sub-text" id="miniBarsBest">—</div>
-      <div class="mini-bars" id="miniBars"></div>
+      <div class="chart-wrap">
+        <div class="chart-grid">
+          <div class="chart-grid-line"></div>
+          <div class="chart-grid-line"></div>
+          <div class="chart-grid-line"></div>
+        </div>
+        <div class="mini-bars" id="miniBars"></div>
+      </div>
+      <div class="chart-labels">
+        <span>1</span>
+        <span>5</span>
+        <span>10</span>
+        <span>15</span>
+        <span>20</span>
+        <span>25</span>
+        <span id="chartLastDay">30</span>
+      </div>
     </div>
 
     <div class="card">
@@ -580,7 +643,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
   <div class="card">
     <div class="about-icon">📊</div>
     <div class="about-name">Трекер продаж</div>
-    <div class="about-version">Версия 2.1 · фикс дублей</div>
+    <div class="about-version">Версия 2.2 · фикс дублей + график</div>
     <div class="about-desc">Простое приложение для учёта личных продаж.</div>
   </div>
   <div class="card">
@@ -703,7 +766,6 @@ function inSameWeek(a, b) { return dateStr(weekStart(new Date(a))) === dateStr(w
 function normalizeName(n) { return (n || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
 function prevMonth(d) { var x = new Date(d); x.setMonth(x.getMonth() - 1); return x; }
 
-// ФИКС #1: новая функция — извлечь артикул из имени
 function extractArticleFromName(name) {
   if (!name) return '';
   var m = name.match(/\b(\d{6,8})\b/);
@@ -832,6 +894,18 @@ function showSuccessCheckmark() {
   setTimeout(function() { el.classList.remove('show'); }, 1000);
 }
 
+// ФИКС: миграция старых регулярных — проставить артикул из имени
+function migrateRegularProducts() {
+  var changed = false;
+  products.forEach(function(p) {
+    if (p.type === 'regular' && !p.art) {
+      var art = extractArticleFromName(p.name);
+      if (art) { p.art = art; changed = true; }
+    }
+  });
+  if (changed) { save(); console.log('Миграция: проставлены артикулы у регулярных'); }
+}
+
 var ACHIEVEMENTS = [
   { id: 'day_100k', icon: '💰', name: '100 000 ₽ за день', desc: 'Продать на 100 000 ₽ за один день', type: 'daily', check: function() { return getDaySumToday() >= 100000; } },
   { id: 'day_10_focus', icon: '⭐', name: '10 фокусных за день', desc: 'Продать 10 фокусных товаров за день', type: 'daily', check: function() { return getFocusQtyToday() >= 10; } },
@@ -915,7 +989,7 @@ function renderAchievements() {
 }
 
 function getBackupJSON() {
-  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, achievements: getUnlockedAchievements(), exportDate: new Date().toISOString(), version: '2.1' }, null, 2);
+  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, achievements: getUnlockedAchievements(), exportDate: new Date().toISOString(), version: '2.2' }, null, 2);
 }
 function saveBackupToFile() {
   try {
@@ -986,33 +1060,21 @@ function findProduct(query) {
   }).slice(0, 20);
 }
 
-// ФИКС #2: сохраняем артикул в p.art при создании регулярного товара
 function saveRegularProduct(name) {
   var key = normalizeName(name);
   if (!key) return;
-
   var artFromName = extractArticleFromName(name);
-
-  // Проверка на существующий товар — теперь и по артикулу, и по имени
   var exists = products.find(function(p) {
-    // по артикулу (в поле)
     if (artFromName && p.art && p.art === artFromName) return true;
-    // по артикулу в имени
     if (artFromName && extractArticleFromName(p.name) === artFromName) return true;
-    // по имени
     if (normalizeName(p.name) === key) return true;
     return false;
   });
   if (exists) return;
-
-  // Дополнительная защита — по короткому ключу
   var shortKey = key.substring(0, 30);
   if (shortKey.length > 10) {
-    if (products.find(function(p) {
-      return normalizeName(p.name).substring(0, 30) === shortKey;
-    })) return;
+    if (products.find(function(p) { return normalizeName(p.name).substring(0, 30) === shortKey; })) return;
   }
-
   products.push({ art: artFromName, name: name, percent: 1.5, type: 'regular' });
   save();
 }
@@ -1157,6 +1219,7 @@ function saveOklad() {
   showToast('Оклад сохранён', 'success');
 }
 
+// УЛУЧШЕННЫЙ график: столбики выше, градиент по высоте, сегодняшний день золотой
 function renderMiniBars(mSales) {
   var el = document.getElementById('miniBars');
   if (!el) return;
@@ -1174,13 +1237,21 @@ function renderMiniBars(mSales) {
     var d = m + '-' + (i < 10 ? '0' + i : i);
     var val = daySums[d] || 0;
     var pct = maxSum > 0 ? (val / maxSum * 100) : 0;
-    var h = val > 0 ? Math.max(6, pct) : 3;
+    var h = val > 0 ? Math.max(4, pct) : 2;
     var cls = '';
-    if (i > todayDay) cls = 'empty-bar';
-    else if (i === todayDay) cls = 'gold';
+    if (i > todayDay) cls = 'future-bar';
+    else if (i === todayDay) cls = 'bar-today';
+    else if (val === 0) cls = 'empty-bar';
+    else if (pct > 66) cls = 'bar-fill-1';
+    else if (pct > 33) cls = 'bar-fill-2';
+    else cls = 'bar-fill-3';
     html += '<span class="' + cls + '" style="height:' + h + '%"></span>';
   }
   el.innerHTML = html;
+
+  var lastDayEl = document.getElementById('chartLastDay');
+  if (lastDayEl) lastDayEl.textContent = totalDays;
+
   var best = document.getElementById('miniBarsBest');
   if (best) {
     if (maxSum > 0) {
@@ -1682,7 +1753,8 @@ document.getElementById('btnAddAD').onclick = addAD;
 
 document.getElementById('btnImportManual').onclick = function() { document.getElementById('screen-import').classList.add('active'); };
 
-// ФИКС #3: обновлённая синхронизация — сравнивает по артикулу из имени регулярных
+// ФИНАЛЬНЫЙ ФИКС СИНХРОНИЗАЦИИ:
+// удаляем ТОЛЬКО регулярные, чьи артикулы есть в CSV. Фокусные не трогаем.
 document.getElementById('btnSyncFocus').onclick = function() {
   var ok = confirm('Тест с сервера, бесплатный пробный период.\n\nЗагрузить фокус-лист?');
   if (!ok) return;
@@ -1720,26 +1792,30 @@ document.getElementById('btnSyncFocus').onclick = function() {
     }
     if (np.length === 0) { showToast('Товары не найдены', 'warn'); return; }
 
-    // ФИКС #3a: собираем все артикулы из CSV в Set
+    // Собираем артикулы из CSV
     var csvArts = {};
     np.forEach(function(x) { if (x.art) csvArts[x.art] = true; });
 
-    // ФИКС #3b: удаляем локальные товары, чей артикул (в поле или в имени) есть в CSV
-    // Это убирает дубли "регуляр vs фокусный"
+    // Удаляем ТОЛЬКО регулярные, чьи артикулы есть в CSV
     var cleaned = [];
     var removed = 0;
     products.forEach(function(p) {
+      // Фокусные — оставляем (их удалит замена ниже, но удалять их по отдельности не нужно)
+      if (p.type !== 'regular') { cleaned.push(p); return; }
       var artInField = p.art || '';
       var artInName = extractArticleFromName(p.name);
       if ((artInField && csvArts[artInField]) || (artInName && csvArts[artInName])) {
         removed++;
-        return; // удаляем
+        return;
       }
       cleaned.push(p);
     });
     products = cleaned;
 
-    // ФИКС #3c: загружаем CSV-товары, дедуп по артикулу внутри CSV
+    // Убираем старые фокусные (все), чтобы залить свежие из CSV
+    products = products.filter(function(p) { return p.type !== 'focus' && p.type !== 'conditional'; });
+
+    // Загружаем CSV-товары с дедупликацией внутри
     var seenArts = {};
     var npUnique = [];
     np.forEach(function(x) {
@@ -1811,22 +1887,17 @@ function parseData(input) {
   showToast('Обновлено: ' + np.length + ' товаров', 'success');
 }
 
-// ФИКС #4: улучшенная дедупликация — учитывает артикул из p.art И из имени,
-// и оставляет фокусный товар (а не того, у кого процент больше)
 document.getElementById('btnDedup').onclick = function() {
   var seen = {}, unique = [], removed = 0;
   products.forEach(function(p) {
     var k = normalizeName(p.name);
     if (!k) { unique.push(p); return; }
-
-    // ФИКС #4a: ключ по артикулу — сначала из p.art, потом из имени
     var artKey = null;
     if (p.art) artKey = 'art_' + p.art;
     else {
       var artInName = extractArticleFromName(p.name);
       if (artInName) artKey = 'art_' + artInName;
     }
-
     var shortKey = k.substring(0, 30);
     var dupKey = null;
     if (artKey && seen[artKey]) dupKey = artKey;
@@ -1834,17 +1905,14 @@ document.getElementById('btnDedup').onclick = function() {
 
     if (dupKey) {
       var e = seen[dupKey];
-      // ФИКС #4b: приоритет — фокусный товар (не по проценту, а по типу)
       if (e.type !== 'focus' && p.type === 'focus') {
-        // p — фокусный, e — регулярный. Заменяем данные e на p.
         e.art = p.art || e.art;
         e.name = p.name;
         e.percent = p.percent;
         e.type = p.type;
       } else if (e.type === 'focus' && p.type !== 'focus') {
-        // e уже фокусный — не трогаем, p удаляем
+        // оставляем фокусный
       } else {
-        // оба одного типа — оставляем с большим процентом
         if (p.percent > e.percent) {
           e.art = p.art || e.art;
           e.name = p.name;
@@ -1930,6 +1998,9 @@ updateDateDisplay('inputDate', 'inputDateDisplay');
 updateDateDisplay('editDate', 'editDateDisplay');
 updateDateDisplay('adDate', 'adDateDisplay');
 document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' });
+
+// ФИКС: миграция старых регулярных — проставить артикул
+migrateRegularProducts();
 
 attachRipple();
 checkBackupReminder();

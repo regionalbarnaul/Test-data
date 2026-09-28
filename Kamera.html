@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Трекер продаж</title>
+<title>Трекер продаж Polaris</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#060a08">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,12 +19,21 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 
 .accent { color: #10b981; }
 .header { padding: 18px 44px 12px 16px; display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1; }
-.header h1 { font-size: 26px; font-weight: 800; letter-spacing:-0.5px; line-height:1.15;
+.header h1 { font-size: 24px; font-weight: 800; letter-spacing:-0.5px; line-height:1.15;
   background: linear-gradient(135deg, #a7f3d0 0%, #10b981 60%, #059669 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .header .date { font-size: 12px; color: #5b7a6d; margin-top: 4px; display:flex; align-items:center; gap:6px; }
-.header .pulse-dot { width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 0 0 rgba(16,185,129,0.6); animation: pulseDot 2s ease-out infinite; flex-shrink:0; }
-@keyframes pulseDot { 0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); } 70% { box-shadow: 0 0 0 12px rgba(16,185,129,0); } 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); } }
+
+/* Уровень-иконка в шапке */
+.lvl-icon { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; position:relative; transition: background 0.4s ease, box-shadow 0.4s ease; }
+.lvl-icon.c1 { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 0 0 0 rgba(16,185,129,0.6); animation: lvlPulse 2s ease-out infinite; }
+.lvl-icon.c2 { background: linear-gradient(135deg, #38bdf8, #0284c7); box-shadow: 0 0 0 0 rgba(56,189,248,0.6); animation: lvlPulse 2s ease-out infinite; }
+.lvl-icon.c3 { background: linear-gradient(135deg, #fbbf24, #f59e0b); box-shadow: 0 0 0 0 rgba(251,191,36,0.6); animation: lvlPulse 2s ease-out infinite; }
+.lvl-icon.c4 { background: linear-gradient(135deg, #a855f7, #7e22ce); box-shadow: 0 0 0 0 rgba(168,85,247,0.6); animation: lvlPulse 2s ease-out infinite; }
+.lvl-icon.c5 { background: linear-gradient(135deg, #ef4444, #fbbf24); box-shadow: 0 0 0 0 rgba(239,68,68,0.6); animation: lvlPulse 2s ease-out infinite; }
+@keyframes lvlPulse { 0% { box-shadow: 0 0 0 0 currentColor; opacity:1; } 70% { box-shadow: 0 0 0 10px transparent; opacity:0.9; } 100% { box-shadow: 0 0 0 0 transparent; opacity:1; } }
+.lvl-icon.shine::after { content:''; position:absolute; inset:-4px; border-radius:50%; background: radial-gradient(circle, rgba(255,255,255,0.5), transparent 70%); animation: lvlShine 3s ease-in-out infinite; pointer-events:none; }
+@keyframes lvlShine { 0%, 100% { opacity:0; transform: scale(0.8); } 50% { opacity:1; transform: scale(1.1); } }
 
 .card {
   background: linear-gradient(180deg, rgba(26,38,32,0.72) 0%, rgba(18,26,22,0.72) 100%);
@@ -37,7 +46,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
   transition: transform 0.15s ease;
 }
 .card:active { transform: scale(0.985); }
-#screen-home .card { animation: cardIn 0.6s cubic-bezier(0.22,1,0.36,1) backwards; will-change: transform, opacity; }
+#screen-home .card { animation: cardIn 0.6s cubic-bezier(0.22,1,0.36,1) backwards; }
 #screen-home .card:nth-child(2) { animation-delay: 0.05s; }
 #screen-home .card:nth-child(3) { animation-delay: 0.1s; }
 #screen-home .card:nth-child(4) { animation-delay: 0.15s; }
@@ -62,13 +71,41 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .grid-2 .card { margin: 0; }
 .grid-2.inside { margin: 0; gap: 10px; }
 
+/* Прогресс-бар */
 .progress-bg { background: rgba(255,255,255,0.06); border-radius: 6px; height: 10px; margin-top: 14px; overflow: hidden; position: relative; }
 .progress-fill { height: 100%; border-radius: 6px; transition: width 0.4s ease; width: 0%; background: linear-gradient(90deg, #ef4444, #f59e0b); position: relative; overflow: hidden; box-shadow: 0 0 12px rgba(245,158,11,0.4); }
+.progress-fill.orange { background: linear-gradient(90deg, #f59e0b, #fbbf24); box-shadow: 0 0 12px rgba(245,158,11,0.5); }
 .progress-fill.ok { background: linear-gradient(90deg, #10b981, #34d399); box-shadow: 0 0 12px rgba(16,185,129,0.5); }
 .progress-fill.gold { background: linear-gradient(90deg, #fbbf24, #f59e0b); box-shadow: 0 0 12px rgba(251,191,36,0.5); }
 .progress-fill::after { content: ''; position: absolute; top: 0; left: -50%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 2.5s infinite; }
 @keyframes shimmer { to { left: 150%; } }
 .progress-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: rgba(232,245,240,0.55); border-radius:2px; z-index: 2; }
+
+/* ===== XP КАРТОЧКА ===== */
+.xp-card {
+  background: linear-gradient(180deg, rgba(30,42,50,0.75) 0%, rgba(20,28,34,0.75) 100%);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.xp-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.xp-badge { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; position:relative; transition: background 0.5s ease; }
+.xp-badge.c1 { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 16px rgba(16,185,129,0.4); }
+.xp-badge.c2 { background: linear-gradient(135deg, #38bdf8, #0284c7); box-shadow: 0 4px 16px rgba(56,189,248,0.4); }
+.xp-badge.c3 { background: linear-gradient(135deg, #fbbf24, #f59e0b); box-shadow: 0 4px 16px rgba(251,191,36,0.4); }
+.xp-badge.c4 { background: linear-gradient(135deg, #a855f7, #7e22ce); box-shadow: 0 4px 16px rgba(168,85,247,0.4); }
+.xp-badge.c5 { background: linear-gradient(135deg, #ef4444, #fbbf24); box-shadow: 0 4px 16px rgba(239,68,68,0.5); animation: badgeGlow 2s ease-in-out infinite; }
+@keyframes badgeGlow { 0%, 100% { box-shadow: 0 4px 16px rgba(239,68,68,0.5); } 50% { box-shadow: 0 4px 24px rgba(251,191,36,0.8); } }
+.xp-info { flex:1; }
+.xp-level { font-size:10.5px; color:#7c9b8d; text-transform:uppercase; letter-spacing:1px; font-weight:700; margin-bottom:3px; }
+.xp-name { font-size:17px; font-weight:800; color:#e8f5f0; letter-spacing:-0.3px; }
+.xp-bar-bg { height:10px; background:rgba(255,255,255,0.06); border-radius:6px; overflow:hidden; margin-top:12px; position:relative; }
+.xp-bar-fill { height:100%; border-radius:6px; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.6s ease; width:0%; box-shadow: 0 0 12px rgba(16,185,129,0.5); }
+.xp-bar-fill.c2 { background: linear-gradient(90deg, #38bdf8, #0ea5e9); box-shadow: 0 0 12px rgba(56,189,248,0.5); }
+.xp-bar-fill.c3 { background: linear-gradient(90deg, #fbbf24, #f59e0b); box-shadow: 0 0 12px rgba(251,191,36,0.5); }
+.xp-bar-fill.c4 { background: linear-gradient(90deg, #a855f7, #7e22ce); box-shadow: 0 0 12px rgba(168,85,247,0.5); }
+.xp-bar-fill.c5 { background: linear-gradient(90deg, #ef4444, #fbbf24); box-shadow: 0 0 12px rgba(239,68,68,0.5); }
+.xp-bar-fill::after { content:''; position:absolute; top:0; left:-50%; width:50%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 2.5s infinite; }
+.xp-meta { display:flex; justify-content:space-between; font-size:11.5px; color:#7c9b8d; margin-top:8px; }
+.xp-meta .hi { color:#e8f5f0; font-weight:700; }
 
 .btn { display: flex; align-items:center; justify-content:center; gap:10px; width: calc(100% - 28px); margin: 12px auto; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border: none; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; position: relative; overflow: hidden; box-shadow: 0 4px 16px rgba(16,185,129,0.25); }
 .btn svg { flex-shrink:0; }
@@ -106,8 +143,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 
 .screen { display: none; }
 .empty { text-align: center; color: #6b8a7d; padding: 24px 12px; font-size: 13px; }
-.record-badge { display: inline-flex; align-items:center; gap:6px; padding: 6px 14px; background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(245,158,11,0.1)); border:1px solid rgba(251,191,36,0.3); color: #fbbf24; border-radius: 16px; font-size: 11px; font-weight: 700; margin-top: 12px; letter-spacing:0.3px; }
-.record-badge svg { width:12px; height:12px; }
 
 .about-icon { text-align: center; font-size: 52px; margin: 16px 0 8px; }
 .about-name { text-align: center; font-size: 22px; font-weight: 800; margin-bottom: 4px; background:linear-gradient(135deg,#a7f3d0,#10b981); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
@@ -126,7 +161,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 
 .percent-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px; }
 .percent-row:last-child { border-bottom: none; }
-.percent-badge { display: inline-block; min-width: 44px; padding: 5px 10px; background: linear-gradient(135deg,#10b981,#059669); color: #0a0f0d; border-radius: 8px; font-size: 12px; font-weight: 800; text-align: center; box-shadow:0 2px 8px rgba(16,185,129,0.3); }
+.percent-badge { display: inline-block; min-width: 44px; padding: 5px 10px; background: linear-gradient(135deg,#10b981,#059669); color: #0a0f0d; border-radius: 8px; font-size: 12px; font-weight: 800; text-align: center; }
 .percent-info { flex: 1; margin-left: 12px; font-size: 13px; color: #a8c5b8; }
 .percent-sum { font-size: 14px; font-weight: 700; color: #10b981; text-align: right; }
 .percent-comm { font-size: 11px; color: #6b8a7d; margin-top: 2px; text-align: right; }
@@ -181,46 +216,13 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 @keyframes strokeCircle { to { stroke-dashoffset: 0; } }
 @keyframes strokeMark { to { stroke-dashoffset: 0; } }
 
-.ach-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
-.ach-item:last-child { border-bottom: none; }
-.ach-icon { font-size: 32px; width: 44px; text-align: center; }
-.ach-info { flex: 1; }
-.ach-name { font-size: 14px; font-weight: 700; }
-.ach-desc { font-size: 12px; color: #6b8a7d; margin-top: 2px; }
-.ach-locked { opacity: 0.4; }
-.ach-locked .ach-icon { filter: grayscale(1); }
-.ach-count { text-align: center; color: #6b8a7d; font-size: 12px; margin-top: 10px; }
-
 #celebrationFlash { position: fixed; inset: 0; background: radial-gradient(circle, rgba(16,185,129,0.95), rgba(16,185,129,0.4)); z-index: 99996; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 20px; pointer-events: none; }
-#celebrationFlash.show { display: flex; animation: celebratePulse 1.2s ease-out; }
-@keyframes celebratePulse { 0% { opacity: 0; transform: scale(1.2); } 15% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
-.celebrate-emoji { font-size: 120px; animation: celebrateBounce 1.2s ease-out; filter: drop-shadow(0 0 30px rgba(255,255,255,0.8)); }
-@keyframes celebrateBounce { 0% { transform: scale(0.3) rotate(-20deg); } 40% { transform: scale(1.3) rotate(10deg); } 70% { transform: scale(1) rotate(-5deg); } 100% { transform: scale(1) rotate(0); opacity: 0; } }
-.celebrate-text { color: #fff; font-size: 22px; font-weight: 800; text-shadow: 0 3px 12px rgba(0,0,0,0.5); text-align: center; padding: 0 20px; }
-
-.earn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
-.earn-grid .lbl { font-size: 11px; color: #7c9b8d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-.earn-grid .val { font-size: 22px; font-weight: 800; color: #fbbf24; letter-spacing:-0.3px; }
-.earn-grid .brk { font-size: 11px; color: #6b8a7d; margin-top: 4px; line-height:1.3; }
-.forecast-box { display:flex; align-items:center; justify-content:space-between; gap:14px; }
-.forecast-num { font-size:26px; font-weight:800; color:#10b981; letter-spacing:-0.5px; }
-.forecast-hint { font-size:12px; color:#6b8a7d; margin-top:6px; line-height:1.4; }
-.forecast-hint b { color:#10b981; font-weight:700; }
-.forecast-hint .down { color:#ef4444; }
-
-.chart-wrap { margin-top: 14px; position: relative; padding: 0 4px; }
-.chart-grid { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; padding: 2px 0 22px; }
-.chart-grid-line { height: 1px; background: rgba(255,255,255,0.04); }
-.mini-bars { display: flex; align-items: flex-end; gap: 3px; height: 72px; position: relative; z-index: 1; padding-bottom: 22px; box-sizing: border-box; }
-.mini-bars span { flex: 1; border-radius: 3px 3px 0 0; min-height: 3px; animation: barGrow 0.7s cubic-bezier(0.22,1,0.36,1) backwards; position: relative; }
-.mini-bars span.bar-fill-1 { background: linear-gradient(180deg, rgba(16,185,129,0.9), rgba(16,185,129,0.2)); }
-.mini-bars span.bar-fill-2 { background: linear-gradient(180deg, rgba(16,185,129,0.75), rgba(16,185,129,0.18)); }
-.mini-bars span.bar-fill-3 { background: linear-gradient(180deg, rgba(16,185,129,0.55), rgba(16,185,129,0.15)); }
-.mini-bars span.bar-today { background: linear-gradient(180deg, #fbbf24, rgba(251,191,36,0.3)); box-shadow: 0 0 12px rgba(251,191,36,0.4); }
-.mini-bars span.empty-bar { background: rgba(255,255,255,0.05); }
-.mini-bars span.future-bar { background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.05); }
-.chart-labels { display: flex; justify-content: space-between; margin-top: 4px; font-size: 9px; color: #5b7a6d; letter-spacing: 0.5px; padding: 0 2px; }
-@keyframes barGrow { from { transform: scaleY(0); transform-origin: bottom; } to { transform: scaleY(1); } }
+#celebrationFlash.show { display: flex; animation: celebratePulse 2s ease-out; }
+@keyframes celebratePulse { 0% { opacity: 0; transform: scale(1.2); } 15% { opacity: 1; transform: scale(1); } 85% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
+.celebrate-emoji { font-size: 120px; animation: celebrateBounce 2s ease-out; filter: drop-shadow(0 0 30px rgba(255,255,255,0.8)); }
+@keyframes celebrateBounce { 0% { transform: scale(0.3) rotate(-20deg); } 30% { transform: scale(1.3) rotate(10deg); } 60% { transform: scale(1) rotate(-5deg); } 100% { transform: scale(1) rotate(0); opacity: 0; } }
+.celebrate-text { color: #fff; font-size: 22px; font-weight: 800; text-shadow: 0 3px 12px rgba(0,0,0,0.5); text-align: center; padding: 0 20px; line-height:1.3; }
+.celebrate-sub { color: rgba(255,255,255,0.85); font-size: 14px; font-weight: 600; margin-top: -10px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 </style>
 </head>
 <body>
@@ -232,8 +234,8 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
   <div class="swipe-screen" id="screen-home">
     <div class="header">
       <div>
-        <h1>Трекер продаж</h1>
-        <div class="date"><span class="pulse-dot"></span><span id="currentDate"></span></div>
+        <h1>Трекер продаж Polaris</h1>
+        <div class="date"><span class="lvl-icon c1" id="hdrLvlIcon">🐣</span><span id="currentDate"></span></div>
       </div>
     </div>
 
@@ -249,6 +251,21 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
         <div class="progress-mark" style="left: 80%;"></div>
       </div>
       <div class="sub-text" id="minThreshold">Минимум 80% — не выполнен</div>
+    </div>
+
+    <div class="card xp-card">
+      <div class="xp-header">
+        <div class="xp-badge c1" id="xpBadge">🐣</div>
+        <div class="xp-info">
+          <div class="xp-level" id="xpLevelNum">УРОВЕНЬ 1</div>
+          <div class="xp-name" id="xpLevelName">Первый день</div>
+        </div>
+      </div>
+      <div class="xp-bar-bg"><div class="xp-bar-fill c1" id="xpBar"></div></div>
+      <div class="xp-meta">
+        <span><span class="hi" id="xpCurrent">0</span> / <span id="xpNext">300</span> XP</span>
+        <span id="xpToNext">до следующего: 300</span>
+      </div>
     </div>
 
     <div class="grid-2">
@@ -275,16 +292,16 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
         Заработано
       </div>
-      <div class="earn-grid">
+      <div class="grid-2 inside">
         <div>
-          <div class="lbl">Сегодня</div>
-          <div class="val" id="todayEarned">0 ₽</div>
-          <div class="brk" id="todayEarnedBreak">—</div>
+          <div class="sub-text" style="margin-top:0">Сегодня</div>
+          <div class="big-number gold" style="font-size:22px" id="todayEarned">0 ₽</div>
+          <div class="sub-text" id="todayEarnedBreak">—</div>
         </div>
         <div>
-          <div class="lbl">За месяц</div>
-          <div class="val" id="monthEarned">0 ₽</div>
-          <div class="brk" id="monthEarnedBreak">—</div>
+          <div class="sub-text" style="margin-top:0">За месяц</div>
+          <div class="big-number gold" style="font-size:22px" id="monthEarned">0 ₽</div>
+          <div class="sub-text" id="monthEarnedBreak">—</div>
         </div>
       </div>
     </div>
@@ -294,39 +311,9 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         Прогноз заработка
       </div>
-      <div class="forecast-box">
-        <div>
-          <div class="forecast-num" id="forecastEarned">0 ₽</div>
-          <div class="forecast-hint">если темп сохранится</div>
-        </div>
-        <div style="font-size:26px">📈</div>
-      </div>
-      <div class="forecast-hint" id="forecastCompare" style="margin-top:10px;">—</div>
-    </div>
-
-    <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        Дни месяца
-      </div>
-      <div class="sub-text" id="miniBarsBest">—</div>
-      <div class="chart-wrap">
-        <div class="chart-grid">
-          <div class="chart-grid-line"></div>
-          <div class="chart-grid-line"></div>
-          <div class="chart-grid-line"></div>
-        </div>
-        <div class="mini-bars" id="miniBars"></div>
-      </div>
-      <div class="chart-labels">
-        <span>1</span>
-        <span>5</span>
-        <span>10</span>
-        <span>15</span>
-        <span>20</span>
-        <span>25</span>
-        <span id="chartLastDay">30</span>
-      </div>
+      <div class="big-number" style="font-size:26px" id="forecastEarned">0 ₽</div>
+      <div class="sub-text">если темп сохранится</div>
+      <div class="sub-text" id="forecastCompare" style="margin-top:10px;">—</div>
     </div>
 
     <div class="card">
@@ -353,10 +340,9 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
         Рекорд месяца
       </div>
       <div class="grid-2 inside">
-        <div><div class="sub-text">По сумме</div><div class="big-number gold" style="font-size:20px" id="recordSum">0 ₽</div><div class="sub-text" id="recordDate">—</div></div>
-        <div><div class="sub-text">По отчислениям</div><div class="big-number" style="font-size:20px;color:#34d399" id="recordComm">0 ₽</div><div class="sub-text" id="recordCommDate">—</div></div>
+        <div><div class="sub-text" style="margin-top:0">По сумме</div><div class="big-number gold" style="font-size:20px" id="recordSum">0 ₽</div><div class="sub-text" id="recordDate">—</div></div>
+        <div><div class="sub-text" style="margin-top:0">По отчислениям</div><div class="big-number" style="font-size:20px;color:#34d399" id="recordComm">0 ₽</div><div class="sub-text" id="recordCommDate">—</div></div>
       </div>
-      <div id="recordBadge"></div>
     </div>
 
     <div class="card">
@@ -507,14 +493,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
       <div class="sub-text">Отчисления: <span class="accent" id="totalsRegComm">0 ₽</span></div>
       <div class="sub-text">Количество: <span class="accent" id="totalsRegCount">0 шт</span></div>
     </div>
-    <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-        Лучший день по сумме
-      </div>
-      <div class="big-number gold" style="font-size:22px" id="totalsBestSum">0 ₽</div>
-      <div class="sub-text" id="totalsBestSumDate">—</div>
-    </div>
   </div>
 
   <div class="swipe-screen" id="screen-plan">
@@ -604,7 +582,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
   <div class="card">
     <div class="about-icon">📊</div>
     <div class="about-name">Трекер продаж</div>
-    <div class="about-version">Версия 2.3 · фикс дедупликации</div>
+    <div class="about-version">Версия 2.4 · Polaris + XP</div>
     <div class="about-desc">Простое приложение для учёта личных продаж.</div>
   </div>
   <div class="card">
@@ -612,7 +590,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
     <div class="about-row"><span class="label">Почта</span><span class="value">regionalbarnaul@yandex.ru</span></div>
   </div>
   <a class="about-mail" href="mailto:regionalbarnaul@yandex.ru">Написать разработчику</a>
-  <button class="btn" id="btnAchievements" style="background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0a0f0d;">🏆 Достижения</button>
   <button class="btn" id="btnBackup" style="margin-top:12px">Данные (бэкап)</button>
   <button class="btn" id="btnSaveFile" style="background:linear-gradient(135deg,#10b981,#059669);color:#0a0f0d;">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -626,12 +603,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
   <button class="btn secondary" id="btnImportManual">📝 Обновить фокус-лист вручную</button>
   <button class="btn" id="btnSyncFocus">Обновить фокус-лист из сети</button>
   <button class="btn secondary" id="btnAboutClose">Закрыть</button>
-</div>
-
-<div id="screen-achievements" class="modal-screen">
-  <div class="header"><h1>🏆 Достижения</h1></div>
-  <div class="card" id="achievementsList"></div>
-  <button class="btn secondary" id="btnAchClose">Закрыть</button>
 </div>
 
 <div id="screen-backup" class="modal-screen">
@@ -699,6 +670,7 @@ var sales = [];
 var plans = {};
 var products = [];
 var salary = { oklad: 35000 };
+var xpData = { xp: 0, level: 1, startDate: null };
 var editingId = null;
 var historyDate = new Date();
 var totalsMonth = new Date();
@@ -711,7 +683,43 @@ try {
   products = JSON.parse(localStorage.getItem('products') || '[]');
   var _sal = JSON.parse(localStorage.getItem('salary') || 'null');
   if (_sal && typeof _sal.oklad === 'number') salary = _sal;
+  var _xp = JSON.parse(localStorage.getItem('xpData') || 'null');
+  if (_xp) xpData = _xp;
 } catch(e) { sales = []; plans = {}; products = []; }
+
+// Уровни и звания
+var LEVELS = [
+  { n: 1,  name: 'Первый день',              icon: '🐣', xp: 0 },
+  { n: 2,  name: 'Стажёр',                   icon: '🎒', xp: 300 },
+  { n: 3,  name: 'Уже продаю',               icon: '💼', xp: 800 },
+  { n: 4,  name: 'Держу план',               icon: '🎯', xp: 1800 },
+  { n: 5,  name: 'Делаю кассу',              icon: '💰', xp: 3200 },
+  { n: 6,  name: 'Звёздочка смены',          icon: '⚡', xp: 5200 },
+  { n: 7,  name: 'Лучший на точке',          icon: '🔥', xp: 8000 },
+  { n: 8,  name: 'Гордость DNS',             icon: '🏅', xp: 11500 },
+  { n: 9,  name: 'Легенда отдела',           icon: '💎', xp: 16000 },
+  { n: 10, name: 'Гуру Polaris',             icon: '👑', xp: 21000 },
+  { n: 11, name: 'Ракета продаж',            icon: '🚀', xp: 27000 },
+  { n: 12, name: 'Титан кассы',              icon: '🏆', xp: 34000 },
+  { n: 13, name: 'Небожитель',               icon: '🌟', xp: 42000 },
+  { n: 14, name: 'Бог консультаций',         icon: '🔮', xp: 52000 },
+  { n: 15, name: 'Продаёт даже во сне',      icon: '👽', xp: 65000 }
+];
+
+function getLevelByXp(xp) {
+  var lvl = LEVELS[0];
+  for (var i = 0; i < LEVELS.length; i++) {
+    if (xp >= LEVELS[i].xp) lvl = LEVELS[i];
+  }
+  return lvl;
+}
+function getColorClass(lvlNum) {
+  if (lvlNum >= 13) return 'c5';
+  if (lvlNum >= 10) return 'c4';
+  if (lvlNum >= 7) return 'c3';
+  if (lvlNum >= 4) return 'c2';
+  return 'c1';
+}
 
 function fmt(n) { return Math.round(n).toLocaleString('ru-RU') + ' ₽'; }
 function pad(n) { return n < 10 ? '0' + n : '' + n; }
@@ -720,7 +728,8 @@ function monthStr(d) { return d.getFullYear() + '-' + pad(d.getMonth()+1); }
 function today() { return dateStr(new Date()); }
 function currentMonth() { return monthStr(new Date()); }
 function daysInMonth(d) { return new Date(d.getFullYear(), d.getMonth()+1, 0).getDate(); }
-function daysLeft() { var d = new Date(); return daysInMonth(d) - d.getDate() + 1; }
+// ИЗМЕНЕНО: дни после сегодняшнего (минимум 1)
+function daysLeft() { var d = new Date(); return Math.max(1, daysInMonth(d) - d.getDate()); }
 function dayOfMonth() { return new Date().getDate(); }
 function weekStart(d) { var day = d.getDay(); var diff = d.getDate() - day + (day === 0 ? -6 : 1); return new Date(d.setDate(diff)); }
 function inSameWeek(a, b) { return dateStr(weekStart(new Date(a))) === dateStr(weekStart(new Date(b))); }
@@ -733,6 +742,7 @@ function extractArticleFromName(name) {
   return m ? m[1] : '';
 }
 
+// ===== ЗВУКИ / ВИБРО =====
 function showToast(message, type) {
   type = type || 'success';
   var old = document.getElementById('appToast');
@@ -753,8 +763,7 @@ function showToast(message, type) {
 function playBeep() {
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
-    var osc = ctx.createOscillator();
-    var gain = ctx.createGain();
+    var osc = ctx.createOscillator(); var gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
     osc.type = 'sine'; osc.frequency.value = 1800;
     gain.gain.setValueAtTime(0.001, ctx.currentTime);
@@ -768,8 +777,7 @@ function playDing() {
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
     [880, 1320].forEach(function(freq, idx) {
-      var osc = ctx.createOscillator();
-      var gain = ctx.createGain();
+      var osc = ctx.createOscillator(); var gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
       osc.type = 'sine'; osc.frequency.value = freq;
       var start = ctx.currentTime + idx * 0.08;
@@ -785,8 +793,7 @@ function playFanfare() {
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
     [523, 659, 784, 1047].forEach(function(freq, i) {
-      var osc = ctx.createOscillator();
-      var gain = ctx.createGain();
+      var osc = ctx.createOscillator(); var gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
       osc.type = 'triangle'; osc.frequency.value = freq;
       var start = ctx.currentTime + i * 0.1;
@@ -802,6 +809,108 @@ function vibrateLight() { if (navigator.vibrate) navigator.vibrate(30); }
 function vibrateSuccess() { if (navigator.vibrate) navigator.vibrate([40, 30, 40]); }
 function vibrateRecord() { if (navigator.vibrate) navigator.vibrate([80, 40, 80, 40, 120]); }
 
+// ===== XP СИСТЕМА =====
+// Формула: фокусные продажи дают XP = (сумма / 1000) × процент, регулярные 0
+function calcXpForSale(s) {
+  if (s.isAD) return 0;               // АД не даёт XP, а снимает
+  if (s.percent <= 1.5) return 0;     // регулярные — 0 XP
+  return (Math.abs(s.sum) / 1000) * s.percent;
+}
+function recalcXp() {
+  // Считаем XP от всех продаж, начиная с xpData.startDate
+  var total = 0;
+  sales.forEach(function(s) {
+    if (s.isAD) return;
+    if (!xpData.startDate) return;
+    if (s.date < xpData.startDate) return;
+    total += calcXpForSale(s);
+  });
+  // АД снимает XP пропорционально
+  sales.forEach(function(s) {
+    if (!s.isAD) return;
+    if (!xpData.startDate) return;
+    if (s.date < xpData.startDate) return;
+    // АД на 10 000 ₽ при 5% снимает 50 XP — берём процент от исходной продажи если есть, иначе 1.5
+    total -= (Math.abs(s.sum) / 1000) * 1.5;
+  });
+  if (total < 0) total = 0;
+  return total;
+}
+function updateLevels() {
+  var newXp = recalcXp();
+  var oldLevel = xpData.level || 1;
+  xpData.xp = newXp;
+  var newLevelObj = getLevelByXp(newXp);
+  xpData.level = newLevelObj.n;
+  save();
+  if (newLevelObj.n > oldLevel) {
+    celebrateLevelUp(newLevelObj);
+  }
+  return newLevelObj;
+}
+function celebrateLevelUp(lvl) {
+  var cls = getColorClass(lvl.n);
+  playFanfare();
+  if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 150]);
+  var flash = document.getElementById('celebrationFlash');
+  if (!flash) { flash = document.createElement('div'); flash.id = 'celebrationFlash'; document.body.appendChild(flash); }
+  flash.className = '';
+  flash.style.background = cls === 'c3' ? 'radial-gradient(circle, rgba(251,191,36,0.95), rgba(245,158,11,0.4))' :
+                            cls === 'c4' ? 'radial-gradient(circle, rgba(168,85,247,0.95), rgba(126,34,206,0.4))' :
+                            cls === 'c5' ? 'radial-gradient(circle, rgba(239,68,68,0.95), rgba(251,191,36,0.5))' :
+                            cls === 'c2' ? 'radial-gradient(circle, rgba(56,189,248,0.95), rgba(2,132,199,0.4))' :
+                            'radial-gradient(circle, rgba(16,185,129,0.95), rgba(5,150,105,0.4))';
+  flash.innerHTML = '<div class="celebrate-emoji">' + lvl.icon + '</div>' +
+    '<div class="celebrate-text">УРОВЕНЬ ' + lvl.n + '</div>' +
+    '<div class="celebrate-sub">' + lvl.name + '</div>';
+  flash.classList.remove('show');
+  void flash.offsetWidth;
+  flash.classList.add('show');
+  setTimeout(function() { flash.classList.remove('show'); }, 2200);
+  setTimeout(function() { showToast('🎉 Новый уровень: ' + lvl.name, 'record'); }, 700);
+}
+
+function renderXpCard() {
+  var lvl = getLevelByXp(xpData.xp);
+  var next = null;
+  for (var i = 0; i < LEVELS.length; i++) {
+    if (LEVELS[i].xp > xpData.xp) { next = LEVELS[i]; break; }
+  }
+  var cls = getColorClass(lvl.n);
+
+  // Иконка в шапке
+  var hdr = document.getElementById('hdrLvlIcon');
+  if (hdr) {
+    hdr.className = 'lvl-icon ' + cls + (lvl.n >= 13 ? ' shine' : '');
+    hdr.textContent = lvl.icon;
+  }
+
+  // XP карточка
+  document.getElementById('xpBadge').className = 'xp-badge ' + cls;
+  document.getElementById('xpBadge').textContent = lvl.icon;
+  document.getElementById('xpLevelNum').textContent = 'УРОВЕНЬ ' + lvl.n;
+  document.getElementById('xpLevelName').textContent = lvl.name;
+  document.getElementById('xpCurrent').textContent = Math.round(xpData.xp).toLocaleString('ru-RU');
+
+  if (next) {
+    document.getElementById('xpNext').textContent = next.xp.toLocaleString('ru-RU');
+    document.getElementById('xpToNext').textContent = 'до «' + next.name + '»: ' + Math.round(next.xp - xpData.xp).toLocaleString('ru-RU') + ' XP';
+    var need = next.xp - lvl.xp;
+    var have = xpData.xp - lvl.xp;
+    var pct = need > 0 ? (have / need * 100) : 100;
+    var bar = document.getElementById('xpBar');
+    bar.className = 'xp-bar-fill ' + cls;
+    bar.style.width = Math.min(100, pct) + '%';
+  } else {
+    document.getElementById('xpNext').textContent = lvl.xp.toLocaleString('ru-RU');
+    document.getElementById('xpToNext').textContent = 'максимум достигнут 👑';
+    var bar2 = document.getElementById('xpBar');
+    bar2.className = 'xp-bar-fill ' + cls;
+    bar2.style.width = '100%';
+  }
+}
+
+// ===== RIPPLE =====
 function attachRipple() {
   document.querySelectorAll('.btn').forEach(function(btn) {
     if (btn.dataset.ripple) return;
@@ -855,6 +964,7 @@ function showSuccessCheckmark() {
   setTimeout(function() { el.classList.remove('show'); }, 1000);
 }
 
+// Миграция старых регулярных (артикул из имени)
 function migrateRegularProducts() {
   var changed = false;
   products.forEach(function(p) {
@@ -863,102 +973,20 @@ function migrateRegularProducts() {
       if (art) { p.art = art; changed = true; }
     }
   });
-  if (changed) { save(); }
+  if (changed) save();
 }
 
-var ACHIEVEMENTS = [
-  { id: 'day_100k', icon: '💰', name: '100 000 ₽ за день', desc: 'Продать на 100 000 ₽ за один день', type: 'daily', check: function() { return getDaySumToday() >= 100000; } },
-  { id: 'day_10_focus', icon: '⭐', name: '10 фокусных за день', desc: 'Продать 10 фокусных товаров за день', type: 'daily', check: function() { return getFocusQtyToday() >= 10; } },
-  { id: 'month_500k', icon: '🥉', name: '500 000 ₽ за месяц', desc: 'Оборот 500K за месяц', type: 'monthly', check: function() { return getMonthNetTurnover() >= 500000; } },
-  { id: 'month_1m', icon: '🥈', name: '1 000 000 ₽ за месяц', desc: 'Оборот 1M за месяц', type: 'monthly', check: function() { return getMonthNetTurnover() >= 1000000; } },
-  { id: 'month_2m', icon: '🥇', name: '2 000 000 ₽ за месяц', desc: 'Оборот 2M за месяц', type: 'monthly', check: function() { return getMonthNetTurnover() >= 2000000; } },
-  { id: 'month_3m', icon: '💎', name: '3 000 000 ₽ за месяц', desc: 'Оборот 3M за месяц', type: 'monthly', check: function() { return getMonthNetTurnover() >= 3000000; } },
-  { id: 'month_5m', icon: '👑', name: '5 000 000 ₽ за месяц', desc: 'Оборот 5M за месяц', type: 'monthly', check: function() { return getMonthNetTurnover() >= 5000000; } },
-  { id: 'month_record', icon: '🏆', name: 'Рекорд дня побит', desc: 'Побить личный рекорд по дню в этом месяце', type: 'monthly', check: function() { return isNewDayRecordThisMonth(); } }
-];
-
-function getDaySumToday() {
-  var t = today(), sum = 0;
-  sales.forEach(function(s) { if (!s.isAD && s.date === t) sum += s.sum; });
-  return sum;
-}
-function getFocusQtyToday() {
-  var t = today(), q = 0;
-  sales.forEach(function(s) { if (!s.isAD && s.date === t && s.percent > 1.5) q += s.qty; });
-  return q;
-}
-function getMonthNetTurnover() {
-  var m = currentMonth(), sum = 0, ad = 0;
-  sales.forEach(function(s) {
-    if (s.date.indexOf(m) !== 0) return;
-    if (s.isAD) ad += Math.abs(s.sum); else sum += s.sum;
-  });
-  return sum - ad;
-}
-function isNewDayRecordThisMonth() {
-  var m = currentMonth();
-  var daySums = {};
-  sales.forEach(function(s) { if (!s.isAD) daySums[s.date] = (daySums[s.date] || 0) + s.sum; });
-  var bestThisMonth = 0, bestAllTime = 0;
-  Object.keys(daySums).forEach(function(d) {
-    if (d.indexOf(m) === 0) { if (daySums[d] > bestThisMonth) bestThisMonth = daySums[d]; }
-    if (daySums[d] > bestAllTime) bestAllTime = daySums[d];
-  });
-  return bestThisMonth > 0 && bestThisMonth >= bestAllTime;
-}
-function getUnlockedAchievements() {
-  try { return JSON.parse(localStorage.getItem('achievements') || '[]'); } catch(e) { return []; }
-}
-function checkAchievements() {
-  var unlocked = getUnlockedAchievements();
-  var validIds = ACHIEVEMENTS.map(function(a) { return a.id; });
-  unlocked = unlocked.filter(function(id) { return validIds.indexOf(id) !== -1; });
-  ACHIEVEMENTS.forEach(function(a) {
-    if (unlocked.indexOf(a.id) === -1 && a.check()) {
-      unlocked.push(a.id);
-      localStorage.setItem('achievements', JSON.stringify(unlocked));
-      if (a.type === 'monthly') { setTimeout(function() { bigCelebration(a); }, 900); }
-      else { setTimeout(function() { showToast('🏆 ' + a.name, 'record'); vibrateRecord(); }, 1500); }
-    }
-  });
-}
-function bigCelebration(a) {
-  playFanfare();
-  if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 150]);
-  var flash = document.getElementById('celebrationFlash');
-  if (!flash) { flash = document.createElement('div'); flash.id = 'celebrationFlash'; document.body.appendChild(flash); }
-  flash.innerHTML = '<div class="celebrate-emoji">' + a.icon + '</div><div class="celebrate-text">' + a.name + '</div>';
-  flash.classList.remove('show'); void flash.offsetWidth; flash.classList.add('show');
-  setTimeout(function() { flash.classList.remove('show'); }, 1500);
-  setTimeout(function() { showToast('🔥 ' + a.name + '!', 'record'); }, 600);
-}
-function renderAchievements() {
-  var unlocked = getUnlockedAchievements();
-  var validIds = ACHIEVEMENTS.map(function(a) { return a.id; });
-  unlocked = unlocked.filter(function(id) { return validIds.indexOf(id) !== -1; });
-  localStorage.setItem('achievements', JSON.stringify(unlocked));
-  var el = document.getElementById('achievementsList');
-  if (!el) return;
-  var html = '';
-  ACHIEVEMENTS.forEach(function(a) {
-    var isUnlocked = unlocked.indexOf(a.id) !== -1;
-    html += '<div class="ach-item ' + (isUnlocked ? '' : 'ach-locked') + '"><div class="ach-icon">' + a.icon + '</div><div class="ach-info"><div class="ach-name">' + a.name + '</div><div class="ach-desc">' + a.desc + '</div></div></div>';
-  });
-  html += '<div class="ach-count">Открыто: ' + unlocked.length + ' из ' + ACHIEVEMENTS.length + '</div>';
-  el.innerHTML = html;
-}
-
+// ===== АВТОБЭКАП =====
 function getBackupJSON() {
-  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, achievements: getUnlockedAchievements(), exportDate: new Date().toISOString(), version: '2.3' }, null, 2);
+  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, exportDate: new Date().toISOString(), version: '2.4' }, null, 2);
 }
 function saveBackupToFile() {
   try {
     var data = getBackupJSON();
-    var filename = 'tracker_backup.json';
     var blob = new Blob([data], {type: 'application/json'});
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    a.href = url; a.download = filename;
+    a.href = url; a.download = 'tracker_backup.json';
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
     localStorage.setItem('lastBackupDate', today());
@@ -1009,6 +1037,7 @@ function save() {
     localStorage.setItem('plans', JSON.stringify(plans));
     localStorage.setItem('products', JSON.stringify(products));
     localStorage.setItem('salary', JSON.stringify(salary));
+    localStorage.setItem('xpData', JSON.stringify(xpData));
   } catch(e) {}
 }
 function getPlan(month) { return plans[month] || 0; }
@@ -1056,6 +1085,7 @@ function recalcConditional(productName, dateStrVal) {
   ws.forEach(function(s) { s.percent = np; s.commission = s.sum * np / 100; });
 }
 
+// ===== ПРОДАЖА =====
 function addSale() {
   var date = document.getElementById('inputDate').value || today();
   if (date > today()) { showToast('Дата не может быть в будущем', 'warn'); return; }
@@ -1074,6 +1104,7 @@ function addSale() {
   if (prod && prod.type === 'conditional') recalcConditional(name, date);
   if (!prod) saveRegularProduct(name);
   save();
+
   document.getElementById('inputName').value = '';
   document.getElementById('inputSum').value = '';
   document.getElementById('inputQty').value = '1';
@@ -1087,7 +1118,7 @@ function addSale() {
   if (wasRecord) { vibrateRecord(); setTimeout(function() { showToast('🏆 Новый рекорд дня!', 'record'); }, 900); }
   else { vibrateSuccess(); showToast('Продажа сохранена', 'success'); }
   maybeAutoBackup();
-  checkAchievements();
+  updateLevels();
   render();
   scrollToScreen('home');
 }
@@ -1119,10 +1150,12 @@ function addAD() {
   vibrateLight();
   showToast('Возврат сохранён', 'success');
   maybeAutoBackup();
+  updateLevels();
   render();
   scrollToScreen('home');
 }
 
+// ===== РЕДАКТИРОВАНИЕ =====
 function openEdit(id) {
   var s = sales.find(function(x) { return x.id === id; });
   if (!s) return;
@@ -1154,6 +1187,7 @@ function updateSale() {
   if (prod && prod.type === 'conditional') recalcConditional(name, date);
   save();
   closeEdit();
+  updateLevels();
   render();
 }
 function deleteSale(id) {
@@ -1163,7 +1197,9 @@ function deleteSale(id) {
     var prod = products.find(function(p) { return normalizeName(p.name) === normalizeName(s.name); });
     if (prod && prod.type === 'conditional') recalcConditional(s.name, s.date);
   }
-  save(); render();
+  save();
+  updateLevels();
+  render();
 }
 function savePlan() {
   var m = currentMonth();
@@ -1179,50 +1215,13 @@ function saveOklad() {
   showToast('Оклад сохранён', 'success');
 }
 
-function renderMiniBars(mSales) {
-  var el = document.getElementById('miniBars');
+// ===== РЕНДЕР =====
+function setProgressClass(el, pct) {
   if (!el) return;
-  var dom = dayOfMonth();
-  var totalDays = daysInMonth(new Date());
-  var showDays = Math.min(totalDays, 31);
-  var daySums = {};
-  mSales.forEach(function(s) { daySums[s.date] = (daySums[s.date] || 0) + s.sum; });
-  var maxSum = 0;
-  Object.keys(daySums).forEach(function(d) { if (daySums[d] > maxSum) maxSum = daySums[d]; });
-  var html = '';
-  var todayDay = new Date().getDate();
-  var m = currentMonth();
-  for (var i = 1; i <= showDays; i++) {
-    var d = m + '-' + (i < 10 ? '0' + i : i);
-    var val = daySums[d] || 0;
-    var pct = maxSum > 0 ? (val / maxSum * 100) : 0;
-    var h = val > 0 ? Math.max(4, pct) : 2;
-    var cls = '';
-    if (i > todayDay) cls = 'future-bar';
-    else if (i === todayDay) cls = 'bar-today';
-    else if (val === 0) cls = 'empty-bar';
-    else if (pct > 66) cls = 'bar-fill-1';
-    else if (pct > 33) cls = 'bar-fill-2';
-    else cls = 'bar-fill-3';
-    html += '<span class="' + cls + '" style="height:' + h + '%"></span>';
-  }
-  el.innerHTML = html;
-
-  var lastDayEl = document.getElementById('chartLastDay');
-  if (lastDayEl) lastDayEl.textContent = totalDays;
-
-  var best = document.getElementById('miniBarsBest');
-  if (best) {
-    if (maxSum > 0) {
-      var bestDay = 1, bestVal = 0;
-      Object.keys(daySums).forEach(function(d) {
-        if (daySums[d] > bestVal) { bestVal = daySums[d]; bestDay = parseInt(d.split('-')[2]); }
-      });
-      best.innerHTML = 'Лучший день — <b style="color:#fbbf24">' + bestDay + ' ' + new Date().toLocaleDateString('ru-RU', { month: 'long' }) + '</b> · <b style="color:#fbbf24">' + fmt(bestVal) + '</b>';
-    } else {
-      best.innerHTML = 'Пока нет продаж в этом месяце';
-    }
-  }
+  el.className = 'progress-fill';
+  if (pct >= 100) el.classList.add('gold');
+  else if (pct >= 90) el.classList.add('ok');
+  else if (pct >= 80) el.classList.add('orange');
 }
 
 function render() {
@@ -1258,7 +1257,7 @@ function render() {
   if (fcEl) fcEl.textContent = fmt(forecastEarn);
   var fccEl = document.getElementById('forecastCompare');
   if (fccEl) {
-    if (pmEarn > 0) {
+    if (pmEarn > 0 && pmComm > 0) {
       var diffPct = ((forecastEarn - pmEarn) / pmEarn * 100);
       var sign = diffPct >= 0 ? '+' : '';
       var cls = diffPct >= 0 ? '' : ' style="color:#ef4444"';
@@ -1271,9 +1270,7 @@ function render() {
   var bar = document.getElementById('monthProgress');
   if (bar) {
     bar.style.width = Math.min(100, pct) + '%';
-    bar.className = 'progress-fill';
-    if (pct >= 100) bar.classList.add('gold');
-    else if (pct >= 80) bar.classList.add('ok');
+    setProgressClass(bar, pct);
   }
   var minEl = document.getElementById('minThreshold');
   if (minEl) {
@@ -1327,24 +1324,21 @@ function render() {
     document.getElementById('recordDate').textContent = new Date(bS).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
     document.getElementById('recordComm').textContent = fmt(bdC[bC]);
     document.getElementById('recordCommDate').textContent = new Date(bC).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-    document.getElementById('recordBadge').innerHTML = '<div class="record-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Личный рекорд</div>';
   } else {
     document.getElementById('recordSum').textContent = '0 ₽';
     document.getElementById('recordDate').textContent = '—';
     document.getElementById('recordComm').textContent = '0 ₽';
     document.getElementById('recordCommDate').textContent = '—';
-    document.getElementById('recordBadge').innerHTML = '';
   }
 
-  renderMiniBars(mSales);
+  // XP карточка
+  renderXpCard();
 
   document.getElementById('planProgress').textContent = fmt(netTurnover);
   document.getElementById('planPercent').textContent = pct.toFixed(1) + '%';
   var pb = document.getElementById('planProgressBar');
   pb.style.width = Math.min(100, pct) + '%';
-  pb.className = 'progress-fill';
-  if (pct >= 100) pb.classList.add('gold');
-  else if (pct >= 80) pb.classList.add('ok');
+  setProgressClass(pb, pct);
   document.getElementById('inputPlan').value = mPlan || '';
   document.getElementById('inputOklad').value = salary.oklad || '';
 
@@ -1393,9 +1387,7 @@ function render() {
   document.getElementById('totalsPercent').textContent = tPct.toFixed(1) + '% выполнено';
   var tb = document.getElementById('totalsProgress');
   tb.style.width = Math.min(100, tPct) + '%';
-  tb.className = 'progress-fill';
-  if (tPct >= 100) tb.classList.add('gold');
-  else if (tPct >= 80) tb.classList.add('ok');
+  setProgressClass(tb, tPct);
   document.getElementById('totalsSum').textContent = fmt(tS);
   document.getElementById('totalsCount').textContent = totSales.length + ' продаж';
   document.getElementById('totalsComm').textContent = fmt(tC);
@@ -1436,18 +1428,6 @@ function render() {
   document.getElementById('totalsRegComm').textContent = fmt(rC);
   document.getElementById('totalsRegCount').textContent = rQ + ' шт';
 
-  var tdS = {};
-  totSales.forEach(function(s) { tdS[s.date] = (tdS[s.date] || 0) + s.sum; });
-  var td = Object.keys(tdS);
-  if (td.length > 0) {
-    var b1 = td.reduce(function(a,b) { return tdS[a] > tdS[b] ? a : b; });
-    document.getElementById('totalsBestSum').textContent = fmt(tdS[b1]);
-    document.getElementById('totalsBestSumDate').textContent = new Date(b1).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-  } else {
-    document.getElementById('totalsBestSum').textContent = '0 ₽';
-    document.getElementById('totalsBestSumDate').textContent = '—';
-  }
-
   document.getElementById('adMonthSum').textContent = '−' + fmt(mADSum);
   document.getElementById('adMonthCount').textContent = mAD.length + ' записей';
 
@@ -1465,16 +1445,13 @@ function render() {
         animateNumber(document.getElementById('forecastEarned'), forecastEarn);
       }, 300);
     };
-    if (document.visibilityState === 'visible') {
-      setTimeout(startAnim, 1200);
-    } else {
-      document.addEventListener('visibilitychange', function once() {
-        if (document.visibilityState === 'visible') {
-          document.removeEventListener('visibilitychange', once);
-          setTimeout(startAnim, 1200);
-        }
-      });
-    }
+    if (document.visibilityState === 'visible') setTimeout(startAnim, 1200);
+    else document.addEventListener('visibilitychange', function once() {
+      if (document.visibilityState === 'visible') {
+        document.removeEventListener('visibilitychange', once);
+        setTimeout(startAnim, 1200);
+      }
+    });
   }
 }
 
@@ -1524,6 +1501,7 @@ document.querySelectorAll('#dots span').forEach(function(dot) {
   dot.addEventListener('click', function() { scrollToScreen(this.getAttribute('data-screen')); });
 });
 
+// ===== ПОИСК =====
 document.getElementById('searchProduct').oninput = function() {
   var q = this.value.trim();
   var res = document.getElementById('searchResults');
@@ -1565,6 +1543,7 @@ document.getElementById('adSearchProduct').oninput = function() {
   });
 };
 
+// ===== ДАТЫ =====
 document.getElementById('inputDateDisplay').onclick = function() { var inp = document.getElementById('inputDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('editDateDisplay').onclick = function() { var inp = document.getElementById('editDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('inputDate').addEventListener('change', function() { updateDateDisplay('inputDate', 'inputDateDisplay'); });
@@ -1579,6 +1558,7 @@ document.getElementById('historyDatePicker').addEventListener('change', function
 document.getElementById('adDateDisplay').onclick = function() { var inp = document.getElementById('adDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('adDate').addEventListener('change', function() { updateDateDisplay('adDate', 'adDateDisplay'); });
 
+// ===== СКАНЕР =====
 var liveStream = null, liveScanning = false, torchOn = false, scanTarget = 'add';
 document.getElementById('btnScanQR').onclick = function() { scanTarget = 'add'; startLiveScanner(); };
 document.getElementById('adScanQR').onclick = function() { scanTarget = 'ad'; startLiveScanner(); };
@@ -1588,8 +1568,7 @@ function startLiveScanner() {
   var video = document.getElementById('liveVideo');
   modal.classList.add('show');
   var spinner = document.createElement('div');
-  spinner.className = 'qr-loading';
-  spinner.id = 'qrLoading';
+  spinner.className = 'qr-loading'; spinner.id = 'qrLoading';
   spinner.innerHTML = '<div class="qr-spinner"></div><div class="qr-loading-text">Включаю камеру...</div>';
   document.querySelector('.qr-cam-wrap').appendChild(spinner);
   navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false }).then(function(stream) {
@@ -1696,22 +1675,22 @@ function handleQRDataAD(data) {
   showToast('Возврат · ' + r.article, 'success');
 }
 
+// ===== МОДАЛКИ =====
 document.getElementById('aboutBtn').onclick = function() { document.getElementById('screen-about').classList.add('active'); };
 document.getElementById('btnAboutClose').onclick = function() { document.getElementById('screen-about').classList.remove('active'); };
 document.getElementById('btnBackupClose').onclick = function() { document.getElementById('screen-backup').classList.remove('active'); };
 document.getElementById('btnImportClose').onclick = function() { document.getElementById('screen-import').classList.remove('active'); };
-document.getElementById('btnAchievements').onclick = function() { renderAchievements(); document.getElementById('screen-achievements').classList.add('active'); };
-document.getElementById('btnAchClose').onclick = function() { document.getElementById('screen-achievements').classList.remove('active'); };
 
+// ===== КНОПКИ =====
 document.getElementById('btnAdd').onclick = addSale;
 document.getElementById('btnUpdate').onclick = updateSale;
 document.getElementById('btnEditCancel').onclick = closeEdit;
 document.getElementById('btnPlan').onclick = savePlan;
 document.getElementById('btnOklad').onclick = saveOklad;
 document.getElementById('btnAddAD').onclick = addAD;
-
 document.getElementById('btnImportManual').onclick = function() { document.getElementById('screen-import').classList.add('active'); };
 
+// ===== СИНХРОНИЗАЦИЯ ФОКУС-ЛИСТА =====
 document.getElementById('btnSyncFocus').onclick = function() {
   var ok = confirm('Тест с сервера, бесплатный пробный период.\n\nЗагрузить фокус-лист?');
   if (!ok) return;
@@ -1748,26 +1727,19 @@ document.getElementById('btnSyncFocus').onclick = function() {
       np.push({ art: art, name: name, percent: percent, type: type });
     }
     if (np.length === 0) { showToast('Товары не найдены', 'warn'); return; }
-
     var csvArts = {};
     np.forEach(function(x) { if (x.art) csvArts[x.art] = true; });
-
     var cleaned = [];
     var removed = 0;
     products.forEach(function(p) {
       if (p.type !== 'regular') { cleaned.push(p); return; }
       var artInField = p.art || '';
       var artInName = extractArticleFromName(p.name);
-      if ((artInField && csvArts[artInField]) || (artInName && csvArts[artInName])) {
-        removed++;
-        return;
-      }
+      if ((artInField && csvArts[artInField]) || (artInName && csvArts[artInName])) { removed++; return; }
       cleaned.push(p);
     });
     products = cleaned;
-
     products = products.filter(function(p) { return p.type !== 'focus' && p.type !== 'conditional'; });
-
     var seenArts = {};
     var npUnique = [];
     np.forEach(function(x) {
@@ -1776,7 +1748,6 @@ document.getElementById('btnSyncFocus').onclick = function() {
       npUnique.push(x);
     });
     npUnique.forEach(function(x) { products.push(x); });
-
     save();
     var msg = 'Загружено: ' + npUnique.length + ' товаров';
     if (removed > 0) msg += ' · убрано дублей: ' + removed;
@@ -1839,8 +1810,7 @@ function parseData(input) {
   showToast('Обновлено: ' + np.length + ' товаров', 'success');
 }
 
-// ФИКС 2.3: дедупликация теперь работает ТОЛЬКО по артикулу.
-// Убрано сравнение по короткому имени — оно удаляло разные товары с одинаковым началом имени.
+// ===== ДЕДУПЛИКАЦИЯ (по артикулу) =====
 document.getElementById('btnDedup').onclick = function() {
   var seen = {}, unique = [], removed = 0;
   products.forEach(function(p) {
@@ -1850,23 +1820,14 @@ document.getElementById('btnDedup').onclick = function() {
       var artInName = extractArticleFromName(p.name);
       if (artInName) artKey = 'art_' + artInName;
     }
-
     if (artKey && seen[artKey]) {
       var e = seen[artKey];
       if (e.type !== 'focus' && p.type === 'focus') {
-        e.art = p.art || e.art;
-        e.name = p.name;
-        e.percent = p.percent;
-        e.type = p.type;
+        e.art = p.art || e.art; e.name = p.name; e.percent = p.percent; e.type = p.type;
       } else if (e.type === 'focus' && p.type !== 'focus') {
         // оставляем фокусный
       } else {
-        if (p.percent > e.percent) {
-          e.art = p.art || e.art;
-          e.name = p.name;
-          e.percent = p.percent;
-          e.type = p.type;
-        }
+        if (p.percent > e.percent) { e.art = p.art || e.art; e.name = p.name; e.percent = p.percent; e.type = p.type; }
       }
       removed++;
     } else {
@@ -1878,6 +1839,7 @@ document.getElementById('btnDedup').onclick = function() {
   showToast('Удалено дублей: ' + removed, 'success'); render();
 };
 
+// ===== БЭКАП =====
 document.getElementById('btnBackup').onclick = function() {
   document.getElementById('exportText').value = getBackupJSON();
   document.getElementById('importText2').value = '';
@@ -1904,11 +1866,12 @@ document.getElementById('restoreFileInput').addEventListener('change', function(
     if (data.plans) plans = data.plans;
     if (data.products) products = data.products;
     if (data.salary) salary = data.salary;
-    if (data.achievements) localStorage.setItem('achievements', JSON.stringify(data.achievements));
+    if (data.xpData) xpData = data.xpData;
     save();
     showToast('Восстановлено: ' + sales.length + ' записей', 'success');
     event.target.value = '';
     document.getElementById('screen-backup').classList.remove('active');
+    updateLevels();
     render();
   };
   reader.readAsText(file);
@@ -1925,15 +1888,28 @@ document.getElementById('btnRestore').onclick = function() {
   if (data.plans) plans = data.plans;
   if (data.products) products = data.products;
   if (data.salary) salary = data.salary;
+  if (data.xpData) xpData = data.xpData;
   save();
   showToast('Восстановлено: ' + sales.length + ' записей', 'success');
   document.getElementById('importText2').value = '';
   document.getElementById('screen-backup').classList.remove('active');
+  updateLevels();
   render();
 };
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() { navigator.serviceWorker.register('sw.js').catch(function(){}); });
+}
+
+// ===== INIT =====
+// Устанавливаем дату старта XP — первое число текущего месяца или следующий месяц
+if (!xpData.startDate) {
+  var now = new Date();
+  var firstOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  xpData.startDate = dateStr(firstOfNextMonth);
+  xpData.xp = 0;
+  xpData.level = 1;
+  save();
 }
 
 document.getElementById('inputDate').value = today();
@@ -1947,11 +1923,10 @@ updateDateDisplay('adDate', 'adDateDisplay');
 document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' });
 
 migrateRegularProducts();
-
 attachRipple();
 checkBackupReminder();
 render();
 updateDots();
 </script>
 </body>
-</html>
+</html> 

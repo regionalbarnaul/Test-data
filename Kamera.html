@@ -696,20 +696,22 @@ body.theme-soviet #aboutBtn, body.theme-soviet #chatBtn {
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  width: 34px;
-  height: 34px;
+  background: rgba(16,185,129,0.12);
+  border: 1.5px solid var(--accent);
+  border-radius: 12px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--text-muted);
+  color: var(--accent);
   transition: all 0.2s ease;
-  position: absolute;
   padding: 0;
+  box-shadow: 0 0 12px rgba(16,185,129,0.2);
 }
+.chat-inline svg { width: 22px; height: 22px; stroke-width: 2.2; }
+.chat-inline:active { transform: translateY(-50%) scale(0.92); }
 .chat-inline svg { width: 18px; height: 18px; }
 .chat-inline:active { transform: translateY(-50%) scale(0.95); }
 

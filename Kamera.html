@@ -24,14 +24,13 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .header .date { font-size: 12px; color: #5b7a6d; margin-top: 4px; display:flex; align-items:center; gap:6px; }
 
-/* Уровень-иконка в шапке */
-.lvl-icon { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; position:relative; transition: background 0.4s ease, box-shadow 0.4s ease; }
-.lvl-icon.c1 { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 0 0 0 rgba(16,185,129,0.6); animation: lvlPulse 2s ease-out infinite; }
-.lvl-icon.c2 { background: linear-gradient(135deg, #38bdf8, #0284c7); box-shadow: 0 0 0 0 rgba(56,189,248,0.6); animation: lvlPulse 2s ease-out infinite; }
-.lvl-icon.c3 { background: linear-gradient(135deg, #fbbf24, #f59e0b); box-shadow: 0 0 0 0 rgba(251,191,36,0.6); animation: lvlPulse 2s ease-out infinite; }
-.lvl-icon.c4 { background: linear-gradient(135deg, #a855f7, #7e22ce); box-shadow: 0 0 0 0 rgba(168,85,247,0.6); animation: lvlPulse 2s ease-out infinite; }
-.lvl-icon.c5 { background: linear-gradient(135deg, #ef4444, #fbbf24); box-shadow: 0 0 0 0 rgba(239,68,68,0.6); animation: lvlPulse 2s ease-out infinite; }
-@keyframes lvlPulse { 0% { box-shadow: 0 0 0 0 currentColor; opacity:1; } 70% { box-shadow: 0 0 0 10px transparent; opacity:0.9; } 100% { box-shadow: 0 0 0 0 transparent; opacity:1; } }
+.lvl-icon { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; position:relative; transition: background 0.4s ease; }
+.lvl-icon.c1 { background: linear-gradient(135deg, #10b981, #059669); animation: lvlPulse 2s ease-out infinite; }
+.lvl-icon.c2 { background: linear-gradient(135deg, #38bdf8, #0284c7); animation: lvlPulse 2s ease-out infinite; }
+.lvl-icon.c3 { background: linear-gradient(135deg, #fbbf24, #f59e0b); animation: lvlPulse 2s ease-out infinite; }
+.lvl-icon.c4 { background: linear-gradient(135deg, #a855f7, #7e22ce); animation: lvlPulse 2s ease-out infinite; }
+.lvl-icon.c5 { background: linear-gradient(135deg, #ef4444, #fbbf24); animation: lvlPulse 2s ease-out infinite; }
+@keyframes lvlPulse { 0% { box-shadow: 0 0 0 0 currentColor; } 70% { box-shadow: 0 0 0 10px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
 .lvl-icon.shine::after { content:''; position:absolute; inset:-4px; border-radius:50%; background: radial-gradient(circle, rgba(255,255,255,0.5), transparent 70%); animation: lvlShine 3s ease-in-out infinite; pointer-events:none; }
 @keyframes lvlShine { 0%, 100% { opacity:0; transform: scale(0.8); } 50% { opacity:1; transform: scale(1.1); } }
 
@@ -71,7 +70,6 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .grid-2 .card { margin: 0; }
 .grid-2.inside { margin: 0; gap: 10px; }
 
-/* Прогресс-бар */
 .progress-bg { background: rgba(255,255,255,0.06); border-radius: 6px; height: 10px; margin-top: 14px; overflow: hidden; position: relative; }
 .progress-fill { height: 100%; border-radius: 6px; transition: width 0.4s ease; width: 0%; background: linear-gradient(90deg, #ef4444, #f59e0b); position: relative; overflow: hidden; box-shadow: 0 0 12px rgba(245,158,11,0.4); }
 .progress-fill.orange { background: linear-gradient(90deg, #f59e0b, #fbbf24); box-shadow: 0 0 12px rgba(245,158,11,0.5); }
@@ -81,35 +79,32 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 @keyframes shimmer { to { left: 150%; } }
 .progress-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: rgba(232,245,240,0.55); border-radius:2px; z-index: 2; }
 
-/* ===== XP КАРТОЧКА ===== */
 .xp-card {
   background: linear-gradient(180deg, rgba(30,42,50,0.75) 0%, rgba(20,28,34,0.75) 100%);
   border: 1px solid rgba(255,255,255,0.08);
 }
 .xp-header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
-.xp-badge { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; position:relative; transition: background 0.5s ease; }
+.xp-badge { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; transition: background 0.5s ease; }
 .xp-badge.c1 { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 16px rgba(16,185,129,0.4); }
 .xp-badge.c2 { background: linear-gradient(135deg, #38bdf8, #0284c7); box-shadow: 0 4px 16px rgba(56,189,248,0.4); }
 .xp-badge.c3 { background: linear-gradient(135deg, #fbbf24, #f59e0b); box-shadow: 0 4px 16px rgba(251,191,36,0.4); }
 .xp-badge.c4 { background: linear-gradient(135deg, #a855f7, #7e22ce); box-shadow: 0 4px 16px rgba(168,85,247,0.4); }
-.xp-badge.c5 { background: linear-gradient(135deg, #ef4444, #fbbf24); box-shadow: 0 4px 16px rgba(239,68,68,0.5); animation: badgeGlow 2s ease-in-out infinite; }
-@keyframes badgeGlow { 0%, 100% { box-shadow: 0 4px 16px rgba(239,68,68,0.5); } 50% { box-shadow: 0 4px 24px rgba(251,191,36,0.8); } }
+.xp-badge.c5 { background: linear-gradient(135deg, #ef4444, #fbbf24); box-shadow: 0 4px 16px rgba(239,68,68,0.5); }
 .xp-info { flex:1; }
 .xp-level { font-size:10.5px; color:#7c9b8d; text-transform:uppercase; letter-spacing:1px; font-weight:700; margin-bottom:3px; }
 .xp-name { font-size:17px; font-weight:800; color:#e8f5f0; letter-spacing:-0.3px; }
 .xp-bar-bg { height:10px; background:rgba(255,255,255,0.06); border-radius:6px; overflow:hidden; margin-top:12px; position:relative; }
 .xp-bar-fill { height:100%; border-radius:6px; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.6s ease; width:0%; box-shadow: 0 0 12px rgba(16,185,129,0.5); }
-.xp-bar-fill.c2 { background: linear-gradient(90deg, #38bdf8, #0ea5e9); box-shadow: 0 0 12px rgba(56,189,248,0.5); }
-.xp-bar-fill.c3 { background: linear-gradient(90deg, #fbbf24, #f59e0b); box-shadow: 0 0 12px rgba(251,191,36,0.5); }
-.xp-bar-fill.c4 { background: linear-gradient(90deg, #a855f7, #7e22ce); box-shadow: 0 0 12px rgba(168,85,247,0.5); }
-.xp-bar-fill.c5 { background: linear-gradient(90deg, #ef4444, #fbbf24); box-shadow: 0 0 12px rgba(239,68,68,0.5); }
-.xp-bar-fill::after { content:''; position:absolute; top:0; left:-50%; width:50%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 2.5s infinite; }
+.xp-bar-fill.c2 { background: linear-gradient(90deg, #38bdf8, #0ea5e9); }
+.xp-bar-fill.c3 { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.xp-bar-fill.c4 { background: linear-gradient(90deg, #a855f7, #7e22ce); }
+.xp-bar-fill.c5 { background: linear-gradient(90deg, #ef4444, #fbbf24); }
 .xp-meta { display:flex; justify-content:space-between; font-size:11.5px; color:#7c9b8d; margin-top:8px; }
 .xp-meta .hi { color:#e8f5f0; font-weight:700; }
 
 .btn { display: flex; align-items:center; justify-content:center; gap:10px; width: calc(100% - 28px); margin: 12px auto; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border: none; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; position: relative; overflow: hidden; box-shadow: 0 4px 16px rgba(16,185,129,0.25); }
 .btn svg { flex-shrink:0; }
-.btn.danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; box-shadow: 0 4px 16px rgba(239,68,68,0.25); }
+.btn.danger { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
 .btn.secondary { background: rgba(255,255,255,0.06); color:#e8f5f0; box-shadow:none; border:1px solid rgba(255,255,255,0.08); }
 .ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.55); transform: scale(0); animation: rippleAnim 0.65s ease-out; pointer-events: none; }
 @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
@@ -120,7 +115,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .form-group input:focus { border-color: #10b981; }
 .search-row { display: flex; gap: 8px; align-items: stretch; }
 .search-row input { flex: 1; }
-.btn-cam { padding: 0 20px; background: linear-gradient(135deg,#10b981,#059669); color: #0a0f0d; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; min-width: 56px; animation: pulseGreen 2.2s ease-in-out infinite; box-shadow: 0 4px 14px rgba(16,185,129,0.35); }
+.btn-cam { padding: 0 20px; background: linear-gradient(135deg,#10b981,#059669); color: #0a0f0d; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; min-width: 56px; animation: pulseGreen 2.2s ease-in-out infinite; }
 @keyframes pulseGreen { 0%, 100% { box-shadow: 0 4px 14px rgba(16,185,129,0.35), 0 0 0 0 rgba(16,185,129,0.55); } 50% { box-shadow: 0 4px 14px rgba(16,185,129,0.35), 0 0 0 10px rgba(16,185,129,0); } }
 .btn-cam svg { display: block; }
 
@@ -154,6 +149,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .about-row .value { color: #e8f5f0; }
 .about-mail { display: block; text-align: center; margin: 16px 14px 10px; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border-radius: 14px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 16px rgba(16,185,129,0.25); }
 #aboutBtn { position: fixed; top: 20px; right: 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #7c9b8d; font-size: 20px; cursor: pointer; z-index: 10; padding: 6px 8px; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; }
+.chat-btn { position: fixed; top: 20px; right: 60px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #7c9b8d; font-size: 18px; cursor: pointer; z-index: 10; padding: 6px 8px; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
 .date-display { padding: 12px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #e8f5f0; font-size: 15px; cursor: pointer; }
 .date-display:active { background: rgba(255,255,255,0.06); }
 .compare-up { color: #10b981 !important; }
@@ -192,7 +188,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .qr-corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; border-top-right-radius: 16px; }
 .qr-corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; border-bottom-left-radius: 16px; }
 .qr-corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: 16px; }
-.qr-laser { position: absolute; left: 10px; right: 10px; top: 0; height: 2px; background: linear-gradient(90deg, transparent, #10b981, transparent); animation: qrLaser 2.2s ease-in-out infinite; will-change: transform; }
+.qr-laser { position: absolute; left: 10px; right: 10px; top: 0; height: 2px; background: linear-gradient(90deg, transparent, #10b981, transparent); animation: qrLaser 2.2s ease-in-out infinite; }
 @keyframes qrLaser { 0%,100% { transform: translateY(14px); } 50% { transform: translateY(calc(68vw - 28px)); } }
 .qr-hint { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: #fff; font-size: 14px; text-shadow: 0 2px 6px rgba(0,0,0,0.9); opacity: 0.9; }
 .qr-controls { position: absolute; left: 0; right: 0; bottom: 60px; display: flex; justify-content: center; gap: 40px; align-items: center; }
@@ -223,10 +219,46 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 @keyframes celebrateBounce { 0% { transform: scale(0.3) rotate(-20deg); } 30% { transform: scale(1.3) rotate(10deg); } 60% { transform: scale(1) rotate(-5deg); } 100% { transform: scale(1) rotate(0); opacity: 0; } }
 .celebrate-text { color: #fff; font-size: 22px; font-weight: 800; text-shadow: 0 3px 12px rgba(0,0,0,0.5); text-align: center; padding: 0 20px; line-height:1.3; }
 .celebrate-sub { color: rgba(255,255,255,0.85); font-size: 14px; font-weight: 600; margin-top: -10px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+
+/* ===== ЧАТ ===== */
+#screen-chat { display: none; position: fixed; inset: 0; background: #060a08; overflow: hidden; z-index: 300; flex-direction: column; }
+#screen-chat.active { display: flex; }
+.chat-header { padding: 16px 16px 14px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); background: rgba(6,10,8,0.95); backdrop-filter: blur(14px); flex-shrink: 0; }
+.chat-back { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #7c9b8d; font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+.chat-title { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; background: linear-gradient(135deg, #a7f3d0 0%, #10b981 60%, #059669 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.chat-status { font-size: 11px; color: #6b8a7d; margin-top: 2px; display: flex; align-items: center; gap: 5px; }
+.chat-status .dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 16px 14px 8px; display: flex; flex-direction: column; gap: 10px; }
+.chat-messages::-webkit-scrollbar { width: 0; }
+.msg-row { display: flex; flex-direction: column; max-width: 82%; }
+.msg-row.own { align-self: flex-end; align-items: flex-end; }
+.msg-row.other { align-self: flex-start; align-items: flex-start; }
+.msg-author { font-size: 11px; color: #7c9b8d; margin: 0 8px 4px; font-weight: 600; }
+.msg-row.own .msg-author { color: #34d399; }
+.msg-bubble { padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.4; word-wrap: break-word; max-width: 100%; }
+.msg-row.other .msg-bubble { background: rgba(26,38,32,0.85); border: 1px solid rgba(255,255,255,0.06); color: #e8f5f0; border-bottom-left-radius: 4px; }
+.msg-row.own .msg-bubble { background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; font-weight: 500; border-bottom-right-radius: 4px; box-shadow: 0 4px 14px rgba(16,185,129,0.25); }
+.msg-time { font-size: 10px; color: rgba(232,245,240,0.4); margin: 4px 8px 0; }
+.msg-row.own .msg-time { color: rgba(16,185,129,0.6); }
+.msg-empty { text-align: center; color: #6b8a7d; padding: 30px 12px; font-size: 13px; }
+.chat-input-bar { padding: 12px 14px; background: rgba(6,10,8,0.95); backdrop-filter: blur(14px); border-top: 1px solid rgba(255,255,255,0.06); display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0; }
+.chat-input { flex: 1; padding: 12px 16px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; color: #e8f5f0; font-size: 15px; outline: none; resize: none; font-family: inherit; max-height: 100px; min-height: 44px; }
+.chat-input:focus { border-color: #10b981; }
+.chat-send { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); border: none; color: #0a0f0d; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 14px rgba(16,185,129,0.4); }
+.chat-send:active { transform: scale(0.9); }
+.chat-name-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+.chat-name-modal.show { display: flex; }
+.chat-name-box { background: #121a16; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px; max-width: 340px; width: 100%; }
+.chat-name-box h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+.chat-name-box p { font-size: 13px; color: #6b8a7d; margin-bottom: 16px; }
+.chat-name-box input { width: 100%; padding: 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #e8f5f0; font-size: 16px; outline: none; margin-bottom: 12px; }
+.chat-name-box input:focus { border-color: #10b981; }
+.chat-name-box button { width: 100%; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; }
 </style>
 </head>
 <body>
 
+<button id="chatBtn" class="chat-btn">💬</button>
 <button id="aboutBtn">ⓘ</button>
 
 <div id="swipeContainer">
@@ -582,7 +614,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
   <div class="card">
     <div class="about-icon">📊</div>
     <div class="about-name">Трекер продаж</div>
-    <div class="about-version">Версия 2.4 · Polaris + XP</div>
+    <div class="about-version">Версия 2.5 · Polaris + Chat</div>
     <div class="about-desc">Простое приложение для учёта личных продаж.</div>
   </div>
   <div class="card">
@@ -665,6 +697,34 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
     <path class="check-mark" d="M35 62 L55 82 L88 42"/>
   </svg>
 </div>
+
+<div id="screen-chat">
+  <div class="chat-header">
+    <div class="chat-back" id="chatBack">←</div>
+    <div style="flex:1">
+      <div class="chat-title">Чат</div>
+      <div class="chat-status"><span class="dot"></span><span id="chatOnline">Подключение...</span></div>
+    </div>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg-empty">Загрузка...</div>
+  </div>
+  <div class="chat-input-bar">
+    <textarea class="chat-input" id="chatInput" placeholder="Сообщение..." rows="1"></textarea>
+    <button class="chat-send" id="chatSend">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="chat-name-modal" id="chatNameModal">
+  <div class="chat-name-box">
+    <h3>Как тебя зовут?</h3>
+    <p>Это имя будет показываться в чате с коллегами</p>
+    <input type="text" id="chatNameInput" placeholder="Например, Максим" maxlength="20">
+    <button id="chatNameSave">Войти в чат</button>
+  </div>
+</div>
 <script>
 var sales = [];
 var plans = {};
@@ -687,7 +747,6 @@ try {
   if (_xp) xpData = _xp;
 } catch(e) { sales = []; plans = {}; products = []; }
 
-// Уровни и звания
 var LEVELS = [
   { n: 1,  name: 'Первый день',              icon: '🐣', xp: 0 },
   { n: 2,  name: 'Стажёр',                   icon: '🎒', xp: 300 },
@@ -728,7 +787,6 @@ function monthStr(d) { return d.getFullYear() + '-' + pad(d.getMonth()+1); }
 function today() { return dateStr(new Date()); }
 function currentMonth() { return monthStr(new Date()); }
 function daysInMonth(d) { return new Date(d.getFullYear(), d.getMonth()+1, 0).getDate(); }
-// ИЗМЕНЕНО: дни после сегодняшнего (минимум 1)
 function daysLeft() { var d = new Date(); return Math.max(1, daysInMonth(d) - d.getDate()); }
 function dayOfMonth() { return new Date().getDate(); }
 function weekStart(d) { var day = d.getDay(); var diff = d.getDate() - day + (day === 0 ? -6 : 1); return new Date(d.setDate(diff)); }
@@ -742,7 +800,6 @@ function extractArticleFromName(name) {
   return m ? m[1] : '';
 }
 
-// ===== ЗВУКИ / ВИБРО =====
 function showToast(message, type) {
   type = type || 'success';
   var old = document.getElementById('appToast');
@@ -809,29 +866,18 @@ function vibrateLight() { if (navigator.vibrate) navigator.vibrate(30); }
 function vibrateSuccess() { if (navigator.vibrate) navigator.vibrate([40, 30, 40]); }
 function vibrateRecord() { if (navigator.vibrate) navigator.vibrate([80, 40, 80, 40, 120]); }
 
-// ===== XP СИСТЕМА =====
-// Формула: фокусные продажи дают XP = (сумма / 1000) × процент, регулярные 0
 function calcXpForSale(s) {
-  if (s.isAD) return 0;               // АД не даёт XP, а снимает
-  if (s.percent <= 1.5) return 0;     // регулярные — 0 XP
+  if (s.isAD) return 0;
+  if (s.percent <= 1.5) return 0;
   return (Math.abs(s.sum) / 1000) * s.percent;
 }
 function recalcXp() {
-  // Считаем XP от всех продаж, начиная с xpData.startDate
   var total = 0;
   sales.forEach(function(s) {
     if (s.isAD) return;
     if (!xpData.startDate) return;
     if (s.date < xpData.startDate) return;
     total += calcXpForSale(s);
-  });
-  // АД снимает XP пропорционально
-  sales.forEach(function(s) {
-    if (!s.isAD) return;
-    if (!xpData.startDate) return;
-    if (s.date < xpData.startDate) return;
-    // АД на 10 000 ₽ при 5% снимает 50 XP — берём процент от исходной продажи если есть, иначе 1.5
-    total -= (Math.abs(s.sum) / 1000) * 1.5;
   });
   if (total < 0) total = 0;
   return total;
@@ -878,14 +924,12 @@ function renderXpCard() {
   }
   var cls = getColorClass(lvl.n);
 
-  // Иконка в шапке
   var hdr = document.getElementById('hdrLvlIcon');
   if (hdr) {
     hdr.className = 'lvl-icon ' + cls + (lvl.n >= 13 ? ' shine' : '');
     hdr.textContent = lvl.icon;
   }
 
-  // XP карточка
   document.getElementById('xpBadge').className = 'xp-badge ' + cls;
   document.getElementById('xpBadge').textContent = lvl.icon;
   document.getElementById('xpLevelNum').textContent = 'УРОВЕНЬ ' + lvl.n;
@@ -910,7 +954,6 @@ function renderXpCard() {
   }
 }
 
-// ===== RIPPLE =====
 function attachRipple() {
   document.querySelectorAll('.btn').forEach(function(btn) {
     if (btn.dataset.ripple) return;
@@ -964,7 +1007,6 @@ function showSuccessCheckmark() {
   setTimeout(function() { el.classList.remove('show'); }, 1000);
 }
 
-// Миграция старых регулярных (артикул из имени)
 function migrateRegularProducts() {
   var changed = false;
   products.forEach(function(p) {
@@ -976,9 +1018,8 @@ function migrateRegularProducts() {
   if (changed) save();
 }
 
-// ===== АВТОБЭКАП =====
 function getBackupJSON() {
-  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, exportDate: new Date().toISOString(), version: '2.4' }, null, 2);
+  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, exportDate: new Date().toISOString(), version: '2.5' }, null, 2);
 }
 function saveBackupToFile() {
   try {
@@ -1085,7 +1126,6 @@ function recalcConditional(productName, dateStrVal) {
   ws.forEach(function(s) { s.percent = np; s.commission = s.sum * np / 100; });
 }
 
-// ===== ПРОДАЖА =====
 function addSale() {
   var date = document.getElementById('inputDate').value || today();
   if (date > today()) { showToast('Дата не может быть в будущем', 'warn'); return; }
@@ -1104,7 +1144,6 @@ function addSale() {
   if (prod && prod.type === 'conditional') recalcConditional(name, date);
   if (!prod) saveRegularProduct(name);
   save();
-
   document.getElementById('inputName').value = '';
   document.getElementById('inputSum').value = '';
   document.getElementById('inputQty').value = '1';
@@ -1155,7 +1194,6 @@ function addAD() {
   scrollToScreen('home');
 }
 
-// ===== РЕДАКТИРОВАНИЕ =====
 function openEdit(id) {
   var s = sales.find(function(x) { return x.id === id; });
   if (!s) return;
@@ -1215,7 +1253,6 @@ function saveOklad() {
   showToast('Оклад сохранён', 'success');
 }
 
-// ===== РЕНДЕР =====
 function setProgressClass(el, pct) {
   if (!el) return;
   el.className = 'progress-fill';
@@ -1331,7 +1368,6 @@ function render() {
     document.getElementById('recordCommDate').textContent = '—';
   }
 
-  // XP карточка
   renderXpCard();
 
   document.getElementById('planProgress').textContent = fmt(netTurnover);
@@ -1501,7 +1537,6 @@ document.querySelectorAll('#dots span').forEach(function(dot) {
   dot.addEventListener('click', function() { scrollToScreen(this.getAttribute('data-screen')); });
 });
 
-// ===== ПОИСК =====
 document.getElementById('searchProduct').oninput = function() {
   var q = this.value.trim();
   var res = document.getElementById('searchResults');
@@ -1543,7 +1578,6 @@ document.getElementById('adSearchProduct').oninput = function() {
   });
 };
 
-// ===== ДАТЫ =====
 document.getElementById('inputDateDisplay').onclick = function() { var inp = document.getElementById('inputDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('editDateDisplay').onclick = function() { var inp = document.getElementById('editDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('inputDate').addEventListener('change', function() { updateDateDisplay('inputDate', 'inputDateDisplay'); });
@@ -1558,7 +1592,6 @@ document.getElementById('historyDatePicker').addEventListener('change', function
 document.getElementById('adDateDisplay').onclick = function() { var inp = document.getElementById('adDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('adDate').addEventListener('change', function() { updateDateDisplay('adDate', 'adDateDisplay'); });
 
-// ===== СКАНЕР =====
 var liveStream = null, liveScanning = false, torchOn = false, scanTarget = 'add';
 document.getElementById('btnScanQR').onclick = function() { scanTarget = 'add'; startLiveScanner(); };
 document.getElementById('adScanQR').onclick = function() { scanTarget = 'ad'; startLiveScanner(); };
@@ -1675,13 +1708,11 @@ function handleQRDataAD(data) {
   showToast('Возврат · ' + r.article, 'success');
 }
 
-// ===== МОДАЛКИ =====
 document.getElementById('aboutBtn').onclick = function() { document.getElementById('screen-about').classList.add('active'); };
 document.getElementById('btnAboutClose').onclick = function() { document.getElementById('screen-about').classList.remove('active'); };
 document.getElementById('btnBackupClose').onclick = function() { document.getElementById('screen-backup').classList.remove('active'); };
 document.getElementById('btnImportClose').onclick = function() { document.getElementById('screen-import').classList.remove('active'); };
 
-// ===== КНОПКИ =====
 document.getElementById('btnAdd').onclick = addSale;
 document.getElementById('btnUpdate').onclick = updateSale;
 document.getElementById('btnEditCancel').onclick = closeEdit;
@@ -1690,7 +1721,6 @@ document.getElementById('btnOklad').onclick = saveOklad;
 document.getElementById('btnAddAD').onclick = addAD;
 document.getElementById('btnImportManual').onclick = function() { document.getElementById('screen-import').classList.add('active'); };
 
-// ===== СИНХРОНИЗАЦИЯ ФОКУС-ЛИСТА =====
 document.getElementById('btnSyncFocus').onclick = function() {
   var ok = confirm('Тест с сервера, бесплатный пробный период.\n\nЗагрузить фокус-лист?');
   if (!ok) return;
@@ -1810,7 +1840,6 @@ function parseData(input) {
   showToast('Обновлено: ' + np.length + ' товаров', 'success');
 }
 
-// ===== ДЕДУПЛИКАЦИЯ (по артикулу) =====
 document.getElementById('btnDedup').onclick = function() {
   var seen = {}, unique = [], removed = 0;
   products.forEach(function(p) {
@@ -1839,7 +1868,6 @@ document.getElementById('btnDedup').onclick = function() {
   showToast('Удалено дублей: ' + removed, 'success'); render();
 };
 
-// ===== БЭКАП =====
 document.getElementById('btnBackup').onclick = function() {
   document.getElementById('exportText').value = getBackupJSON();
   document.getElementById('importText2').value = '';
@@ -1901,8 +1929,6 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() { navigator.serviceWorker.register('sw.js').catch(function(){}); });
 }
 
-// ===== INIT =====
-// Устанавливаем дату старта XP — первое число текущего месяца или следующий месяц
 if (!xpData.startDate) {
   var now = new Date();
   var firstOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
@@ -1928,5 +1954,121 @@ checkBackupReminder();
 render();
 updateDots();
 </script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCSO7WOy2y6RCpLb2BSGAHtAd75YI8-Erc",
+  authDomain: "tracker-chat-372b9.firebaseapp.com",
+  databaseURL: "https://tracker-chat-372b9-default-rtdb.firebaseio.com",
+  projectId: "tracker-chat-372b9",
+  storageBucket: "tracker-chat-372b9.firebasestorage.app",
+  messagingSenderId: "576975275559",
+  appId: "1:576975275559:web:8c5a34d512adb4bfa37002"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getDatabase(fbApp);
+const auth = getAuth(fbApp);
+
+let chatUser = null;
+let chatStarted = false;
+
+document.getElementById('chatBtn').onclick = function() {
+  document.getElementById('screen-chat').classList.add('active');
+  if (navigator.vibrate) navigator.vibrate(20);
+  if (!chatStarted) {
+    var saved = localStorage.getItem('chatName') || '';
+    if (saved) {
+      document.getElementById('chatNameInput').value = saved;
+      startChat();
+    } else {
+      document.getElementById('chatNameModal').classList.add('show');
+    }
+  }
+};
+document.getElementById('chatBack').onclick = function() {
+  document.getElementById('screen-chat').classList.remove('active');
+};
+
+document.getElementById('chatNameSave').onclick = function() {
+  var name = document.getElementById('chatNameInput').value.trim();
+  if (!name) { alert('Введи имя'); return; }
+  localStorage.setItem('chatName', name);
+  document.getElementById('chatNameModal').classList.remove('show');
+  startChat();
+};
+document.getElementById('chatNameInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('chatNameSave').click();
+});
+
+function startChat() {
+  if (chatStarted) return;
+  chatStarted = true;
+  chatUser = localStorage.getItem('chatName') || 'Аноним';
+  signInAnonymously(auth).then(function() {
+    loadMessages();
+  }).catch(function(err) {
+    document.getElementById('chatOnline').textContent = 'Ошибка входа';
+    console.error('Auth error:', err);
+  });
+}
+
+function loadMessages() {
+  var msgsRef = query(ref(db, 'chat/messages'), limitToLast(100));
+  onValue(msgsRef, function(snapshot) {
+    var container = document.getElementById('chatMessages');
+    var data = snapshot.val();
+    if (!data) {
+      container.innerHTML = '<div class="msg-empty">Пока сообщений нет.<br>Напиши первым!</div>';
+      document.getElementById('chatOnline').textContent = 'в сети';
+      return;
+    }
+    var html = '';
+    Object.keys(data).forEach(function(key) {
+      var m = data[key];
+      var own = m.name === chatUser;
+      var cls = own ? 'msg-row own' : 'msg-row other';
+      var time = m.ts ? new Date(m.ts).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) : '';
+      var safeText = String(m.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      html += '<div class="' + cls + '">' +
+        '<div class="msg-author">' + (own ? 'Ты' : m.name) + '</div>' +
+        '<div class="msg-bubble">' + safeText + '</div>' +
+        '<div class="msg-time">' + time + '</div>' +
+        '</div>';
+    });
+    container.innerHTML = html;
+    container.scrollTop = container.scrollHeight;
+    document.getElementById('chatOnline').textContent = 'в сети';
+  });
+}
+
+function sendMessage() {
+  var input = document.getElementById('chatInput');
+  var text = input.value.trim();
+  if (!text || !chatUser) return;
+  push(ref(db, 'chat/messages'), {
+    name: chatUser,
+    text: text,
+    ts: Date.now()
+  }).then(function() {
+    input.value = '';
+    input.style.height = '44px';
+  }).catch(function(err) {
+    alert('Ошибка: ' + err.message);
+  });
+}
+document.getElementById('chatSend').onclick = sendMessage;
+document.getElementById('chatInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+document.getElementById('chatInput').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+});
+</script>
 </body>
-</html> 
+  </html>

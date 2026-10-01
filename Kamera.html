@@ -24,7 +24,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .header .date { font-size: 12px; color: #5b7a6d; margin-top: 4px; display:flex; align-items:center; gap:6px; }
 
-.lvl-icon { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; position:relative; transition: background 0.4s ease; }
+.lvl-icon { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; position:relative; }
 .lvl-icon.c1 { background: linear-gradient(135deg, #10b981, #059669); animation: lvlPulse 2s ease-out infinite; }
 .lvl-icon.c2 { background: linear-gradient(135deg, #38bdf8, #0284c7); animation: lvlPulse 2s ease-out infinite; }
 .lvl-icon.c3 { background: linear-gradient(135deg, #fbbf24, #f59e0b); animation: lvlPulse 2s ease-out infinite; }
@@ -150,6 +150,9 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 .about-mail { display: block; text-align: center; margin: 16px 14px 10px; padding: 14px; background: linear-gradient(135deg, #10b981, #059669); color: #0a0f0d; border-radius: 14px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 16px rgba(16,185,129,0.25); }
 #aboutBtn { position: fixed; top: 20px; right: 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #7c9b8d; font-size: 20px; cursor: pointer; z-index: 10; padding: 6px 8px; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; }
 .chat-btn { position: fixed; top: 20px; right: 60px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #7c9b8d; font-size: 18px; cursor: pointer; z-index: 10; padding: 6px 8px; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+.chat-badge { position: absolute; top: -3px; right: -3px; min-width: 18px; height: 18px; padding: 0 5px; background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; border-radius: 9px; font-size: 10px; font-weight: 800; display: none; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(239,68,68,0.5); animation: badgePop 0.3s ease-out; border: 2px solid #060a08; box-sizing: content-box; }
+.chat-badge.show { display: flex; }
+@keyframes badgePop { 0% { transform: scale(0); } 70% { transform: scale(1.2); } 100% { transform: scale(1); } }
 .date-display { padding: 12px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #e8f5f0; font-size: 15px; cursor: pointer; }
 .date-display:active { background: rgba(255,255,255,0.06); }
 .compare-up { color: #10b981 !important; }
@@ -258,7 +261,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
 </head>
 <body>
 
-<button id="chatBtn" class="chat-btn">💬</button>
+<button id="chatBtn" class="chat-btn">💬<span class="chat-badge" id="chatBadge">0</span></button>
 <button id="aboutBtn">ⓘ</button>
 
 <div id="swipeContainer">
@@ -614,7 +617,7 @@ body::after { width:300px; height:300px; bottom:-100px; right:-80px; background:
   <div class="card">
     <div class="about-icon">📊</div>
     <div class="about-name">Трекер продаж</div>
-    <div class="about-version">Версия 2.5 · Polaris + Chat</div>
+    <div class="about-version">Версия 2.6 · Polaris + Chat + Badge</div>
     <div class="about-desc">Простое приложение для учёта личных продаж.</div>
   </div>
   <div class="card">
@@ -1019,7 +1022,7 @@ function migrateRegularProducts() {
 }
 
 function getBackupJSON() {
-  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, exportDate: new Date().toISOString(), version: '2.5' }, null, 2);
+  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, exportDate: new Date().toISOString(), version: '2.6' }, null, 2);
 }
 function saveBackupToFile() {
   try {
@@ -1976,9 +1979,15 @@ const auth = getAuth(fbApp);
 
 let chatUser = null;
 let chatStarted = false;
+let lastReadTs = parseInt(localStorage.getItem('chatLastRead') || '0', 10);
+let chatOpen = false;
 
 document.getElementById('chatBtn').onclick = function() {
   document.getElementById('screen-chat').classList.add('active');
+  chatOpen = true;
+  lastReadTs = Date.now();
+  localStorage.setItem('chatLastRead', String(lastReadTs));
+  updateBadge(0);
   if (navigator.vibrate) navigator.vibrate(20);
   if (!chatStarted) {
     var saved = localStorage.getItem('chatName') || '';
@@ -1992,7 +2001,19 @@ document.getElementById('chatBtn').onclick = function() {
 };
 document.getElementById('chatBack').onclick = function() {
   document.getElementById('screen-chat').classList.remove('active');
+  chatOpen = false;
 };
+
+function updateBadge(count) {
+  var badge = document.getElementById('chatBadge');
+  if (!badge) return;
+  if (count > 0) {
+    badge.textContent = count > 99 ? '99+' : String(count);
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+  }
+}
 
 document.getElementById('chatNameSave').onclick = function() {
   var name = document.getElementById('chatNameInput').value.trim();
@@ -2025,9 +2046,11 @@ function loadMessages() {
     if (!data) {
       container.innerHTML = '<div class="msg-empty">Пока сообщений нет.<br>Напиши первым!</div>';
       document.getElementById('chatOnline').textContent = 'в сети';
+      updateBadge(0);
       return;
     }
     var html = '';
+    var newUnread = 0;
     Object.keys(data).forEach(function(key) {
       var m = data[key];
       var own = m.name === chatUser;
@@ -2039,9 +2062,17 @@ function loadMessages() {
         '<div class="msg-bubble">' + safeText + '</div>' +
         '<div class="msg-time">' + time + '</div>' +
         '</div>';
+      if (!own && m.ts && m.ts > lastReadTs) newUnread++;
     });
     container.innerHTML = html;
-    container.scrollTop = container.scrollHeight;
+    if (chatOpen) {
+      container.scrollTop = container.scrollHeight;
+      lastReadTs = Date.now();
+      localStorage.setItem('chatLastRead', String(lastReadTs));
+      updateBadge(0);
+    } else {
+      updateBadge(newUnread);
+    }
     document.getElementById('chatOnline').textContent = 'в сети';
   });
 }
@@ -2071,4 +2102,4 @@ document.getElementById('chatInput').addEventListener('input', function() {
 });
 </script>
 </body>
-  </html>
+                                          </html> 

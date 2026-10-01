@@ -10,9 +10,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <style>
-/* ============================================ */
-/* ===== ТЕМЫ (CSS-переменные) ===== */
-/* ============================================ */
 :root {
   --bg: #060a08;
   --card-bg1: rgba(26,38,32,0.72);
@@ -38,9 +35,6 @@
   --radius-small: 12px;
 }
 
-/* ===== ТЁМНАЯ (текущая, default) — уже в :root ===== */
-
-/* ===== СВЕТЛАЯ ===== */
 body.theme-light {
   --bg: #f2f2f7;
   --card-bg1: rgba(255,255,255,0.95);
@@ -50,13 +44,9 @@ body.theme-light {
   --text: #1a1a1a;
   --text-muted: #5b7a6d;
   --text-dim: #8e8e93;
-  --accent: #10b981;
-  --accent-dark: #059669;
   --input-bg: rgba(0,0,0,0.04);
   --input-border: rgba(0,0,0,0.1);
 }
-
-/* ===== POLARIS ===== */
 body.theme-polaris {
   --bg: #000000;
   --card-bg1: rgba(20,20,20,0.9);
@@ -73,8 +63,6 @@ body.theme-polaris {
   --gold-dark: #e5b800;
   --blue: #2d7fd4;
 }
-
-/* ===== iOS ===== */
 body.theme-ios {
   --bg: #F2F2F7;
   --card-bg1: #ffffff;
@@ -98,8 +86,6 @@ body.theme-ios {
   --radius: 16px;
   --radius-small: 10px;
 }
-
-/* ===== ТЕРМИНАЛ ===== */
 body.theme-terminal {
   --bg: #000000;
   --card-bg1: rgba(0,20,0,0.8);
@@ -123,8 +109,6 @@ body.theme-terminal {
   --radius: 4px;
   --radius-small: 3px;
 }
-
-/* ===== СОВЕТСКИЙ ===== */
 body.theme-soviet {
   --bg: #F5DEB3;
   --card-bg1: rgba(255,245,220,0.95);
@@ -149,11 +133,7 @@ body.theme-soviet {
   --radius-small: 3px;
 }
 
-/* ============================================ */
-/* ===== ОСНОВНОЕ ===== */
-/* ============================================ */
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-
 body {
   font-family: var(--font-main);
   background: var(--bg);
@@ -163,23 +143,15 @@ body {
   position: relative;
   transition: background 0.3s ease, color 0.3s ease;
 }
-
-/* Живой фон — только для тёмной темы */
-body.theme-default::before, body:not([class*="theme-"]):not(.theme-light):not(.theme-polaris):not(.theme-ios):not(.theme-terminal):not(.theme-soviet)::before,
-body.theme-default::after, body:not([class*="theme-"]):not(.theme-light):not(.theme-polaris):not(.theme-ios):not(.theme-terminal):not(.theme-soviet)::after {
-  content:'';
-  position:fixed;
-  border-radius:50%;
-  filter:blur(80px);
-  pointer-events:none;
-  z-index:0;
-  animation: bgFloat 14s ease-in-out infinite;
-}
 body:not([class*="theme-"]):not(.theme-light):not(.theme-polaris):not(.theme-ios):not(.theme-terminal):not(.theme-soviet)::before {
+  content:''; position:fixed; border-radius:50%; filter:blur(80px); pointer-events:none; z-index:0;
+  animation: bgFloat 14s ease-in-out infinite;
   width:340px; height:340px; top:-80px; left:-100px;
   background: radial-gradient(circle, rgba(16,185,129,0.28), transparent 70%);
 }
 body:not([class*="theme-"]):not(.theme-light):not(.theme-polaris):not(.theme-ios):not(.theme-terminal):not(.theme-soviet)::after {
+  content:''; position:fixed; border-radius:50%; filter:blur(80px); pointer-events:none; z-index:0;
+  animation: bgFloat 14s ease-in-out infinite;
   width:300px; height:300px; bottom:-100px; right:-80px;
   background: radial-gradient(circle, rgba(56,189,248,0.18), transparent 70%);
   animation-delay: -7s;
@@ -188,10 +160,7 @@ body:not([class*="theme-"]):not(.theme-light):not(.theme-polaris):not(.theme-ios
   0%,100% { transform: translate(0,0) scale(1); }
   50% { transform: translate(30px,-20px) scale(1.1); }
 }
-
 .accent { color: var(--accent); }
-
-/* ===== ШАПКА ===== */
 .header {
   padding: 18px 16px 12px;
   display: flex;
@@ -201,46 +170,23 @@ body:not([class*="theme-"]):not(.theme-light):not(.theme-polaris):not(.theme-ios
   z-index: 1;
 }
 .header h1 {
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  line-height: 1.15;
+  font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.15;
   background: linear-gradient(135deg, var(--accent-pale) 0%, var(--accent) 60%, var(--accent-dark) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 body.theme-light .header h1,
 body.theme-ios .header h1,
 body.theme-soviet .header h1 {
-  background: none;
-  -webkit-text-fill-color: var(--text);
-  color: var(--text);
+  background: none; -webkit-text-fill-color: var(--text); color: var(--text);
 }
 body.theme-terminal .header h1 {
-  background: none;
-  -webkit-text-fill-color: var(--accent);
-  color: var(--accent);
+  background: none; -webkit-text-fill-color: var(--accent); color: var(--accent);
 }
-.header .date {
-  font-size: 12px;
-  color: var(--text-dim);
-  margin-top: 4px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
+.header .date { font-size: 12px; color: var(--text-dim); margin-top: 4px; display: flex; align-items: center; gap: 6px; }
 .lvl-icon {
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-  position: relative;
-  transition: background 0.4s ease;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0; position: relative;
 }
 .lvl-icon.c1 { background: linear-gradient(135deg, #10b981, #059669); animation: lvlPulse 2s ease-out infinite; }
 .lvl-icon.c2 { background: linear-gradient(135deg, #38bdf8, #0284c7); animation: lvlPulse 2s ease-out infinite; }
@@ -252,45 +198,28 @@ body.theme-terminal .header h1 {
   70% { box-shadow: 0 0 0 10px transparent; }
   100% { box-shadow: 0 0 0 0 transparent; }
 }
-body.theme-terminal .lvl-icon,
-body.theme-soviet .lvl-icon {
-  border-radius: 4px;
-}
-
-/* ===== КАРТОЧКИ ===== */
+body.theme-terminal .lvl-icon, body.theme-soviet .lvl-icon { border-radius: 4px; }
 .card {
   background: linear-gradient(180deg, var(--card-bg1) 0%, var(--card-bg2) 100%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   border-radius: var(--radius);
   border: 1px solid var(--card-border);
   box-shadow: 0 8px 24px var(--card-shadow), inset 0 1px 0 rgba(255,255,255,0.05);
   margin: 0 14px 12px;
   padding: 16px;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
+  position: relative; overflow: hidden; z-index: 1;
   transition: transform 0.15s ease, background 0.3s ease;
 }
-body.theme-light .card,
-body.theme-ios .card,
-body.theme-soviet .card {
+body.theme-light .card, body.theme-ios .card, body.theme-soviet .card {
   box-shadow: 0 2px 12px var(--card-shadow), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 body.theme-terminal .card {
   border: 1px solid var(--accent);
   box-shadow: 0 0 12px rgba(0,255,0,0.2), inset 0 0 20px rgba(0,255,0,0.05);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
 }
-body.theme-soviet .card {
-  border: 2px solid var(--accent);
-  box-shadow: 3px 3px 0 rgba(139,0,0,0.3);
-}
-
-#screen-home .card {
-  animation: cardIn 0.6s cubic-bezier(0.22,1,0.36,1) backwards;
-}
+body.theme-soviet .card { border: 2px solid var(--accent); box-shadow: 3px 3px 0 rgba(139,0,0,0.3); }
+#screen-home .card { animation: cardIn 0.6s cubic-bezier(0.22,1,0.36,1) backwards; }
 #screen-home .card:nth-child(2) { animation-delay: 0.05s; }
 #screen-home .card:nth-child(3) { animation-delay: 0.1s; }
 #screen-home .card:nth-child(4) { animation-delay: 0.15s; }
@@ -298,328 +227,131 @@ body.theme-soviet .card {
 #screen-home .card:nth-child(6) { animation-delay: 0.25s; }
 #screen-home .card:nth-child(7) { animation-delay: 0.3s; }
 #screen-home .card:nth-child(8) { animation-delay: 0.35s; }
-@keyframes cardIn {
-  from { opacity:0; transform: translateY(20px) scale(0.98); }
-  to { opacity:1; transform: translateY(0) scale(1); }
-}
+@keyframes cardIn { from { opacity:0; transform: translateY(20px) scale(0.98); } to { opacity:1; transform: translateY(0) scale(1); } }
 body.theme-terminal .card { animation: none !important; }
-
 .card-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-muted);
-  font-weight: 600;
-  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--text-muted); font-weight: 600; margin-bottom: 10px;
+  position: relative;
 }
 .card-head svg { flex-shrink: 0; }
 body.theme-terminal .card-head::before { content: '> '; color: var(--accent); }
-
-.card-title {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: var(--text-muted);
-  margin-bottom: 10px;
-  font-weight: 600;
-}
-
-/* ===== ЦИФРЫ ===== */
-.big-number {
-  font-size: 30px;
-  font-weight: 800;
-  color: var(--accent);
-  letter-spacing: -0.5px;
-  line-height: 1.1;
-  font-variant-numeric: tabular-nums;
-}
+.card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 10px; font-weight: 600; }
+.big-number { font-size: 30px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; line-height: 1.1; font-variant-numeric: tabular-nums; }
 .big-number.gold { color: var(--gold); }
 .big-number.blue { color: var(--blue); }
 .big-number.red { color: var(--red); }
 body.theme-terminal .big-number { text-shadow: 0 0 8px var(--accent); }
-
-.sub-text {
-  font-size: 12px;
-  color: var(--text-dim);
-  margin-top: 6px;
-  line-height: 1.45;
-}
+.sub-text { font-size: 12px; color: var(--text-dim); margin-top: 6px; line-height: 1.45; }
 .sub-text .accent { color: var(--accent); font-weight: 600; }
-
-/* ===== СЕТКА ===== */
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 0 14px 12px;
-  position: relative;
-  z-index: 1;
-}
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 14px 12px; position: relative; z-index: 1; }
 .grid-2 .card { margin: 0; }
 .grid-2.inside { margin: 0; gap: 10px; }
-
-/* ===== ПРОГРЕСС ===== */
-.progress-bg {
-  background: rgba(255,255,255,0.06);
-  border-radius: 6px;
-  height: 10px;
-  margin-top: 14px;
-  overflow: hidden;
-  position: relative;
-}
-body.theme-light .progress-bg,
-body.theme-ios .progress-bg,
-body.theme-soviet .progress-bg {
-  background: rgba(0,0,0,0.08);
-}
-body.theme-terminal .progress-bg {
-  border: 1px solid var(--accent);
-  background: rgba(0,30,0,0.4);
-}
+.progress-bg { background: rgba(255,255,255,0.06); border-radius: 6px; height: 10px; margin-top: 14px; overflow: hidden; position: relative; }
+body.theme-light .progress-bg, body.theme-ios .progress-bg, body.theme-soviet .progress-bg { background: rgba(0,0,0,0.08); }
+body.theme-terminal .progress-bg { border: 1px solid var(--accent); background: rgba(0,30,0,0.4); }
 .progress-fill {
-  height: 100%;
-  border-radius: 6px;
-  transition: width 0.4s ease;
-  width: 0%;
+  height: 100%; border-radius: 6px; transition: width 0.4s ease; width: 0%;
   background: linear-gradient(90deg, #ef4444, #f59e0b);
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
   box-shadow: 0 0 12px rgba(245,158,11,0.4);
 }
 .progress-fill.orange { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
 .progress-fill.ok { background: linear-gradient(90deg, #10b981, #34d399); box-shadow: 0 0 12px rgba(16,185,129,0.5); }
 .progress-fill.gold { background: linear-gradient(90deg, #fbbf24, #f59e0b); box-shadow: 0 0 12px rgba(251,191,36,0.5); }
 .progress-fill::after {
-  content: '';
-  position: absolute;
-  top: 0; left: -50%;
-  width: 50%; height: 100%;
+  content: ''; position: absolute; top: 0; left: -50%; width: 50%; height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
   animation: shimmer 2.5s infinite;
 }
 @keyframes shimmer { to { left: 150%; } }
 body.theme-terminal .progress-fill::after { display: none; }
-body.theme-soviet .progress-fill {
-  background: var(--accent);
-  box-shadow: none;
-  border: 1px solid var(--accent-dark);
-}
-.progress-mark {
-  position: absolute;
-  top: -2px; bottom: -2px;
-  width: 2px;
-  background: var(--text);
-  opacity: 0.5;
-  border-radius: 2px;
-  z-index: 2;
-}
+body.theme-soviet .progress-fill { background: var(--accent); box-shadow: none; border: 1px solid var(--accent-dark); }
+.progress-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--text); opacity: 0.5; border-radius: 2px; z-index: 2; }
 /* ===== КНОПКИ ===== */
 .btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: calc(100% - 28px);
-  margin: 12px auto;
-  padding: 14px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: calc(100% - 28px); margin: 12px auto; padding: 14px;
   background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  color: #0a0f0d;
-  border: none;
-  border-radius: var(--radius-small);
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+  color: #0a0f0d; border: none; border-radius: var(--radius-small);
+  font-size: 15px; font-weight: 700; cursor: pointer; text-align: center;
+  position: relative; overflow: hidden;
   box-shadow: 0 4px 16px rgba(16,185,129,0.25);
   font-family: inherit;
 }
 body.theme-ios .btn { box-shadow: none; }
 body.theme-terminal .btn {
-  background: transparent;
-  border: 2px solid var(--accent);
-  color: var(--accent);
-  box-shadow: 0 0 12px rgba(0,255,0,0.3);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  background: transparent; border: 2px solid var(--accent); color: var(--accent);
+  box-shadow: 0 0 12px rgba(0,255,0,0.3); text-transform: uppercase; letter-spacing: 1px;
 }
 body.theme-soviet .btn {
-  background: var(--accent);
-  color: #F5DEB3;
-  border: 2px solid var(--accent-dark);
-  box-shadow: 3px 3px 0 var(--accent-dark);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 900;
+  background: var(--accent); color: #F5DEB3; border: 2px solid var(--accent-dark);
+  box-shadow: 3px 3px 0 var(--accent-dark); text-transform: uppercase; letter-spacing: 1px; font-weight: 900;
 }
 .btn svg { flex-shrink: 0; }
-.btn.danger {
-  background: linear-gradient(135deg, var(--red), var(--red-dark));
-  color: #fff;
-}
-.btn.secondary {
-  background: rgba(255,255,255,0.06);
-  color: var(--text);
-  box-shadow: none;
-  border: 1px solid var(--card-border);
-}
-body.theme-light .btn.secondary,
-body.theme-ios .btn.secondary {
-  background: rgba(0,0,0,0.04);
-}
-body.theme-terminal .btn.secondary {
-  background: transparent;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-}
-body.theme-soviet .btn.secondary {
-  background: #F5DEB3;
-  color: var(--accent);
-  border: 2px solid var(--accent);
-}
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.55);
-  transform: scale(0);
-  animation: rippleAnim 0.65s ease-out;
-  pointer-events: none;
-}
+.btn.danger { background: linear-gradient(135deg, var(--red), var(--red-dark)); color: #fff; }
+.btn.secondary { background: rgba(255,255,255,0.06); color: var(--text); box-shadow: none; border: 1px solid var(--card-border); }
+body.theme-light .btn.secondary, body.theme-ios .btn.secondary { background: rgba(0,0,0,0.04); }
+body.theme-terminal .btn.secondary { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+body.theme-soviet .btn.secondary { background: #F5DEB3; color: var(--accent); border: 2px solid var(--accent); }
+.ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.55); transform: scale(0); animation: rippleAnim 0.65s ease-out; pointer-events: none; }
 @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
-body.theme-terminal .ripple { display: none; }
-body.theme-soviet .ripple { display: none; }
+body.theme-terminal .ripple, body.theme-soviet .ripple { display: none; }
 
 /* ===== ФОРМЫ ===== */
 .form-group { margin-bottom: 12px; }
-.form-group label {
-  display: block;
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
-}
+.form-group label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
 .form-group input {
-  width: 100%;
-  padding: 12px 14px;
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: var(--radius-small);
-  color: var(--text);
-  font-size: 15px;
-  outline: none;
-  transition: border-color 0.2s;
-  font-family: inherit;
+  width: 100%; padding: 12px 14px;
+  background: var(--input-bg); border: 1px solid var(--input-border);
+  border-radius: var(--radius-small); color: var(--text);
+  font-size: 15px; outline: none; transition: border-color 0.2s; font-family: inherit;
 }
 .form-group input:focus { border-color: var(--accent); }
-body.theme-terminal .form-group input {
-  background: rgba(0,30,0,0.6);
-  border: 1px solid var(--accent);
-  color: var(--accent);
-}
-body.theme-soviet .form-group input {
-  background: #FFF8E7;
-  border: 2px solid var(--accent);
-}
+body.theme-terminal .form-group input { background: rgba(0,30,0,0.6); border: 1px solid var(--accent); color: var(--accent); }
+body.theme-soviet .form-group input { background: #FFF8E7; border: 2px solid var(--accent); }
 .search-row { display: flex; gap: 8px; align-items: stretch; }
 .search-row input { flex: 1; }
 .btn-cam {
-  padding: 0 20px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  color: #0a0f0d;
-  border: none;
-  border-radius: var(--radius-small);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 56px;
+  padding: 0 20px; background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #0a0f0d; border: none; border-radius: var(--radius-small); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; min-width: 56px;
   animation: pulseGreen 2.2s ease-in-out infinite;
 }
 @keyframes pulseGreen {
   0%, 100% { box-shadow: 0 4px 14px rgba(16,185,129,0.35), 0 0 0 0 rgba(16,185,129,0.55); }
   50% { box-shadow: 0 4px 14px rgba(16,185,129,0.35), 0 0 0 10px rgba(16,185,129,0); }
 }
-body.theme-terminal .btn-cam {
-  background: transparent;
-  border: 2px solid var(--accent);
-}
+body.theme-terminal .btn-cam { background: transparent; border: 2px solid var(--accent); }
 body.theme-terminal .btn-cam svg { stroke: var(--accent); }
-body.theme-soviet .btn-cam {
-  border: 2px solid var(--accent-dark);
-  box-shadow: 2px 2px 0 var(--accent-dark);
-}
+body.theme-soviet .btn-cam { border: 2px solid var(--accent-dark); box-shadow: 2px 2px 0 var(--accent-dark); }
 .btn-cam svg { display: block; }
 
-/* ===== ПОИСК ===== */
 #searchResults, #adSearchResults {
-  background: var(--card-bg1);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-small);
-  max-height: 160px;
-  overflow-y: auto;
-  margin-top: 6px;
+  background: var(--card-bg1); backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border); border-radius: var(--radius-small);
+  max-height: 160px; overflow-y: auto; margin-top: 6px;
 }
 body.theme-light #searchResults, body.theme-light #adSearchResults,
-body.theme-ios #searchResults, body.theme-ios #adSearchResults {
-  background: #fff;
-}
-body.theme-terminal #searchResults, body.theme-terminal #adSearchResults {
-  background: rgba(0,30,0,0.9);
-  border: 1px solid var(--accent);
-}
-#searchResults div, #adSearchResults div {
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--card-border);
-  cursor: pointer;
-  font-size: 13px;
-}
+body.theme-ios #searchResults, body.theme-ios #adSearchResults { background: #fff; }
+body.theme-terminal #searchResults, body.theme-terminal #adSearchResults { background: rgba(0,30,0,0.9); border: 1px solid var(--accent); }
+#searchResults div, #adSearchResults div { padding: 10px 14px; border-bottom: 1px solid var(--card-border); cursor: pointer; font-size: 13px; }
 #searchResults div:last-child, #adSearchResults div:last-child { border-bottom: none; }
 #searchResults div:active, #adSearchResults div:active { background: rgba(255,255,255,0.06); }
 
 /* ===== ИСТОРИЯ ===== */
-.history-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--card-border);
-}
+.history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--card-border); }
 .history-item:last-child { border-bottom: none; }
 .history-item .info { flex: 1; }
 .history-item .name { font-size: 14px; font-weight: 600; line-height: 1.3; }
 .history-item .meta { font-size: 12px; color: var(--text-dim); margin-top: 3px; }
 .history-item .sum { font-size: 15px; font-weight: 700; color: var(--accent); white-space: nowrap; }
 .history-item.ad .sum { color: var(--red); }
-.badge-ad {
-  display: inline-block;
-  padding: 2px 6px;
-  background: var(--red);
-  color: #fff;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 700;
-  margin-left: 6px;
-  vertical-align: middle;
-}
-.history-item .edit, .history-item .delete {
-  margin-left: 6px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px 8px;
-  display: flex;
-  align-items: center;
-}
+.badge-ad { display: inline-block; padding: 2px 6px; background: var(--red); color: #fff; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
+.history-item .edit, .history-item .delete { margin-left: 6px; background: none; border: none; cursor: pointer; padding: 4px 8px; display: flex; align-items: center; }
 .history-item .edit { color: var(--accent); }
 .history-item .delete { color: var(--red); }
-
 .screen { display: none; }
 .empty { text-align: center; color: var(--text-dim); padding: 24px 12px; font-size: 13px; }
 body.theme-terminal .empty::before { content: '> '; }
@@ -627,898 +359,266 @@ body.theme-terminal .empty::before { content: '> '; }
 /* ===== О ПРИЛОЖЕНИИ ===== */
 .about-icon { text-align: center; font-size: 52px; margin: 16px 0 8px; }
 .about-name {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 800;
-  margin-bottom: 4px;
+  text-align: center; font-size: 22px; font-weight: 800; margin-bottom: 4px;
   background: linear-gradient(135deg, var(--accent-pale), var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
-body.theme-light .about-name,
-body.theme-ios .about-name,
-body.theme-soviet .about-name,
-body.theme-terminal .about-name {
-  background: none;
-  -webkit-text-fill-color: var(--text);
-  color: var(--text);
+body.theme-light .about-name, body.theme-ios .about-name, body.theme-soviet .about-name, body.theme-terminal .about-name {
+  background: none; -webkit-text-fill-color: var(--text); color: var(--text);
 }
 .about-version { text-align: center; font-size: 12px; color: var(--text-dim); margin-bottom: 16px; }
 .about-desc { font-size: 13px; color: var(--text); line-height: 1.5; opacity: 0.85; }
-.about-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--card-border);
-  font-size: 13px;
-}
+.about-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--card-border); font-size: 13px; }
 .about-row:last-child { border-bottom: none; }
 .about-row .label { color: var(--text-dim); }
 .about-row .value { color: var(--text); }
 
-/* ===== КНОПКИ В ШАПКЕ ===== */
-#aboutBtn, #chatBtn {
-  position: fixed;
-  top: 20px;
+/* ===== КНОПКА НАСТРОЕК В ШАПКЕ ===== */
+#aboutBtn {
+  position: fixed; top: 20px; right: 16px;
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--card-border);
-  color: var(--text-muted);
-  font-size: 20px;
-  cursor: pointer;
-  z-index: 10;
-  padding: 6px 8px;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--text-muted); font-size: 20px; cursor: pointer; z-index: 10;
+  padding: 6px 8px; border-radius: 50%; width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
 }
-#aboutBtn { right: 16px; }
-body.theme-terminal #aboutBtn, body.theme-terminal #chatBtn {
-  background: transparent;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  border-radius: 4px;
-}
-body.theme-soviet #aboutBtn, body.theme-soviet #chatBtn {
-  background: #F5DEB3;
-  border: 2px solid var(--accent);
-  color: var(--accent);
-  border-radius: 4px;
-}
+body.theme-terminal #aboutBtn { background: transparent; border: 1px solid var(--accent); color: var(--accent); border-radius: 4px; }
+body.theme-soviet #aboutBtn { background: #F5DEB3; border: 2px solid var(--accent); color: var(--accent); border-radius: 4px; }
 
-/* ===== КНОПКА ЧАТА В КАРТОЧКЕ ПЛАНА ===== */
-.card-head { position: relative; }
+/* ===== КНОПКА ЧАТА В КАРТОЧКЕ ПЛАНА (с надписью) ===== */
 .chat-inline {
-  position: absolute;
-  right: 0;
-  top: 50%;
+  position: absolute; right: 0; top: 50%;
   transform: translateY(-50%);
-  background: rgba(16,185,129,0.12);
-  border: 1.5px solid var(--accent);
+  background: rgba(16,185,129,0.15);
+  border: 2px solid var(--accent);
   border-radius: 12px;
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--accent);
+  padding: 8px 14px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  cursor: pointer; color: var(--accent);
   transition: all 0.2s ease;
-  padding: 0;
-  box-shadow: 0 0 12px rgba(16,185,129,0.2);
+  box-shadow: 0 0 16px rgba(16,185,129,0.25);
+  font-family: inherit; font-size: 13px; font-weight: 800;
+  letter-spacing: 0.5px; text-transform: uppercase;
 }
-.chat-inline svg { width: 22px; height: 22px; stroke-width: 2.2; }
-.chat-inline:active { transform: translateY(-50%) scale(0.92); }
-.chat-inline svg { width: 18px; height: 18px; }
-.chat-inline:active { transform: translateY(-50%) scale(0.95); }
-
-/* Есть непрочитанные */
+.chat-inline svg { width: 20px; height: 20px; stroke-width: 2.4; flex-shrink: 0; }
+.chat-inline .chat-label { display: block; }
+.chat-inline:active { transform: translateY(-50%) scale(0.96); }
 .chat-inline.unread {
-  color: var(--accent);
-  border-color: var(--accent);
   animation: chatPulse 1.5s ease-in-out infinite;
-  box-shadow: 0 0 0 0 rgba(16,185,129,0.5);
+  box-shadow: 0 0 0 0 rgba(16,185,129,0.6);
 }
 @keyframes chatPulse {
   0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
-  70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
+  70% { box-shadow: 0 0 0 12px rgba(16,185,129,0); }
   100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
 }
-body.theme-terminal .chat-inline {
-  border: 1px solid var(--accent);
-  background: transparent;
-}
-body.theme-terminal .chat-inline.unread { color: var(--accent); animation: none; box-shadow: 0 0 12px var(--accent); }
-body.theme-soviet .chat-inline {
-  background: #F5DEB3;
-  border: 2px solid var(--accent);
-}
-
+body.theme-terminal .chat-inline { border: 2px solid var(--accent); background: transparent; border-radius: 4px; }
+body.theme-terminal .chat-inline.unread { animation: none; box-shadow: 0 0 12px var(--accent); }
+body.theme-soviet .chat-inline { background: #F5DEB3; border: 2px solid var(--accent); border-radius: 4px; }
 .chat-badge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
+  position: absolute; top: -8px; right: -8px;
+  min-width: 18px; height: 18px; padding: 0 5px;
   background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: #fff;
-  border-radius: 9px;
-  font-size: 10px;
-  font-weight: 800;
-  display: none;
-  align-items: center;
-  justify-content: center;
+  color: #fff; border-radius: 9px; font-size: 10px; font-weight: 800;
+  display: none; align-items: center; justify-content: center;
   box-shadow: 0 2px 6px rgba(239,68,68,0.5);
   animation: badgePop 0.3s ease-out;
-  border: 2px solid var(--bg);
-  box-sizing: content-box;
+  border: 2px solid var(--bg); box-sizing: content-box;
 }
 .chat-badge.show { display: flex; }
-@keyframes badgePop {
-  0% { transform: scale(0); }
-  70% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
+@keyframes badgePop { 0% { transform: scale(0); } 70% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
 /* ===== ДАТЫ ===== */
-.date-display {
-  padding: 12px 14px;
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: var(--radius-small);
-  color: var(--text);
-  font-size: 15px;
-  cursor: pointer;
-}
+.date-display { padding: 12px 14px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: var(--radius-small); color: var(--text); font-size: 15px; cursor: pointer; }
 .date-display:active { background: rgba(255,255,255,0.06); }
 .compare-up { color: var(--accent) !important; }
 .compare-down { color: var(--red) !important; }
 
 /* ===== ПРОЦЕНТЫ ===== */
-.percent-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--card-border);
-  font-size: 13px;
-}
+.percent-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--card-border); font-size: 13px; }
 .percent-row:last-child { border-bottom: none; }
-.percent-badge {
-  display: inline-block;
-  min-width: 44px;
-  padding: 5px 10px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  color: #0a0f0d;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 800;
-  text-align: center;
-}
+.percent-badge { display: inline-block; min-width: 44px; padding: 5px 10px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #0a0f0d; border-radius: 8px; font-size: 12px; font-weight: 800; text-align: center; }
 .percent-info { flex: 1; margin-left: 12px; font-size: 13px; opacity: 0.85; }
 .percent-sum { font-size: 14px; font-weight: 700; color: var(--accent); text-align: right; }
 .percent-comm { font-size: 11px; color: var(--text-dim); margin-top: 2px; text-align: right; }
 
 /* ===== СВАЙП ===== */
 #swipeContainer {
-  display: flex;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  height: 100vh;
-  width: 100vw;
-  position: relative;
-  z-index: 1;
+  display: flex; overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; height: 100vh; width: 100vw;
+  position: relative; z-index: 1;
 }
 #swipeContainer::-webkit-scrollbar { display: none; }
 .swipe-screen {
-  min-width: 100vw;
-  width: 100vw;
-  height: 100vh;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex-shrink: 0;
-  padding-bottom: 60px;
-  box-sizing: border-box;
+  min-width: 100vw; width: 100vw; height: 100vh;
+  scroll-snap-align: start; scroll-snap-stop: always;
+  overflow-y: auto; overflow-x: hidden;
+  flex-shrink: 0; padding-bottom: 60px; box-sizing: border-box;
   position: relative;
 }
-.modal-screen {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--bg);
-  overflow-y: auto;
-  z-index: 200;
-  padding-bottom: 40px;
-}
+.modal-screen { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); overflow-y: auto; z-index: 200; padding-bottom: 40px; }
 .modal-screen.active { display: block; }
 
-/* ===== ТОЧКИ НАВИГАЦИИ ===== */
-#dots {
-  position: fixed;
-  bottom: 6px;
-  left: 0; right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 0;
-  z-index: 150;
-  pointer-events: none;
-}
-#dots span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  transition: all 0.35s ease;
-  pointer-events: auto;
-  cursor: pointer;
-}
-body.theme-light #dots span,
-body.theme-ios #dots span,
-body.theme-soviet #dots span {
-  background: rgba(0,0,0,0.15);
-}
+/* ===== ТОЧКИ ===== */
+#dots { position: fixed; bottom: 6px; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px 0; z-index: 150; pointer-events: none; }
+#dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.15); transition: all 0.35s ease; pointer-events: auto; cursor: pointer; }
+body.theme-light #dots span, body.theme-ios #dots span, body.theme-soviet #dots span { background: rgba(0,0,0,0.15); }
 body.theme-terminal #dots span { background: rgba(0,255,0,0.2); border-radius: 2px; }
-#dots span.active {
-  background: var(--accent);
-  width: 24px;
-  border-radius: 4px;
-  box-shadow: 0 0 12px rgba(16,185,129,0.6);
-}
+#dots span.active { background: var(--accent); width: 24px; border-radius: 4px; box-shadow: 0 0 12px rgba(16,185,129,0.6); }
 
-/* ===== QR СКАНЕР ===== */
-.qr-loading {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  z-index: 10;
-  gap: 20px;
-  transition: opacity 0.4s ease;
-}
+/* ===== QR ===== */
+.qr-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; z-index: 10; gap: 20px; transition: opacity 0.4s ease; }
 .qr-loading.hidden { opacity: 0; pointer-events: none; }
-.qr-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(255,255,255,0.1);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: qrSpin 0.9s linear infinite;
-}
+.qr-spinner { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--accent); border-radius: 50%; animation: qrSpin 0.9s linear infinite; }
 @keyframes qrSpin { to { transform: rotate(360deg); } }
 .qr-loading-text { color: #6b8a7d; font-size: 14px; }
-#liveQRModal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #000;
-  z-index: 99998;
-  display: none;
-  flex-direction: column;
-}
+#liveQRModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 99998; display: none; flex-direction: column; }
 #liveQRModal.show { display: flex; }
 .qr-cam-wrap { position: relative; flex: 1; overflow: hidden; background: #000; }
 #liveVideo { width: 100%; height: 100%; object-fit: cover; display: block; }
 .qr-overlay { position: absolute; inset: 0; pointer-events: none; }
-.qr-frame {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 68vw; height: 68vw;
-  max-width: 300px; max-height: 300px;
-  border-radius: 20px;
-  box-shadow: 0 0 0 9999px rgba(0,0,0,0.55);
-}
-.qr-corner {
-  position: absolute;
-  width: 42px; height: 42px;
-  border: 4px solid #10b981;
-}
+.qr-frame { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 68vw; height: 68vw; max-width: 300px; max-height: 300px; border-radius: 20px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.55); }
+.qr-corner { position: absolute; width: 42px; height: 42px; border: 4px solid #10b981; }
 .qr-corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: 16px; }
 .qr-corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; border-top-right-radius: 16px; }
 .qr-corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; border-bottom-left-radius: 16px; }
 .qr-corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: 16px; }
-.qr-laser {
-  position: absolute;
-  left: 10px; right: 10px; top: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #10b981, transparent);
-  animation: qrLaser 2.2s ease-in-out infinite;
-}
-@keyframes qrLaser {
-  0%,100% { transform: translateY(14px); }
-  50% { transform: translateY(calc(68vw - 28px)); }
-}
-.qr-hint {
-  position: absolute;
-  left: 0; right: 0; bottom: 14px;
-  text-align: center;
-  color: #fff;
-  font-size: 14px;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.9);
-  opacity: 0.9;
-}
-.qr-controls {
-  position: absolute;
-  left: 0; right: 0; bottom: 60px;
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  align-items: center;
-}
-.qr-ctl {
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.5);
-  border: 2px solid rgba(255,255,255,0.6);
-  color: #fff;
-  font-size: 22px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.qr-laser { position: absolute; left: 10px; right: 10px; top: 0; height: 2px; background: linear-gradient(90deg, transparent, #10b981, transparent); animation: qrLaser 2.2s ease-in-out infinite; }
+@keyframes qrLaser { 0%,100% { transform: translateY(14px); } 50% { transform: translateY(calc(68vw - 28px)); } }
+.qr-hint { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; color: #fff; font-size: 14px; text-shadow: 0 2px 6px rgba(0,0,0,0.9); opacity: 0.9; }
+.qr-controls { position: absolute; left: 0; right: 0; bottom: 60px; display: flex; justify-content: center; gap: 40px; align-items: center; }
+.qr-ctl { width: 56px; height: 56px; border-radius: 50%; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.6); color: #fff; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .qr-ctl.close { background: rgba(239,68,68,0.7); border-color: #fff; }
 .qr-ctl.active { background: #fbbf24; color: #0a0f0d; border-color: #fbbf24; }
 
 /* ===== ТОСТ ===== */
-.toast {
-  position: fixed;
-  top: 20px; left: 14px; right: 14px;
-  padding: 14px 16px;
-  border-radius: 14px;
-  font-size: 15px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 99999;
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-  color: #0a0f0d;
-}
+.toast { position: fixed; top: 20px; left: 14px; right: 14px; padding: 14px 16px; border-radius: 14px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; z-index: 99999; opacity: 0; transform: translateY(-20px); transition: all 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.5); color: #0a0f0d; }
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast.success { background: linear-gradient(135deg, #10b981, #059669); }
 .toast.warn { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
 .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
 .toast.record { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
 .toast .icon { font-size: 20px; }
-body.theme-terminal .toast {
-  background: #000;
-  border: 2px solid var(--accent);
-  color: var(--accent);
-  box-shadow: 0 0 20px var(--accent);
-  font-family: monospace;
-}
-body.theme-soviet .toast {
-  background: var(--accent);
-  color: #F5DEB3;
-  border: 2px solid var(--accent-dark);
-}
+body.theme-terminal .toast { background: #000; border: 2px solid var(--accent); color: var(--accent); box-shadow: 0 0 20px var(--accent); font-family: monospace; }
+body.theme-soviet .toast { background: var(--accent); color: #F5DEB3; border: 2px solid var(--accent-dark); }
 
 /* ===== ГАЛОЧКА ===== */
-#successOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 99997;
-}
+#successOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; align-items: center; justify-content: center; z-index: 99997; }
 #successOverlay.show { display: flex; }
 .success-checkmark { width: 120px; height: 120px; }
-.success-checkmark .check-circle {
-  stroke: #10b981; stroke-width: 3; fill: none;
-  stroke-dasharray: 314; stroke-dashoffset: 314;
-  animation: strokeCircle 0.5s ease-out forwards;
-}
-.success-checkmark .check-mark {
-  stroke: #10b981; stroke-width: 5; fill: none;
-  stroke-linecap: round; stroke-linejoin: round;
-  stroke-dasharray: 60; stroke-dashoffset: 60;
-  animation: strokeMark 0.35s 0.4s ease-out forwards;
-}
+.success-checkmark .check-circle { stroke: #10b981; stroke-width: 3; fill: none; stroke-dasharray: 314; stroke-dashoffset: 314; animation: strokeCircle 0.5s ease-out forwards; }
+.success-checkmark .check-mark { stroke: #10b981; stroke-width: 5; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; animation: strokeMark 0.35s 0.4s ease-out forwards; }
 @keyframes strokeCircle { to { stroke-dashoffset: 0; } }
 @keyframes strokeMark { to { stroke-dashoffset: 0; } }
 
 /* ===== ПРАЗДНИК ===== */
-#celebrationFlash {
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle, rgba(16,185,129,0.95), rgba(16,185,129,0.4));
-  z-index: 99996;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 20px;
-  pointer-events: none;
-}
+#celebrationFlash { position: fixed; inset: 0; background: radial-gradient(circle, rgba(16,185,129,0.95), rgba(16,185,129,0.4)); z-index: 99996; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 20px; pointer-events: none; }
 #celebrationFlash.show { display: flex; animation: celebratePulse 2s ease-out; }
-@keyframes celebratePulse {
-  0% { opacity: 0; transform: scale(1.2); }
-  15% { opacity: 1; transform: scale(1); }
-  85% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1); }
-}
-.celebrate-emoji {
-  font-size: 120px;
-  animation: celebrateBounce 2s ease-out;
-  filter: drop-shadow(0 0 30px rgba(255,255,255,0.8));
-}
-@keyframes celebrateBounce {
-  0% { transform: scale(0.3) rotate(-20deg); }
-  30% { transform: scale(1.3) rotate(10deg); }
-  60% { transform: scale(1) rotate(-5deg); }
-  100% { transform: scale(1) rotate(0); opacity: 0; }
-}
-.celebrate-text {
-  color: #fff;
-  font-size: 22px;
-  font-weight: 800;
-  text-shadow: 0 3px 12px rgba(0,0,0,0.5);
-  text-align: center;
-  padding: 0 20px;
-  line-height: 1.3;
-}
-.celebrate-sub {
-  color: rgba(255,255,255,0.85);
-  font-size: 14px;
-  font-weight: 600;
-  margin-top: -10px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-}
+@keyframes celebratePulse { 0% { opacity: 0; transform: scale(1.2); } 15% { opacity: 1; transform: scale(1); } 85% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
+.celebrate-emoji { font-size: 120px; animation: celebrateBounce 2s ease-out; filter: drop-shadow(0 0 30px rgba(255,255,255,0.8)); }
+@keyframes celebrateBounce { 0% { transform: scale(0.3) rotate(-20deg); } 30% { transform: scale(1.3) rotate(10deg); } 60% { transform: scale(1) rotate(-5deg); } 100% { transform: scale(1) rotate(0); opacity: 0; } }
+.celebrate-text { color: #fff; font-size: 22px; font-weight: 800; text-shadow: 0 3px 12px rgba(0,0,0,0.5); text-align: center; padding: 0 20px; line-height: 1.3; }
+.celebrate-sub { color: rgba(255,255,255,0.85); font-size: 14px; font-weight: 600; margin-top: -10px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
-/* ===== XP КАРТОЧКА ===== */
-.xp-card {
-  background: linear-gradient(180deg, var(--card-bg1) 0%, var(--card-bg2) 100%);
-}
+/* ===== XP ===== */
+.xp-card { background: linear-gradient(180deg, var(--card-bg1) 0%, var(--card-bg2) 100%); }
 .xp-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.xp-badge {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  flex-shrink: 0;
-  transition: background 0.5s ease;
-}
+.xp-badge { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
 .xp-badge.c1 { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 16px rgba(16,185,129,0.4); }
 .xp-badge.c2 { background: linear-gradient(135deg, #38bdf8, #0284c7); box-shadow: 0 4px 16px rgba(56,189,248,0.4); }
 .xp-badge.c3 { background: linear-gradient(135deg, #fbbf24, #f59e0b); box-shadow: 0 4px 16px rgba(251,191,36,0.4); }
 .xp-badge.c4 { background: linear-gradient(135deg, #a855f7, #7e22ce); box-shadow: 0 4px 16px rgba(168,85,247,0.4); }
 .xp-badge.c5 { background: linear-gradient(135deg, #ef4444, #fbbf24); box-shadow: 0 4px 16px rgba(239,68,68,0.5); }
 .xp-info { flex: 1; }
-.xp-level {
-  font-size: 10.5px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 700;
-  margin-bottom: 3px;
-}
-.xp-name {
-  font-size: 17px;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: -0.3px;
-}
-.xp-bar-bg {
-  height: 10px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 6px;
-  overflow: hidden;
-  margin-top: 12px;
-  position: relative;
-}
-body.theme-light .xp-bar-bg,
-body.theme-ios .xp-bar-bg,
-body.theme-soviet .xp-bar-bg {
-  background: rgba(0,0,0,0.08);
-}
-.xp-bar-fill {
-  height: 100%;
-  border-radius: 6px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-light));
-  transition: width 0.6s ease;
-  width: 0%;
-  box-shadow: 0 0 12px rgba(16,185,129,0.5);
-}
-.xp-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11.5px;
-  color: var(--text-muted);
-  margin-top: 8px;
-}
+.xp-level { font-size: 10.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 3px; }
+.xp-name { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
+.xp-bar-bg { height: 10px; background: rgba(255,255,255,0.06); border-radius: 6px; overflow: hidden; margin-top: 12px; position: relative; }
+body.theme-light .xp-bar-bg, body.theme-ios .xp-bar-bg, body.theme-soviet .xp-bar-bg { background: rgba(0,0,0,0.08); }
+.xp-bar-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); transition: width 0.6s ease; width: 0%; box-shadow: 0 0 12px rgba(16,185,129,0.5); }
+.xp-meta { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--text-muted); margin-top: 8px; }
 .xp-meta .hi { color: var(--text); font-weight: 700; }
 
 /* ===== ЧЕК-ЛИСТ ТП ===== */
-.checklist-section {
-  margin: 0 14px 16px;
-  padding: 16px;
-  background: linear-gradient(180deg, var(--card-bg1) 0%, var(--card-bg2) 100%);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  box-shadow: 0 4px 16px var(--card-shadow);
-}
-body.theme-terminal .checklist-section {
-  border: 1px solid var(--accent);
-  border-radius: 4px;
-  box-shadow: 0 0 12px rgba(0,255,0,0.15);
-}
-body.theme-soviet .checklist-section {
-  border: 2px solid var(--accent);
-  border-radius: 4px;
-  box-shadow: 3px 3px 0 rgba(139,0,0,0.3);
-}
-.checklist-title {
-  font-size: 14px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 14px;
-  color: var(--accent);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.checklist-section { margin: 0 14px 16px; padding: 16px; background: linear-gradient(180deg, var(--card-bg1) 0%, var(--card-bg2) 100%); border: 1px solid var(--card-border); border-radius: var(--radius); box-shadow: 0 4px 16px var(--card-shadow); }
+body.theme-terminal .checklist-section { border: 1px solid var(--accent); border-radius: 4px; box-shadow: 0 0 12px rgba(0,255,0,0.15); }
+body.theme-soviet .checklist-section { border: 2px solid var(--accent); border-radius: 4px; box-shadow: 3px 3px 0 rgba(139,0,0,0.3); }
+.checklist-title { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; color: var(--accent); display: flex; align-items: center; gap: 8px; }
 body.theme-terminal .checklist-title::before { content: '$ '; }
-body.theme-soviet .checklist-title { color: var(--accent); }
-.checklist-title.critical {
-  color: var(--red);
-  font-weight: 900;
-}
+.checklist-title.critical { color: var(--red); font-weight: 900; }
 body.theme-soviet .checklist-title.critical { color: #8B0000; }
-.checklist-item {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text);
-  padding: 5px 0 5px 18px;
-  position: relative;
-}
-.checklist-item::before {
-  content: '•';
-  position: absolute;
-  left: 4px;
-  color: var(--accent);
-  font-weight: 700;
-}
+.checklist-item { font-size: 13px; line-height: 1.6; color: var(--text); padding: 5px 0 5px 18px; position: relative; }
+.checklist-item::before { content: '•'; position: absolute; left: 4px; color: var(--accent); font-weight: 700; }
 body.theme-terminal .checklist-item::before { content: '>'; }
 body.theme-soviet .checklist-item::before { content: '★'; color: var(--accent); font-size: 10px; }
-.checklist-item.critical {
-  color: var(--red);
-  font-weight: 800;
-}
+.checklist-item.critical { color: var(--red); font-weight: 800; }
 body.theme-soviet .checklist-item.critical { color: #8B0000; }
 
 /* ===== НАСТРОЙКИ ===== */
-.settings-section {
-  margin: 0 14px 14px;
-  padding: 16px;
-  background: linear-gradient(180deg, var(--card-bg1) 0%, var(--card-bg2) 100%);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-}
-body.theme-terminal .settings-section {
-  border: 1px solid var(--accent);
-  border-radius: 4px;
-}
-body.theme-soviet .settings-section {
-  border: 2px solid var(--accent);
-  border-radius: 4px;
-  box-shadow: 3px 3px 0 rgba(139,0,0,0.3);
-}
-.settings-title {
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: var(--accent);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.settings-section { margin: 0 14px 14px; padding: 16px; background: linear-gradient(180deg, var(--card-bg1) 0%, var(--card-bg2) 100%); border: 1px solid var(--card-border); border-radius: var(--radius); }
+body.theme-terminal .settings-section { border: 1px solid var(--accent); border-radius: 4px; }
+body.theme-soviet .settings-section { border: 2px solid var(--accent); border-radius: 4px; box-shadow: 3px 3px 0 rgba(139,0,0,0.3); }
+.settings-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; color: var(--accent); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
 body.theme-terminal .settings-title::before { content: '> '; }
-
-.theme-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 4px;
-}
-.theme-option {
-  padding: 14px 10px;
-  border: 2px solid var(--card-border);
-  border-radius: 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: rgba(255,255,255,0.02);
-}
+.theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+.theme-option { padding: 14px 10px; border: 2px solid var(--card-border); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: rgba(255,255,255,0.02); }
 .theme-option:active { transform: scale(0.97); }
-.theme-option.active {
-  border-color: var(--accent);
-  background: rgba(16,185,129,0.1);
-  box-shadow: 0 0 12px rgba(16,185,129,0.3);
-}
-.theme-option .preview {
-  width: 100%;
-  height: 40px;
-  border-radius: 6px;
-  margin-bottom: 8px;
-  border: 1px solid rgba(255,255,255,0.1);
-}
+.theme-option.active { border-color: var(--accent); background: rgba(16,185,129,0.1); box-shadow: 0 0 12px rgba(16,185,129,0.3); }
+.theme-option .preview { width: 100%; height: 40px; border-radius: 6px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); }
 .theme-option .preview-dark { background: linear-gradient(135deg, #060a08, #10b981); }
 .theme-option .preview-light { background: linear-gradient(135deg, #f2f2f7, #10b981); }
 .theme-option .preview-polaris { background: linear-gradient(135deg, #000, #0159BA); }
 .theme-option .preview-ios { background: linear-gradient(135deg, #fff, #007AFF); }
 .theme-option .preview-terminal { background: linear-gradient(135deg, #000, #00FF00); }
 .theme-option .preview-soviet { background: linear-gradient(135deg, #F5DEB3, #8B0000); }
-.theme-option .label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
+.theme-option .label { font-size: 11px; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; }
 
 /* ===== ЧАТ ===== */
-#screen-chat {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: var(--bg);
-  overflow: hidden;
-  z-index: 300;
-  flex-direction: column;
-}
+#screen-chat { display: none; position: fixed; inset: 0; background: var(--bg); overflow: hidden; z-index: 300; flex-direction: column; }
 #screen-chat.active { display: flex; }
-.chat-header {
-  padding: 16px 16px 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid var(--card-border);
-  background: var(--card-bg1);
-  backdrop-filter: blur(14px);
-  flex-shrink: 0;
-}
-.chat-back {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--card-border);
-  color: var(--text-muted);
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-body.theme-light .chat-back,
-body.theme-ios .chat-back,
-body.theme-soviet .chat-back {
-  background: rgba(0,0,0,0.04);
-}
-.chat-title {
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.3px;
-  color: var(--text);
-}
-.chat-status {
-  font-size: 11px;
-  color: var(--text-dim);
-  margin-top: 2px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.chat-status .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
-}
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px 14px 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+.chat-header { padding: 16px 16px 14px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--card-border); background: var(--card-bg1); backdrop-filter: blur(14px); flex-shrink: 0; }
+.chat-back { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: var(--text-muted); font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+body.theme-light .chat-back, body.theme-ios .chat-back, body.theme-soviet .chat-back { background: rgba(0,0,0,0.04); }
+.chat-title { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; color: var(--text); }
+.chat-status { font-size: 11px; color: var(--text-dim); margin-top: 2px; display: flex; align-items: center; gap: 5px; }
+.chat-status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.chat-messages { flex: 1; overflow-y: auto; padding: 16px 14px 8px; display: flex; flex-direction: column; gap: 10px; }
 .chat-messages::-webkit-scrollbar { width: 0; }
 .msg-row { display: flex; flex-direction: column; max-width: 82%; }
 .msg-row.own { align-self: flex-end; align-items: flex-end; }
 .msg-row.other { align-self: flex-start; align-items: flex-start; }
-.msg-author {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin: 0 8px 4px;
-  font-weight: 600;
-}
+.msg-author { font-size: 11px; color: var(--text-muted); margin: 0 8px 4px; font-weight: 600; }
 .msg-row.own .msg-author { color: var(--accent); }
-.msg-bubble {
-  padding: 10px 14px;
-  border-radius: 16px;
-  font-size: 14px;
-  line-height: 1.4;
-  word-wrap: break-word;
-  max-width: 100%;
-}
-.msg-row.other .msg-bubble {
-  background: var(--card-bg1);
-  border: 1px solid var(--card-border);
-  color: var(--text);
-  border-bottom-left-radius: 4px;
-}
-.msg-row.own .msg-bubble {
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  color: #0a0f0d;
-  font-weight: 500;
-  border-bottom-right-radius: 4px;
-  box-shadow: 0 4px 14px rgba(16,185,129,0.25);
-}
-body.theme-terminal .msg-row.own .msg-bubble {
-  background: var(--accent);
-  color: #000;
-}
-body.theme-soviet .msg-row.own .msg-bubble {
-  background: var(--accent);
-  color: #F5DEB3;
-}
-.msg-time {
-  font-size: 10px;
-  color: var(--text-dim);
-  margin: 4px 8px 0;
-}
-.msg-empty {
-  text-align: center;
-  color: var(--text-dim);
-  padding: 30px 12px;
-  font-size: 13px;
-}
-.chat-input-bar {
-  padding: 12px 14px;
-  background: var(--card-bg1);
-  backdrop-filter: blur(14px);
-  border-top: 1px solid var(--card-border);
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-  flex-shrink: 0;
-}
-.chat-input {
-  flex: 1;
-  padding: 12px 16px;
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: 22px;
-  color: var(--text);
-  font-size: 15px;
-  outline: none;
-  resize: none;
-  font-family: inherit;
-  max-height: 100px;
-  min-height: 44px;
-}
+.msg-bubble { padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.4; word-wrap: break-word; max-width: 100%; }
+.msg-row.other .msg-bubble { background: var(--card-bg1); border: 1px solid var(--card-border); color: var(--text); border-bottom-left-radius: 4px; }
+.msg-row.own .msg-bubble { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #0a0f0d; font-weight: 500; border-bottom-right-radius: 4px; box-shadow: 0 4px 14px rgba(16,185,129,0.25); }
+body.theme-terminal .msg-row.own .msg-bubble { background: var(--accent); color: #000; }
+body.theme-soviet .msg-row.own .msg-bubble { background: var(--accent); color: #F5DEB3; }
+.msg-time { font-size: 10px; color: var(--text-dim); margin: 4px 8px 0; }
+.msg-empty { text-align: center; color: var(--text-dim); padding: 30px 12px; font-size: 13px; }
+.chat-input-bar { padding: 12px 14px; background: var(--card-bg1); backdrop-filter: blur(14px); border-top: 1px solid var(--card-border); display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0; }
+.chat-input { flex: 1; padding: 12px 16px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 22px; color: var(--text); font-size: 15px; outline: none; resize: none; font-family: inherit; max-height: 100px; min-height: 44px; }
 .chat-input:focus { border-color: var(--accent); }
-.chat-send {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  border: none;
-  color: #0a0f0d;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(16,185,129,0.4);
-}
+.chat-send { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); border: none; color: #0a0f0d; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 14px rgba(16,185,129,0.4); }
 .chat-send:active { transform: scale(0.9); }
-.chat-name-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  padding: 20px;
-}
+.chat-name-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
 .chat-name-modal.show { display: flex; }
-.chat-name-box {
-  background: var(--card-bg1);
-  border: 1px solid var(--card-border);
-  border-radius: 18px;
-  padding: 24px;
-  max-width: 340px;
-  width: 100%;
-}
-.chat-name-box h3 {
-  font-size: 18px;
-  font-weight: 800;
-  margin-bottom: 8px;
-  color: var(--text);
-}
-.chat-name-box p {
-  font-size: 13px;
-  color: var(--text-dim);
-  margin-bottom: 16px;
-}
-.chat-name-box input {
-  width: 100%;
-  padding: 14px;
-  background: var(--input-bg);
-  border: 1px solid var(--input-border);
-  border-radius: var(--radius-small);
-  color: var(--text);
-  font-size: 16px;
-  outline: none;
-  margin-bottom: 12px;
-  font-family: inherit;
-}
+.chat-name-box { background: var(--card-bg1); border: 1px solid var(--card-border); border-radius: 18px; padding: 24px; max-width: 340px; width: 100%; }
+.chat-name-box h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
+.chat-name-box p { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; }
+.chat-name-box input { width: 100%; padding: 14px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: var(--radius-small); color: var(--text); font-size: 16px; outline: none; margin-bottom: 12px; font-family: inherit; }
 .chat-name-box input:focus { border-color: var(--accent); }
-.chat-name-box button {
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  color: #0a0f0d;
-  border: none;
-  border-radius: var(--radius-small);
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: inherit;
-}
+.chat-name-box button { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #0a0f0d; border: none; border-radius: var(--radius-small); font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
 
-/* ===== СОВЕТСКИЕ ДЕВИЗЫ ===== */
-.soviet-slogan {
-  display: none;
-  text-align: center;
-  padding: 14px;
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--accent);
-  border-top: 2px solid var(--accent);
-  border-bottom: 2px solid var(--accent);
-  margin: 16px 14px;
-  background: rgba(139,0,0,0.05);
-}
+/* ===== СОВЕТСКИЙ ДЕВИЗ ===== */
+.soviet-slogan { display: none; text-align: center; padding: 14px; font-size: 12px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent); margin: 16px 14px; background: rgba(139,0,0,0.05); }
 body.theme-soviet .soviet-slogan { display: block; }
 </style>
 </head>
 <body>
-<div id="swipeContainer">
+  <div id="swipeContainer">
 
-  <!-- ========== ГЛАВНАЯ ========== -->
+  <!-- ГЛАВНАЯ -->
   <div class="swipe-screen" id="screen-home">
     <div class="header">
       <div>
@@ -1527,13 +627,13 @@ body.theme-soviet .soviet-slogan { display: block; }
       </div>
     </div>
 
-    <!-- План -->
     <div class="card">
       <div class="card-head">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
         План на месяц
         <button class="chat-inline" id="chatInlineBtn" title="Чат">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
+          <span class="chat-label">Чат</span>
           <span class="chat-badge" id="chatBadge">0</span>
         </button>
       </div>
@@ -1546,7 +646,6 @@ body.theme-soviet .soviet-slogan { display: block; }
       <div class="sub-text" id="minThreshold">Минимум 80% — не выполнен</div>
     </div>
 
-    <!-- XP -->
     <div class="card xp-card">
       <div class="xp-header">
         <div class="xp-badge c1" id="xpBadge">🐣</div>
@@ -1562,32 +661,21 @@ body.theme-soviet .soviet-slogan { display: block; }
       </div>
     </div>
 
-    <!-- Продано/Отчисления -->
     <div class="grid-2">
       <div class="card">
-        <div class="card-head">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-          Продано
-        </div>
+        <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Продано</div>
         <div class="big-number" style="font-size:22px" id="todaySales">0 ₽</div>
         <div class="sub-text" id="todayCount">0 продаж</div>
       </div>
       <div class="card">
-        <div class="card-head">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-          Отчисления
-        </div>
+        <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Отчисления</div>
         <div class="big-number blue" style="font-size:22px" id="todayCommission">0 ₽</div>
         <div class="sub-text">сегодня</div>
       </div>
     </div>
 
-    <!-- Заработано -->
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
-        Заработано
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>Заработано</div>
       <div class="grid-2 inside">
         <div>
           <div class="sub-text" style="margin-top:0">Сегодня</div>
@@ -1602,66 +690,43 @@ body.theme-soviet .soviet-slogan { display: block; }
       </div>
     </div>
 
-    <!-- Прогноз -->
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Прогноз заработка
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Прогноз заработка</div>
       <div class="big-number" style="font-size:26px" id="forecastEarned">0 ₽</div>
       <div class="sub-text">если темп сохранится</div>
       <div class="sub-text" id="forecastCompare" style="margin-top:10px;">—</div>
     </div>
 
-    <!-- Возвраты -->
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-        Возвраты за месяц
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Возвраты за месяц</div>
       <div class="big-number red" style="font-size:22px" id="monthCommission_AD">−0 ₽</div>
       <div class="sub-text" id="monthADCount">0 записей</div>
+      <div class="sub-text" id="monthADComm" style="margin-top:4px;">снято отчислений: −0 ₽</div>
     </div>
 
-    <!-- Отчисления за месяц -->
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg>
-        Отчисления за месяц
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg>Отчисления за месяц</div>
       <div class="big-number" style="font-size:25px" id="monthCommission">0 ₽</div>
-      <div class="sub-text">Всего процентов за текущий месяц</div>
+      <div class="sub-text">Продажи минус возвраты</div>
     </div>
 
-    <!-- Рекорд -->
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-        Рекорд месяца
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Рекорд месяца</div>
       <div class="grid-2 inside">
         <div><div class="sub-text" style="margin-top:0">По сумме</div><div class="big-number gold" style="font-size:20px" id="recordSum">0 ₽</div><div class="sub-text" id="recordDate">—</div></div>
         <div><div class="sub-text" style="margin-top:0">По отчислениям</div><div class="big-number" style="font-size:20px;color:#34d399" id="recordComm">0 ₽</div><div class="sub-text" id="recordCommDate">—</div></div>
       </div>
     </div>
 
-    <!-- Осталось -->
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        Осталось до плана
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Осталось до плана</div>
       <div class="big-number gold" style="font-size:22px" id="remaining">0 ₽</div>
       <div class="sub-text"><span id="remainingPercent">100.0%</span> от плана</div>
       <div class="sub-text" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);">Нужно продавать в день: <span class="accent" id="dailyNeeded">0 ₽</span></div>
     </div>
 
-    <!-- Прогноз плана -->
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Прогноз плана
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Прогноз плана</div>
       <div class="big-number" style="font-size:22px;color:#fbbf24" id="forecastPercent">0%</div>
       <div class="sub-text" id="forecastText">при текущем темпе</div>
     </div>
@@ -1669,16 +734,14 @@ body.theme-soviet .soviet-slogan { display: block; }
     <div class="soviet-slogan">ВЫПОЛНИМ ПЛАН — УКРЕПИМ ЭКОНОМИКУ!</div>
   </div>
 
-  <!-- ========== НОВАЯ ПРОДАЖА ========== -->
+  <!-- НОВАЯ ПРОДАЖА -->
   <div class="swipe-screen" id="screen-add">
     <div class="header"><h1>Новая продажа</h1></div>
     <div class="card">
       <div class="form-group"><label>Поиск товара (артикул или название)</label>
         <div class="search-row">
           <input type="text" id="searchProduct" placeholder="Начни вводить...">
-          <button class="btn-cam" id="btnScanQR" type="button">
-            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg>
-          </button>
+          <button class="btn-cam" id="btnScanQR" type="button"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg></button>
         </div>
         <div id="searchResults"></div>
       </div>
@@ -1694,114 +757,80 @@ body.theme-soviet .soviet-slogan { display: block; }
     </div>
   </div>
 
-  <!-- ========== ИСТОРИЯ ========== -->
+  <!-- ИСТОРИЯ -->
   <div class="swipe-screen" id="screen-history">
     <div class="header"><h1 id="histTitle">История продаж</h1></div>
     <div class="card">
-      <div class="form-group" style="margin-bottom:0;">
-        <label>Выбрать дату</label>
+      <div class="form-group" style="margin-bottom:0;"><label>Выбрать дату</label>
         <input type="date" id="historyDatePicker" max="" style="display:none;">
         <div class="date-display" id="historyDateDisplay">Сегодня</div>
       </div>
     </div>
     <div class="card"><div id="historyList"><div class="empty">Нет продаж за этот день</div></div></div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        Итог за день
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Итог за день</div>
       <div class="sub-text">Сумма: <span class="accent" id="histTotal">0 ₽</span></div>
       <div class="sub-text">Отчисления: <span class="accent" id="histCommission">0 ₽</span></div>
     </div>
   </div>
 
-  <!-- ========== ИТОГИ ========== -->
+  <!-- ИТОГИ -->
   <div class="swipe-screen" id="screen-totals">
     <div class="header"><h1 id="totalsTitle">Итоги</h1></div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-        План на месяц
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>План на месяц</div>
       <div class="big-number" id="totalsPlan">0 ₽</div>
       <div class="sub-text" id="totalsPercent">0.0% выполнено</div>
-      <div class="progress-bg">
-        <div class="progress-fill" id="totalsProgress"></div>
-        <div class="progress-mark" style="left: 80%;"></div>
-      </div>
+      <div class="progress-bg"><div class="progress-fill" id="totalsProgress"></div><div class="progress-mark" style="left: 80%;"></div></div>
     </div>
     <div class="grid-2">
       <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Продано</div><div class="big-number" style="font-size:22px" id="totalsSum">0 ₽</div><div class="sub-text" id="totalsCount">0 продаж</div></div>
       <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Отчисления</div><div class="big-number blue" style="font-size:22px" id="totalsComm">0 ₽</div></div>
     </div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
-        Заработок за месяц
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>Заработок за месяц</div>
       <div class="big-number gold" style="font-size:25px" id="totalsEarned">0 ₽</div>
       <div class="sub-text">Оклад: <span class="accent" id="totalsOkladText">0 ₽</span></div>
       <div class="sub-text">Проценты: <span class="accent" id="totalsCommText">0 ₽</span></div>
     </div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-        Возвраты (АД)
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Возвраты (АД)</div>
       <div class="big-number red" style="font-size:22px" id="totalsAD">0 ₽</div>
       <div class="sub-text" id="totalsADCount">0 записей</div>
     </div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        Чистый оборот
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Чистый оборот</div>
       <div class="big-number" style="font-size:25px" id="totalsNet">0 ₽</div>
       <div class="sub-text">Продажи минус возвраты</div>
     </div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-        Продажи по процентам
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Продажи по процентам</div>
       <div id="percentBreakdown"><div class="empty">Нет продаж за этот месяц</div></div>
     </div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-        Сравнение с прошлым месяцем
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Сравнение с прошлым месяцем</div>
       <div class="big-number" style="font-size:22px" id="totalsCompare">0%</div>
       <div class="sub-text" id="totalsCompareDetail">—</div>
     </div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        Средний чек
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Средний чек</div>
       <div class="big-number gold" style="font-size:22px" id="totalsAvgSum">0 ₽</div>
     </div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        Фокусные товары
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Фокусные товары</div>
       <div class="sub-text">Продано: <span class="accent" id="totalsFocusSum">0 ₽</span></div>
       <div class="sub-text">Отчисления: <span class="accent" id="totalsFocusComm">0 ₽</span></div>
       <div class="sub-text">Количество: <span class="accent" id="totalsFocusCount">0 шт</span></div>
     </div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Регулярные товары
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Регулярные товары</div>
       <div class="sub-text">Продано: <span class="accent" id="totalsRegSum">0 ₽</span></div>
       <div class="sub-text">Отчисления: <span class="accent" id="totalsRegComm">0 ₽</span></div>
       <div class="sub-text">Количество: <span class="accent" id="totalsRegCount">0 шт</span></div>
     </div>
   </div>
 
-  <!-- ========== ЧЕК-ЛИСТ ТП ========== -->
+  <!-- ЧЕК-ЛИСТ ТП -->
   <div class="swipe-screen" id="screen-checklist">
     <div class="header"><h1>Чек-лист ТП</h1></div>
 
@@ -1851,16 +880,14 @@ body.theme-soviet .soviet-slogan { display: block; }
     </div>
   </div>
 
-  <!-- ========== АД ========== -->
+  <!-- АД -->
   <div class="swipe-screen" id="screen-ad">
     <div class="header"><h1>Акт дефектовки (АД)</h1></div>
     <div class="card">
       <div class="form-group"><label>Поиск товара (артикул или название)</label>
         <div class="search-row">
           <input type="text" id="adSearchProduct" placeholder="Начни вводить...">
-          <button class="btn-cam" id="adScanQR" type="button">
-            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg>
-          </button>
+          <button class="btn-cam" id="adScanQR" type="button"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg></button>
         </div>
         <div id="adSearchResults"></div>
       </div>
@@ -1874,10 +901,7 @@ body.theme-soviet .soviet-slogan { display: block; }
       <button class="btn danger" id="btnAddAD">Сохранить возврат</button>
     </div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-        Возвраты за текущий месяц
-      </div>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Возвраты за текущий месяц</div>
       <div class="big-number red" style="font-size:22px" id="adMonthSum">0 ₽</div>
       <div class="sub-text" id="adMonthCount">0 записей</div>
     </div>
@@ -1885,7 +909,6 @@ body.theme-soviet .soviet-slogan { display: block; }
 
 </div>
 
-<!-- Точки -->
 <div id="dots">
   <span data-screen="home" class="active"></span>
   <span data-screen="add"></span>
@@ -1895,17 +918,13 @@ body.theme-soviet .soviet-slogan { display: block; }
   <span data-screen="ad"></span>
 </div>
 
-<!-- Кнопка ⚙️ Настройки -->
 <button id="aboutBtn">⚙️</button>
 
-<!-- ========== МОДАЛКА: РЕДАКТИРОВАНИЕ ========== -->
+<!-- РЕДАКТИРОВАНИЕ -->
 <div id="screen-edit" class="modal-screen">
   <div class="header"><h1>Редактировать</h1></div>
   <div class="card">
-    <div class="form-group"><label>Дата</label>
-      <input type="date" id="editDate" max="" style="display:none;">
-      <div class="date-display" id="editDateDisplay">Сегодня</div>
-    </div>
+    <div class="form-group"><label>Дата</label><input type="date" id="editDate" max="" style="display:none;"><div class="date-display" id="editDateDisplay">Сегодня</div></div>
     <div class="form-group"><label>Товар</label><input type="text" id="editName"></div>
     <div class="form-group"><label>Количество</label><input type="number" id="editQty" min="1"></div>
     <div class="form-group"><label>Цена за штуку (₽)</label><input type="number" id="editSum" min="0"></div>
@@ -1915,11 +934,10 @@ body.theme-soviet .soviet-slogan { display: block; }
   </div>
 </div>
 
-<!-- ========== МОДАЛКА: НАСТРОЙКИ ========== -->
+<!-- НАСТРОЙКИ -->
 <div id="screen-settings" class="modal-screen">
   <div class="header"><h1>⚙️ Настройки</h1></div>
 
-  <!-- Мой план -->
   <div class="settings-section">
     <div class="settings-title">📊 Мой план</div>
     <div class="form-group"><label>План на текущий месяц (₽)</label><input type="number" id="inputPlan" placeholder="0" min="0"></div>
@@ -1927,58 +945,28 @@ body.theme-soviet .soviet-slogan { display: block; }
     <div class="form-group" style="margin-top:12px;"><label>Оклад в месяц (₽)</label><input type="number" id="inputOklad" placeholder="35000" min="0"></div>
     <button class="btn" id="btnOklad">Сохранить оклад</button>
     <div class="sub-text" style="margin-top:12px;">Прогресс: <span class="accent" id="planPercent">0.0%</span> · <span class="accent" id="planProgress">0 ₽</span></div>
-    <div class="progress-bg" style="margin-top:8px;">
-      <div class="progress-fill" id="planProgressBar"></div>
-      <div class="progress-mark" style="left: 80%;"></div>
-    </div>
+    <div class="progress-bg" style="margin-top:8px;"><div class="progress-fill" id="planProgressBar"></div><div class="progress-mark" style="left: 80%;"></div></div>
   </div>
 
-  <!-- Тема -->
   <div class="settings-section">
     <div class="settings-title">🎨 Тема оформления</div>
     <div class="theme-grid">
-      <div class="theme-option" data-theme="default">
-        <div class="preview preview-dark"></div>
-        <div class="label">🌿 Тёмная</div>
-      </div>
-      <div class="theme-option" data-theme="light">
-        <div class="preview preview-light"></div>
-        <div class="label">☀️ Светлая</div>
-      </div>
-      <div class="theme-option" data-theme="polaris">
-        <div class="preview preview-polaris"></div>
-        <div class="label">🔵 Polaris</div>
-      </div>
-      <div class="theme-option" data-theme="ios">
-        <div class="preview preview-ios"></div>
-        <div class="label">🍎 iOS</div>
-      </div>
-      <div class="theme-option" data-theme="terminal">
-        <div class="preview preview-terminal"></div>
-        <div class="label">🖥️ Терминал</div>
-      </div>
-      <div class="theme-option" data-theme="soviet">
-        <div class="preview preview-soviet"></div>
-        <div class="label">🚩 Советский</div>
-      </div>
+      <div class="theme-option" data-theme="default"><div class="preview preview-dark"></div><div class="label">🌿 Тёмная</div></div>
+      <div class="theme-option" data-theme="light"><div class="preview preview-light"></div><div class="label">☀️ Светлая</div></div>
+      <div class="theme-option" data-theme="polaris"><div class="preview preview-polaris"></div><div class="label">🔵 Polaris</div></div>
+      <div class="theme-option" data-theme="ios"><div class="preview preview-ios"></div><div class="label">🍎 iOS</div></div>
+      <div class="theme-option" data-theme="terminal"><div class="preview preview-terminal"></div><div class="label">🖥️ Терминал</div></div>
+      <div class="theme-option" data-theme="soviet"><div class="preview preview-soviet"></div><div class="label">🚩 Советский</div></div>
     </div>
   </div>
 
-  <!-- Данные -->
   <div class="settings-section">
     <div class="settings-title">💾 Данные</div>
     <button class="btn" id="btnBackup">Данные (бэкап)</button>
-    <button class="btn" id="btnSaveFile" style="margin-top:12px;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Скачать бэкап в файл
-    </button>
-    <button class="btn secondary" id="btnShareBackup" style="margin-top:12px;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-      Отправить бэкап (Telegram)
-    </button>
+    <button class="btn" id="btnSaveFile" style="margin-top:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Скачать бэкап в файл</button>
+    <button class="btn secondary" id="btnShareBackup" style="margin-top:12px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Отправить бэкап (Telegram)</button>
   </div>
 
-  <!-- Фокус-лист -->
   <div class="settings-section">
     <div class="settings-title">📋 Фокус-лист</div>
     <button class="btn secondary" id="btnDedup">Удалить дубли товаров</button>
@@ -1986,10 +974,9 @@ body.theme-soviet .soviet-slogan { display: block; }
     <button class="btn" id="btnSyncFocus" style="margin-top:12px;">Обновить фокус-лист из сети</button>
   </div>
 
-  <!-- О приложении -->
   <div class="settings-section">
     <div class="settings-title">ℹ️ О приложении</div>
-    <div class="about-row"><span class="label">Версия</span><span class="value">2.7 · Темы + Чек-лист</span></div>
+    <div class="about-row"><span class="label">Версия</span><span class="value">2.8 · АД + темы</span></div>
     <div class="about-row"><span class="label">Разработчик</span><span class="value">Максим</span></div>
     <div class="about-row"><span class="label">Почта</span><span class="value">regionalbarnaul@yandex.ru</span></div>
   </div>
@@ -1997,7 +984,7 @@ body.theme-soviet .soviet-slogan { display: block; }
   <button class="btn secondary" id="btnSettingsClose" style="margin-top:8px;">Закрыть</button>
 </div>
 
-<!-- ========== МОДАЛКА: БЭКАП ========== -->
+<!-- БЭКАП -->
 <div id="screen-backup" class="modal-screen">
   <div class="header"><h1>Данные</h1></div>
   <div class="card">
@@ -2019,12 +1006,11 @@ body.theme-soviet .soviet-slogan { display: block; }
   <button class="btn secondary" id="btnBackupClose">Закрыть</button>
 </div>
 
-<!-- ========== МОДАЛКА: ИМПОРТ ========== -->
+<!-- ИМПОРТ -->
 <div id="screen-import" class="modal-screen">
   <div class="header"><h1>Импорт товаров</h1></div>
   <div class="card">
-    <div class="form-group">
-      <label>Вставьте HTML-код или текст таблицы</label>
+    <div class="form-group"><label>Вставьте HTML-код или текст таблицы</label>
       <textarea id="importText" style="width:100%;height:300px;padding:12px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:12px;color:var(--text);font-size:13px;font-family:monospace;outline:none;resize:none;"></textarea>
     </div>
     <button class="btn" id="btnImport">Сохранить</button>
@@ -2032,7 +1018,7 @@ body.theme-soviet .soviet-slogan { display: block; }
   </div>
 </div>
 
-<!-- ========== QR СКАНЕР ========== -->
+<!-- QR СКАНЕР -->
 <div id="liveQRModal">
   <div class="qr-cam-wrap">
     <video id="liveVideo" playsinline autoplay muted></video>
@@ -2053,15 +1039,11 @@ body.theme-soviet .soviet-slogan { display: block; }
   </div>
 </div>
 
-<!-- ========== ГАЛОЧКА ========== -->
 <div id="successOverlay">
-  <svg class="success-checkmark" viewBox="0 0 120 120">
-    <circle class="check-circle" cx="60" cy="60" r="50"/>
-    <path class="check-mark" d="M35 62 L55 82 L88 42"/>
-  </svg>
+  <svg class="success-checkmark" viewBox="0 0 120 120"><circle class="check-circle" cx="60" cy="60" r="50"/><path class="check-mark" d="M35 62 L55 82 L88 42"/></svg>
 </div>
 
-<!-- ========== ЧАТ ========== -->
+<!-- ЧАТ -->
 <div id="screen-chat">
   <div class="chat-header">
     <div class="chat-back" id="chatBack">←</div>
@@ -2070,14 +1052,10 @@ body.theme-soviet .soviet-slogan { display: block; }
       <div class="chat-status"><span class="dot"></span><span id="chatOnline">Подключение...</span></div>
     </div>
   </div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="msg-empty">Загрузка...</div>
-  </div>
+  <div class="chat-messages" id="chatMessages"><div class="msg-empty">Загрузка...</div></div>
   <div class="chat-input-bar">
     <textarea class="chat-input" id="chatInput" placeholder="Сообщение..." rows="1"></textarea>
-    <button class="chat-send" id="chatSend">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-    </button>
+    <button class="chat-send" id="chatSend"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
   </div>
 </div>
 
@@ -2090,9 +1068,6 @@ body.theme-soviet .soviet-slogan { display: block; }
   </div>
 </div>
 <script>
-/* ============================================ */
-/* ===== СОСТОЯНИЕ ===== */
-/* ============================================ */
 var sales = [];
 var plans = {};
 var products = [];
@@ -2114,9 +1089,6 @@ try {
   if (_xp) xpData = _xp;
 } catch(e) { sales = []; plans = {}; products = []; }
 
-/* ============================================ */
-/* ===== УРОВНИ ===== */
-/* ============================================ */
 var LEVELS = [
   { n: 1,  name: 'Первый день',              icon: '🐣', xp: 0 },
   { n: 2,  name: 'Стажёр',                   icon: '🎒', xp: 300 },
@@ -2150,9 +1122,6 @@ function getColorClass(lvlNum) {
   return 'c1';
 }
 
-/* ============================================ */
-/* ===== УТИЛИТЫ ===== */
-/* ============================================ */
 function fmt(n) { return Math.round(n).toLocaleString('ru-RU') + ' ₽'; }
 function pad(n) { return n < 10 ? '0' + n : '' + n; }
 function dateStr(d) { return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
@@ -2172,14 +1141,10 @@ function extractArticleFromName(name) {
   return m ? m[1] : '';
 }
 
-/* ============================================ */
 /* ===== ТЕМЫ ===== */
-/* ============================================ */
 function applyTheme(theme) {
   document.body.className = '';
-  if (theme && theme !== 'default') {
-    document.body.classList.add('theme-' + theme);
-  }
+  if (theme && theme !== 'default') document.body.classList.add('theme-' + theme);
   document.querySelectorAll('.theme-option').forEach(function(opt) {
     opt.classList.toggle('active', opt.dataset.theme === theme || (theme === 'default' && opt.dataset.theme === 'default'));
   });
@@ -2196,9 +1161,7 @@ function loadTheme() {
   applyTheme(theme);
 }
 
-/* ============================================ */
 /* ===== ТОСТ ===== */
-/* ============================================ */
 function showToast(message, type) {
   type = type || 'success';
   var old = document.getElementById('appToast');
@@ -2216,9 +1179,7 @@ function showToast(message, type) {
   }, 2400);
 }
 
-/* ============================================ */
 /* ===== ЗВУКИ ===== */
-/* ============================================ */
 function playBeep() {
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2268,9 +1229,7 @@ function vibrateLight() { if (navigator.vibrate) navigator.vibrate(30); }
 function vibrateSuccess() { if (navigator.vibrate) navigator.vibrate([40, 30, 40]); }
 function vibrateRecord() { if (navigator.vibrate) navigator.vibrate([80, 40, 80, 40, 120]); }
 
-/* ============================================ */
 /* ===== XP ===== */
-/* ============================================ */
 function calcXpForSale(s) {
   if (s.isAD) return 0;
   if (s.percent <= 1.5) return 0;
@@ -2294,13 +1253,10 @@ function updateLevels() {
   var newLevelObj = getLevelByXp(newXp);
   xpData.level = newLevelObj.n;
   save();
-  if (newLevelObj.n > oldLevel) {
-    celebrateLevelUp(newLevelObj);
-  }
+  if (newLevelObj.n > oldLevel) celebrateLevelUp(newLevelObj);
   return newLevelObj;
 }
 function celebrateLevelUp(lvl) {
-  var cls = getColorClass(lvl.n);
   playFanfare();
   if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 150]);
   var flash = document.getElementById('celebrationFlash');
@@ -2315,7 +1271,6 @@ function celebrateLevelUp(lvl) {
   setTimeout(function() { flash.classList.remove('show'); }, 2200);
   setTimeout(function() { showToast('🎉 Новый уровень: ' + lvl.name, 'record'); }, 700);
 }
-
 function renderXpCard() {
   var lvl = getLevelByXp(xpData.xp);
   var next = null;
@@ -2323,27 +1278,20 @@ function renderXpCard() {
     if (LEVELS[i].xp > xpData.xp) { next = LEVELS[i]; break; }
   }
   var cls = getColorClass(lvl.n);
-
   var hdr = document.getElementById('hdrLvlIcon');
-  if (hdr) {
-    hdr.className = 'lvl-icon ' + cls;
-    hdr.textContent = lvl.icon;
-  }
-
+  if (hdr) { hdr.className = 'lvl-icon ' + cls; hdr.textContent = lvl.icon; }
   document.getElementById('xpBadge').className = 'xp-badge ' + cls;
   document.getElementById('xpBadge').textContent = lvl.icon;
   document.getElementById('xpLevelNum').textContent = 'УРОВЕНЬ ' + lvl.n;
   document.getElementById('xpLevelName').textContent = lvl.name;
   document.getElementById('xpCurrent').textContent = Math.round(xpData.xp).toLocaleString('ru-RU');
-
   if (next) {
     document.getElementById('xpNext').textContent = next.xp.toLocaleString('ru-RU');
     document.getElementById('xpToNext').textContent = 'до «' + next.name + '»: ' + Math.round(next.xp - xpData.xp).toLocaleString('ru-RU') + ' XP';
     var need = next.xp - lvl.xp;
     var have = xpData.xp - lvl.xp;
     var pct = need > 0 ? (have / need * 100) : 100;
-    var bar = document.getElementById('xpBar');
-    bar.style.width = Math.min(100, pct) + '%';
+    document.getElementById('xpBar').style.width = Math.min(100, pct) + '%';
   } else {
     document.getElementById('xpNext').textContent = lvl.xp.toLocaleString('ru-RU');
     document.getElementById('xpToNext').textContent = 'максимум 👑';
@@ -2351,9 +1299,6 @@ function renderXpCard() {
   }
 }
 
-/* ============================================ */
-/* ===== RIPPLE ===== */
-/* ============================================ */
 function attachRipple() {
   document.querySelectorAll('.btn').forEach(function(btn) {
     if (btn.dataset.ripple) return;
@@ -2418,11 +1363,8 @@ function migrateRegularProducts() {
   if (changed) save();
 }
 
-/* ============================================ */
-/* ===== БЭКАП ===== */
-/* ============================================ */
 function getBackupJSON() {
-  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.7' }, null, 2);
+  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.8' }, null, 2);
 }
 function saveBackupToFile() {
   try {
@@ -2527,9 +1469,21 @@ function recalcConditional(productName, dateStrVal) {
   ws.forEach(function(s) { s.percent = np; s.commission = s.sum * np / 100; });
 }
 
-/* ============================================ */
-/* ===== ПРОДАЖИ ===== */
-/* ============================================ */
+/* Найти процент товара для АД (из фокус-листа) */
+function findPercentForAD(name) {
+  if (!name) return 1.5;
+  var key = normalizeName(name);
+  var prod = products.find(function(p) { return normalizeName(p.name) === key; });
+  if (prod) return prod.percent;
+  // ищем по артикулу внутри имени
+  var art = extractArticleFromName(name);
+  if (art) {
+    prod = products.find(function(p) { return p.art === art; });
+    if (prod) return prod.percent;
+  }
+  return 1.5;
+}
+
 function addSale() {
   var date = document.getElementById('inputDate').value || today();
   if (date > today()) { showToast('Дата не может быть в будущем', 'warn'); return; }
@@ -2581,7 +1535,10 @@ function addAD() {
   if (!name) { showToast('Заполни поле «Товар»', 'warn'); return; }
   if (price <= 0) { showToast('Укажи сумму возврата', 'warn'); return; }
   if (qty < 1) { showToast('Количество не меньше 1', 'warn'); return; }
-  sales.push({ id: Date.now(), date: date, name: name, qty: qty, sum: -(price * qty), percent: 0, commission: 0, isAD: true });
+  var sum = price * qty;
+  var percent = findPercentForAD(name);
+  var commission = -(sum * percent / 100);
+  sales.push({ id: Date.now(), date: date, name: name, qty: qty, sum: -sum, percent: percent, commission: commission, isAD: true });
   save();
   document.getElementById('adName').value = '';
   document.getElementById('adSum').value = '';
@@ -2622,9 +1579,9 @@ function updateSale() {
   var percent = parseFloat(document.getElementById('editPercent').value) || 1.5;
   if (!name || price <= 0) { showToast('Заполни «Товар» и «Цену»', 'warn'); return; }
   var sum = price * qty;
-  if (s.isAD) { sum = -sum; percent = 0; }
+  if (s.isAD) { sum = -sum; }
   s.date = date; s.name = name; s.qty = qty; s.sum = sum; s.percent = percent;
-  s.commission = s.isAD ? 0 : sum * percent / 100;
+  s.commission = s.isAD ? -(Math.abs(sum) * percent / 100) : sum * percent / 100;
   var prod = products.find(function(p) { return normalizeName(p.name) === normalizeName(name); });
   if (prod && prod.type === 'conditional') recalcConditional(name, date);
   save();
@@ -2656,7 +1613,6 @@ function saveOklad() {
   vibrateLight();
   showToast('Оклад сохранён', 'success');
 }
-
 function setProgressClass(el, pct) {
   if (!el) return;
   el.className = 'progress-fill';
@@ -2665,24 +1621,22 @@ function setProgressClass(el, pct) {
   else if (pct >= 80) el.classList.add('orange');
 }
 
-/* ============================================ */
-/* ===== РЕНДЕР ===== */
-/* ============================================ */
 function render() {
   var t = today(), m = currentMonth();
   var tSales = sales.filter(function(s) { return s.date === t && !s.isAD; });
   var mSalesAll = sales.filter(function(s) { return s.date.indexOf(m) === 0; });
   var mSales = mSalesAll.filter(function(s) { return !s.isAD; });
   var mAD = mSalesAll.filter(function(s) { return s.isAD; });
-  var tSum = 0, tComm = 0, mSum = 0, mComm = 0, mADSum = 0;
+  var tSum = 0, tComm = 0, mSum = 0, mComm = 0, mADSum = 0, mADComm = 0;
   tSales.forEach(function(s) { tSum += s.sum; tComm += s.commission; });
   mSales.forEach(function(s) { mSum += s.sum; mComm += s.commission; });
-  mAD.forEach(function(s) { mADSum += Math.abs(s.sum); });
+  mAD.forEach(function(s) { mADSum += Math.abs(s.sum); mADComm += s.commission; });
   var netTurnover = mSum - mADSum;
+  var netCommission = mComm + mADComm; // mADComm отрицательный
   var totalDaysInMonth = daysInMonth(new Date());
   var okladPerDay = totalDaysInMonth > 0 ? salary.oklad / totalDaysInMonth : 0;
   var earnedToday = okladPerDay + tComm;
-  var earnedMonth = salary.oklad + mComm;
+  var earnedMonth = salary.oklad + netCommission;
   var mPlan = getPlan(m);
   var pct = mPlan > 0 ? (netTurnover / mPlan * 100) : 0;
   var rem = Math.max(0, mPlan - netTurnover);
@@ -2695,7 +1649,11 @@ function render() {
 
   var pm = monthStr(prevMonth(new Date()));
   var pmComm = 0;
-  sales.forEach(function(s) { if (s.date.indexOf(pm) === 0 && !s.isAD) pmComm += s.commission; });
+  sales.forEach(function(s) {
+    if (s.date.indexOf(pm) !== 0) return;
+    if (!s.isAD) pmComm += s.commission;
+    else pmComm += s.commission;
+  });
   var pmEarn = salary.oklad + pmComm;
   var fcEl = document.getElementById('forecastEarned');
   if (fcEl) fcEl.textContent = fmt(forecastEarn);
@@ -2712,10 +1670,7 @@ function render() {
   }
 
   var bar = document.getElementById('monthProgress');
-  if (bar) {
-    bar.style.width = Math.min(100, pct) + '%';
-    setProgressClass(bar, pct);
-  }
+  if (bar) { bar.style.width = Math.min(100, pct) + '%'; setProgressClass(bar, pct); }
   var minEl = document.getElementById('minThreshold');
   if (minEl) {
     if (pct >= 100) minEl.innerHTML = '✅ <span class="accent">100% — план выполнен</span>';
@@ -2725,7 +1680,7 @@ function render() {
   if (!animatingIds['monthPlan']) document.getElementById('monthPlan').textContent = fmt(mPlan);
   if (!animatingIds['todaySales']) document.getElementById('todaySales').textContent = fmt(tSum);
   if (!animatingIds['todayCommission']) document.getElementById('todayCommission').textContent = fmt(tComm);
-  if (!animatingIds['monthCommission']) document.getElementById('monthCommission').textContent = fmt(mComm);
+  if (!animatingIds['monthCommission']) document.getElementById('monthCommission').textContent = fmt(netCommission);
   if (!animatingIds['remaining']) document.getElementById('remaining').textContent = fmt(rem);
   document.getElementById('monthPercent').textContent = pct.toFixed(1) + '%';
   document.getElementById('daysLeft').textContent = dl;
@@ -2736,12 +1691,14 @@ function render() {
   if (!animatingIds['todayEarned']) document.getElementById('todayEarned').textContent = fmt(earnedToday);
   if (!animatingIds['monthEarned']) document.getElementById('monthEarned').textContent = fmt(earnedMonth);
   document.getElementById('todayEarnedBreak').textContent = 'оклад ' + fmt(okladPerDay) + ' + % ' + fmt(tComm);
-  document.getElementById('monthEarnedBreak').textContent = 'оклад ' + fmt(salary.oklad) + ' + % ' + fmt(mComm);
+  document.getElementById('monthEarnedBreak').textContent = 'оклад ' + fmt(salary.oklad) + ' + % ' + fmt(netCommission);
 
   var adEl = document.getElementById('monthCommission_AD');
   if (adEl) adEl.textContent = '−' + fmt(mADSum);
   var adCntEl = document.getElementById('monthADCount');
   if (adCntEl) adCntEl.textContent = mAD.length + ' записей';
+  var adCommEl = document.getElementById('monthADComm');
+  if (adCommEl) adCommEl.textContent = 'снято отчислений: −' + fmt(Math.abs(mADComm));
 
   var totalDays = daysInMonth(new Date());
   var forecast = dom > 0 ? (netTurnover / dom * totalDays) : 0;
@@ -2799,7 +1756,7 @@ function render() {
     hSales.forEach(function(s) {
       var cls = s.isAD ? 'history-item ad' : 'history-item';
       var badge = s.isAD ? '<span class="badge-ad">АД</span>' : '';
-      var metaTxt = s.isAD ? 'Возврат' : (s.percent + '% = ' + fmt(s.commission));
+      var metaTxt = s.isAD ? ('Возврат · отчисл. ' + fmt(s.commission)) : (s.percent + '% = ' + fmt(s.commission));
       html += '<div class="' + cls + '"><div class="info"><div class="name">' + s.name + ' × ' + s.qty + badge + '</div><div class="meta">' + metaTxt + '</div></div><div class="sum">' + fmt(s.sum) + '</div><button class="edit" data-edit="' + s.id + '">✎</button><button class="delete" data-del="' + s.id + '">✕</button></div>';
     });
     list.innerHTML = html;
@@ -2834,15 +1791,15 @@ function render() {
   document.getElementById('totalsSum').textContent = fmt(tS);
   document.getElementById('totalsCount').textContent = totSales.length + ' продаж';
   document.getElementById('totalsComm').textContent = fmt(tC);
-  document.getElementById('totalsEarned').textContent = fmt(salary.oklad + tC);
+  var totADComm = 0;
+  totAD.forEach(function(s) { totADComm += s.commission; });
+  document.getElementById('totalsEarned').textContent = fmt(salary.oklad + tC + totADComm);
   document.getElementById('totalsOkladText').textContent = fmt(salary.oklad);
-  document.getElementById('totalsCommText').textContent = fmt(tC);
+  document.getElementById('totalsCommText').textContent = fmt(tC + totADComm);
   document.getElementById('totalsAD').textContent = '−' + fmt(adS);
   document.getElementById('totalsADCount').textContent = totAD.length + ' записей';
   document.getElementById('totalsNet').textContent = fmt(netT);
-
   renderPercentBreakdown(totSales);
-
   var pm2 = monthStr(prevMonth(totalsMonth));
   var pmSum = 0, pmADSum = 0;
   sales.forEach(function(s) {
@@ -2870,7 +1827,6 @@ function render() {
   document.getElementById('totalsRegSum').textContent = fmt(rS);
   document.getElementById('totalsRegComm').textContent = fmt(rC);
   document.getElementById('totalsRegCount').textContent = rQ + ' шт';
-
   document.getElementById('adMonthSum').textContent = '−' + fmt(mADSum);
   document.getElementById('adMonthCount').textContent = mAD.length + ' записей';
 
@@ -2881,7 +1837,7 @@ function render() {
         animateNumber(document.getElementById('monthPlan'), mPlan);
         animateNumber(document.getElementById('todaySales'), tSum);
         animateNumber(document.getElementById('todayCommission'), tComm);
-        animateNumber(document.getElementById('monthCommission'), mComm);
+        animateNumber(document.getElementById('monthCommission'), netCommission);
         animateNumber(document.getElementById('remaining'), rem);
         animateNumber(document.getElementById('todayEarned'), earnedToday);
         animateNumber(document.getElementById('monthEarned'), earnedMonth);
@@ -2922,9 +1878,6 @@ function renderPercentBreakdown(monthSales) {
   el.innerHTML = html;
 }
 
-/* ============================================ */
-/* ===== СВАЙП ===== */
-/* ============================================ */
 function scrollToScreen(name) {
   var container = document.getElementById('swipeContainer');
   var idx = screenOrder.indexOf(name);
@@ -2947,9 +1900,6 @@ document.querySelectorAll('#dots span').forEach(function(dot) {
   dot.addEventListener('click', function() { scrollToScreen(this.getAttribute('data-screen')); });
 });
 
-/* ============================================ */
-/* ===== ПОИСК ===== */
-/* ============================================ */
 document.getElementById('searchProduct').oninput = function() {
   var q = this.value.trim();
   var res = document.getElementById('searchResults');
@@ -2978,7 +1928,7 @@ document.getElementById('adSearchProduct').oninput = function() {
   var found = findProduct(q);
   if (found.length === 0) { res.innerHTML = ''; return; }
   var html = '';
-  found.forEach(function(p, i) { html += '<div data-idx="' + i + '">' + (p.art ? p.art + ' — ' : '') + p.name.substring(0, 50) + '...</div>'; });
+  found.forEach(function(p, i) { html += '<div data-idx="' + i + '">' + (p.art ? p.art + ' — ' : '') + p.name.substring(0, 50) + '... (' + p.percent + '%)</div>'; });
   res.innerHTML = html;
   res.querySelectorAll('div').forEach(function(el) {
     el.onclick = function() {
@@ -2991,9 +1941,6 @@ document.getElementById('adSearchProduct').oninput = function() {
   });
 };
 
-/* ============================================ */
-/* ===== ДАТЫ ===== */
-/* ============================================ */
 document.getElementById('inputDateDisplay').onclick = function() { var inp = document.getElementById('inputDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('editDateDisplay').onclick = function() { var inp = document.getElementById('editDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('inputDate').addEventListener('change', function() { updateDateDisplay('inputDate', 'inputDateDisplay'); });
@@ -3008,9 +1955,6 @@ document.getElementById('historyDatePicker').addEventListener('change', function
 document.getElementById('adDateDisplay').onclick = function() { var inp = document.getElementById('adDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('adDate').addEventListener('change', function() { updateDateDisplay('adDate', 'adDateDisplay'); });
 
-/* ============================================ */
-/* ===== СКАНЕР ===== */
-/* ============================================ */
 var liveStream = null, liveScanning = false, torchOn = false, scanTarget = 'add';
 document.getElementById('btnScanQR').onclick = function() { scanTarget = 'add'; startLiveScanner(); };
 document.getElementById('adScanQR').onclick = function() { scanTarget = 'ad'; startLiveScanner(); };
@@ -3127,9 +2071,6 @@ function handleQRDataAD(data) {
   showToast('Возврат · ' + r.article, 'success');
 }
 
-/* ============================================ */
-/* ===== КНОПКИ ===== */
-/* ============================================ */
 document.getElementById('btnAdd').onclick = addSale;
 document.getElementById('btnUpdate').onclick = updateSale;
 document.getElementById('btnEditCancel').onclick = closeEdit;
@@ -3143,23 +2084,14 @@ document.getElementById('btnDedup').onclick = function() {
   products.forEach(function(p) {
     var artKey = null;
     if (p.art) artKey = 'art_' + p.art;
-    else {
-      var artInName = extractArticleFromName(p.name);
-      if (artInName) artKey = 'art_' + artInName;
-    }
+    else { var artInName = extractArticleFromName(p.name); if (artInName) artKey = 'art_' + artInName; }
     if (artKey && seen[artKey]) {
       var e = seen[artKey];
-      if (e.type !== 'focus' && p.type === 'focus') {
-        e.art = p.art || e.art; e.name = p.name; e.percent = p.percent; e.type = p.type;
-      } else if (e.type === 'focus' && p.type !== 'focus') {
-      } else {
-        if (p.percent > e.percent) { e.art = p.art || e.art; e.name = p.name; e.percent = p.percent; e.type = p.type; }
-      }
+      if (e.type !== 'focus' && p.type === 'focus') { e.art = p.art || e.art; e.name = p.name; e.percent = p.percent; e.type = p.type; }
+      else if (e.type === 'focus' && p.type !== 'focus') {}
+      else { if (p.percent > e.percent) { e.art = p.art || e.art; e.name = p.name; e.percent = p.percent; e.type = p.type; } }
       removed++;
-    } else {
-      if (artKey) seen[artKey] = p;
-      unique.push(p);
-    }
+    } else { if (artKey) seen[artKey] = p; unique.push(p); }
   });
   products = unique; save();
   showToast('Удалено дублей: ' + removed, 'success'); render();
@@ -3176,16 +2108,8 @@ document.getElementById('btnSyncFocus').onclick = function() {
       var rows = [], row = [], cur = '', q = false;
       for (var i = 0; i < str.length; i++) {
         var ch = str[i];
-        if (q) {
-          if (ch === '"') { if (str[i+1] === '"') { cur += '"'; i++; } else q = false; }
-          else cur += ch;
-        } else {
-          if (ch === '"') q = true;
-          else if (ch === ',') { row.push(cur); cur = ''; }
-          else if (ch === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; }
-          else if (ch === '\r') { }
-          else cur += ch;
-        }
+        if (q) { if (ch === '"') { if (str[i+1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; }
+        else { if (ch === '"') q = true; else if (ch === ',') { row.push(cur); cur = ''; } else if (ch === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; } else if (ch === '\r') {} else cur += ch; }
       }
       if (cur !== '' || row.length > 0) { row.push(cur); rows.push(row); }
       return rows;
@@ -3216,11 +2140,7 @@ document.getElementById('btnSyncFocus').onclick = function() {
     products = products.filter(function(p) { return p.type !== 'focus' && p.type !== 'conditional'; });
     var seenArts = {};
     var npUnique = [];
-    np.forEach(function(x) {
-      if (x.art && seenArts[x.art]) return;
-      if (x.art) seenArts[x.art] = true;
-      npUnique.push(x);
-    });
+    np.forEach(function(x) { if (x.art && seenArts[x.art]) return; if (x.art) seenArts[x.art] = true; npUnique.push(x); });
     npUnique.forEach(function(x) { products.push(x); });
     save();
     var msg = 'Загружено: ' + npUnique.length + ' товаров';
@@ -3284,9 +2204,6 @@ function parseData(input) {
   showToast('Обновлено: ' + np.length + ' товаров', 'success');
 }
 
-/* ============================================ */
-/* ===== БЭКАП ===== */
-/* ============================================ */
 document.getElementById('btnBackup').onclick = function() {
   document.getElementById('exportText').value = getBackupJSON();
   document.getElementById('importText2').value = '';
@@ -3307,8 +2224,7 @@ document.getElementById('restoreFileInput').addEventListener('change', function(
     try { data = JSON.parse(e.target.result); }
     catch(err) { showToast('Файл повреждён', 'error'); event.target.value = ''; return; }
     if (!data.sales && !data.plans && !data.products) { showToast('Нет данных в файле', 'error'); event.target.value = ''; return; }
-    var info = 'Продаж: ' + (data.sales ? data.sales.length : 0) + '\nТоваров: ' + (data.products ? data.products.length : 0);
-    if (!confirm('Восстановить?\n\n' + info + '\n\nТекущие данные будут заменены.')) { event.target.value = ''; return; }
+    if (!confirm('Восстановить? Текущие данные будут заменены.')) { event.target.value = ''; return; }
     if (data.sales) sales = data.sales;
     if (data.plans) plans = data.plans;
     if (data.products) products = data.products;
@@ -3319,8 +2235,7 @@ document.getElementById('restoreFileInput').addEventListener('change', function(
     showToast('Восстановлено: ' + sales.length + ' записей', 'success');
     event.target.value = '';
     document.getElementById('screen-backup').classList.remove('active');
-    updateLevels();
-    render();
+    updateLevels(); render();
   };
   reader.readAsText(file);
 });
@@ -3342,16 +2257,12 @@ document.getElementById('btnRestore').onclick = function() {
   showToast('Восстановлено: ' + sales.length + ' записей', 'success');
   document.getElementById('importText2').value = '';
   document.getElementById('screen-backup').classList.remove('active');
-  updateLevels();
-  render();
+  updateLevels(); render();
 };
 
 document.getElementById('btnBackupClose').onclick = function() { document.getElementById('screen-backup').classList.remove('active'); };
 document.getElementById('btnImportClose').onclick = function() { document.getElementById('screen-import').classList.remove('active'); };
 
-/* ============================================ */
-/* ===== НАСТРОЙКИ ===== */
-/* ============================================ */
 document.getElementById('aboutBtn').onclick = function() {
   document.getElementById('inputPlan').value = getPlan(currentMonth()) || '';
   document.getElementById('inputOklad').value = salary.oklad || '';
@@ -3377,9 +2288,6 @@ document.querySelectorAll('.theme-option').forEach(function(opt) {
   };
 });
 
-/* ============================================ */
-/* ===== SERVICE WORKER + INIT ===== */
-/* ============================================ */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() { navigator.serviceWorker.register('sw.js').catch(function(){}); });
 }
@@ -3434,7 +2342,6 @@ let chatStarted = false;
 let lastReadTs = parseInt(localStorage.getItem('chatLastRead') || '0', 10);
 let chatOpen = false;
 
-/* Открытие чата из кнопки в карточке плана */
 document.getElementById('chatInlineBtn').onclick = function(e) {
   e.stopPropagation();
   document.getElementById('screen-chat').classList.add('active');

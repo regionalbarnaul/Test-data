@@ -346,6 +346,7 @@ body.theme-terminal .whats-new-item::before { content: '>'; color: var(--accent)
 .stats-device:last-child { border-bottom: none; }
 .stats-device .id { color: var(--accent); }
 .stats-device .when { text-align: right; font-size: 10px; }
+.stats-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--card-border); }
 
 /* ===== ОБЩАЯ БАЗА ТОВАРОВ (Firebase) ===== */
 .art-status { font-size: 12px; margin-top: 6px; line-height: 1.4; }
@@ -409,6 +410,17 @@ body.theme-terminal .whats-new-item::before { content: '>'; color: var(--accent)
 .base-status.warn { color: var(--gold); }
 .base-status.err { color: var(--red); }
 
+.base-search {
+  width: 100%; padding: 10px 14px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 10px; color: var(--text);
+  font-size: 14px; outline: none;
+  font-family: inherit;
+  margin-bottom: 12px;
+}
+.base-search:focus { border-color: var(--accent); }
+
 .base-list-item {
   display: flex; justify-content: space-between;
   align-items: center; gap: 8px;
@@ -425,11 +437,64 @@ body.theme-terminal .whats-new-item::before { content: '>'; color: var(--accent)
   overflow: hidden; text-overflow: ellipsis;
   white-space: nowrap;
 }
+.base-list-item .edit,
 .base-list-item .del {
   background: none; border: none;
-  color: var(--red); cursor: pointer;
-  font-size: 14px; padding: 0 4px;
+  cursor: pointer; font-size: 14px; padding: 0 4px;
 }
+.base-list-item .edit { color: var(--gold); }
+.base-list-item .del { color: var(--red); }
+.base-count {
+  font-size: 12px; color: var(--text-dim);
+  text-align: center; padding: 8px 0;
+}
+
+/* Модалка редактирования товара */
+.edit-product-modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none; align-items: center; justify-content: center;
+  z-index: 100001; padding: 20px; overflow-y: auto;
+}
+.edit-product-modal.show { display: flex; }
+.edit-product-box {
+  background: var(--card-bg1);
+  border: 1px solid var(--card-border);
+  border-radius: 20px; padding: 22px;
+  max-width: 420px; width: 100%;
+  max-height: 80vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+.edit-product-box h3 {
+  font-size: 18px; font-weight: 800;
+  margin-bottom: 14px; color: var(--accent);
+}
+.edit-product-box label {
+  display: block; font-size: 11px;
+  color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 0.5px; font-weight: 600;
+  margin: 10px 0 6px;
+}
+.edit-product-box input,
+.edit-product-box select {
+  width: 100%; padding: 10px 12px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 10px; color: var(--text);
+  font-size: 14px; outline: none; font-family: inherit;
+}
+.edit-product-box input:focus,
+.edit-product-box select:focus { border-color: var(--accent); }
+.edit-product-box .modal-btns {
+  display: flex; gap: 8px; margin-top: 16px;
+}
+.edit-product-box .modal-btns button {
+  flex: 1; padding: 12px; border-radius: 10px;
+  font-size: 14px; font-weight: 700;
+  border: none; cursor: pointer; font-family: inherit;
+}
+.edit-product-box .btn-save { background: var(--accent); color: #0a0f0d; }
+.edit-product-box .btn-cancel { background: rgba(255,255,255,0.08); color: var(--text); }
 </style>
 </head>
 <body>
@@ -551,11 +616,10 @@ body.theme-terminal .whats-new-item::before { content: '>'; color: var(--accent)
       <div class="form-group"><label>Дата</label><input type="date" id="inputDate" max="" style="display:none;"><div class="date-display" id="inputDateDisplay">Сегодня</div></div>
       <div class="form-group"><label>Товар</label><input type="text" id="inputName" placeholder="Название товара"></div>
       <div id="newProductHint" class="new-product-hint">
-        <div class="hint-title">⚠️ Новый артикул — названия нет в базе</div>
+        <div class="hint-title">⚠️ Новый артикул</div>
         <div class="hint-text">
-          Скопируй название из рабочего приложения DNS и вставь в поле «Товар», затем нажми кнопку ниже.
+          Названия нет в базе. Введи его в поле «Товар» выше — оно сохранится в общую базу при сохранении продажи.
         </div>
-        <button class="btn" id="btnQuickSaveProduct" type="button" style="margin:0;width:100%;">💾 Сохранить название в общую базу</button>
       </div>
       <div class="form-group"><label>Количество</label><input type="number" id="inputQty" value="1" min="1"></div>
       <div class="form-group"><label>Цена за штуку (₽)</label><input type="number" id="inputSum" placeholder="0" min="0"></div>
@@ -600,8 +664,7 @@ body.theme-terminal .whats-new-item::before { content: '>'; color: var(--accent)
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Регулярные товары</div><div class="sub-text">Продано: <span class="accent" id="totalsRegSum">0 ₽</span></div><div class="sub-text">Отчисления: <span class="accent" id="totalsRegComm">0 ₽</span></div><div class="sub-text">Количество: <span class="accent" id="totalsRegCount">0 шт</span></div></div>
     <button class="share-btn" id="btnShareMonth"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Поделиться итогами за месяц</button>
   </div>
-
-  <!-- ЧЕК-ЛИСТ ТП -->
+   <!-- ЧЕК-ЛИСТ ТП -->
   <div class="swipe-screen" id="screen-checklist">
     <div class="header"><h1>Чек-лист ТП</h1></div>
     <div class="checklist-section"><div class="checklist-title critical">🌐 ЭКОСИСТЕМА IQ HOME</div>
@@ -728,21 +791,15 @@ body.theme-terminal .whats-new-item::before { content: '>'; color: var(--accent)
     <button class="btn" id="btnSyncFocus" style="margin-top:12px;">Обновить фокус-лист из сети</button>
   </div>
   <div class="settings-section">
-    <div class="settings-title">🗄 Общая база товаров</div>
-    <div class="sub-text" style="margin-bottom:10px;">Названия по артикулам для всех коллег</div>
-    <button class="btn" id="btnOpenBase">📦 Открыть базу товаров</button>
-    <button class="btn secondary" id="btnUploadMyBase" style="margin-top:10px;">📤 Залить мою базу в общую</button>
-  </div>
-  <div class="settings-section">
     <div class="settings-title">ℹ️ О приложении</div>
-    <div class="about-row"><span class="label">Версия</span><span class="value" id="appVersionText">2.11 · общая база</span></div>
+    <div class="about-row"><span class="label">Версия</span><span class="value" id="appVersionText">2.12 · админ-база</span></div>
     <div class="about-row"><span class="label">Разработчик</span><span class="value">Максим</span></div>
     <div class="about-row"><span class="label">Почта</span><span class="value">regionalbarnaul@yandex.ru</span></div>
   </div>
   <button class="btn secondary" id="btnSettingsClose" style="margin-top:8px;">Закрыть</button>
 </div>
 
-<!-- Экран общей базы товаров -->
+<!-- Экран общей базы товаров (доступен только через скрытую статистику) -->
 <div id="screen-base" class="modal-screen">
   <div class="header"><h1>🗄 База товаров</h1></div>
   <div class="settings-section">
@@ -777,10 +834,34 @@ body.theme-terminal .whats-new-item::before { content: '>'; color: var(--accent)
     </div>
   </div>
   <div class="settings-section">
-    <div class="settings-title">📚 Последние добавленные</div>
+    <div class="settings-title">📚 Все товары</div>
+    <input type="text" class="base-search" id="baseSearch" placeholder="🔍 Поиск по артикулу или названию...">
+    <div class="base-count" id="baseCount">Загрузка...</div>
     <div id="baseRecent"><div class="empty">Загрузка...</div></div>
   </div>
   <button class="btn secondary" id="btnBaseClose" style="margin-top:8px;">Закрыть</button>
+</div>
+
+<!-- Модалка редактирования товара -->
+<div class="edit-product-modal" id="editProductModal">
+  <div class="edit-product-box">
+    <h3>✏️ Редактировать товар</h3>
+    <label>Артикул</label>
+    <input type="text" id="editProdArt" readonly style="opacity:0.6;">
+    <label>Название</label>
+    <input type="text" id="editProdName">
+    <label>Процент (%)</label>
+    <input type="number" id="editProdPercent" step="0.1" min="0" max="100">
+    <label>Тип</label>
+    <select id="editProdType">
+      <option value="regular">Регулярный</option>
+      <option value="focus">Фокусный</option>
+    </select>
+    <div class="modal-btns">
+      <button class="btn-cancel" id="editProdCancel">Отмена</button>
+      <button class="btn-save" id="editProdSave">Сохранить</button>
+    </div>
+  </div>
 </div>
 
 <div id="screen-backup" class="modal-screen">
@@ -833,20 +914,25 @@ body.theme-terminal .whats-new-item::before { content: '>'; color: var(--accent)
 <div class="whats-new-modal" id="whatsNewModal">
   <div class="whats-new-box">
     <h3>🎉 Что нового</h3>
-    <div class="whats-new-version" id="whatsNewVersion">Версия 2.11</div>
+    <div class="whats-new-version" id="whatsNewVersion">Версия 2.12</div>
     <div id="whatsNewContent"></div>
     <button class="whats-new-btn" id="whatsNewClose">Понятно</button>
   </div>
 </div>
 
+<!-- Скрытая статистика (5 тапов по версии) + админ-кнопки базы -->
 <div class="stats-modal" id="statsModal">
   <div class="stats-box">
     <h3>📊 Статистика</h3>
     <div id="statsContent">
       <div class="empty">Загрузка...</div>
     </div>
-    <button class="whats-new-btn" id="statsRefresh" style="background: rgba(255,255,255,0.06); color: var(--text); margin-bottom: 8px;">🔄 Обновить</button>
-    <button class="whats-new-btn" id="statsClose">Закрыть</button>
+    <div class="stats-actions">
+      <button class="whats-new-btn" id="statsOpenBase" style="background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #0a0f0d; margin-top:0;">🗄 Открыть базу товаров</button>
+      <button class="whats-new-btn" id="statsUploadBase" style="background: rgba(255,255,255,0.08); color: var(--text); margin-top:0;">📤 Залить мою базу в общую</button>
+      <button class="whats-new-btn" id="statsRefresh" style="background: rgba(255,255,255,0.06); color: var(--text); margin-top:0;">🔄 Обновить статистику</button>
+      <button class="whats-new-btn" id="statsClose" style="background: rgba(255,255,255,0.06); color: var(--text); margin-top:0;">Закрыть</button>
+    </div>
   </div>
 </div>
 <script>
@@ -870,18 +956,13 @@ try {
   if (_xp) xpData = _xp;
 } catch(e) { sales = []; plans = {}; products = []; }
 
-/* ===== DEVICE ID ===== */
 function getDeviceId() {
   var id = localStorage.getItem('deviceId');
-  if (!id) {
-    id = 'dev_' + Math.random().toString(36).substr(2, 9);
-    localStorage.setItem('deviceId', id);
-  }
+  if (!id) { id = 'dev_' + Math.random().toString(36).substr(2, 9); localStorage.setItem('deviceId', id); }
   return id;
 }
 var DEVICE_ID = getDeviceId();
 
-/* ===== УРОВНИ ===== */
 var LEVELS = [
   { n: 1,  name: 'Первый день',              icon: '🐣', xp: 0 },
   { n: 2,  name: 'Стажёр',                   icon: '🎒', xp: 300 },
@@ -902,7 +983,6 @@ var LEVELS = [
 function getLevelByXp(xp) { var lvl = LEVELS[0]; for (var i = 0; i < LEVELS.length; i++) { if (xp >= LEVELS[i].xp) lvl = LEVELS[i]; } return lvl; }
 function getColorClass(lvlNum) { if (lvlNum >= 13) return 'c5'; if (lvlNum >= 10) return 'c4'; if (lvlNum >= 7) return 'c3'; if (lvlNum >= 4) return 'c2'; return 'c1'; }
 
-/* ===== УТИЛИТЫ ===== */
 function fmt(n) { return Math.round(n).toLocaleString('ru-RU') + ' ₽'; }
 function pad(n) { return n < 10 ? '0' + n : '' + n; }
 function dateStr(d) { return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
@@ -919,7 +999,14 @@ function prevMonth(d) { var x = new Date(d); x.setMonth(x.getMonth() - 1); retur
 function extractArticleFromName(name) { if (!name) return ''; var m = name.match(/\b(\d{6,8})\b/); return m ? m[1] : ''; }
 function cleanNameFromArticle(name, art) { if (!name || !art) return name; var re = new RegExp('^' + art + '\\s*[-—]?\\s*'); return name.replace(re, ''); }
 
-/* ===== ТЕМЫ ===== */
+/* ===== ОКЛАД ПО ДНЯМ ===== */
+function calcOkladForMonth() {
+  var totalDays = daysInMonth(new Date());
+  var dom = dayOfMonth();
+  if (totalDays <= 0) return 0;
+  return salary.oklad * dom / totalDays;
+}
+
 function applyTheme(theme) {
   document.body.className = '';
   if (theme && theme !== 'default') document.body.classList.add('theme-' + theme);
@@ -931,7 +1018,6 @@ function applyTheme(theme) {
 }
 function loadTheme() { applyTheme(localStorage.getItem('theme') || 'default'); }
 
-/* ===== ТОСТ ===== */
 function showToast(message, type) {
   type = type || 'success';
   var old = document.getElementById('appToast'); if (old) old.remove();
@@ -943,7 +1029,6 @@ function showToast(message, type) {
   setTimeout(function() { t.classList.remove('show'); setTimeout(function() { t.remove(); }, 300); }, 2400);
 }
 
-/* ===== ЗВУКИ ===== */
 function playBeep() { try { var ctx = new (window.AudioContext || window.webkitAudioContext)(); var osc = ctx.createOscillator(); var gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type = 'sine'; osc.frequency.value = 1800; gain.gain.setValueAtTime(0.001, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.3, ctx.currentTime + 0.01); gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15); osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.16); setTimeout(function() { ctx.close(); }, 300); } catch(e) {} }
 function playDing() { try { var ctx = new (window.AudioContext || window.webkitAudioContext)(); [880, 1320].forEach(function(freq, idx) { var osc = ctx.createOscillator(); var gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type = 'sine'; osc.frequency.value = freq; var start = ctx.currentTime + idx * 0.08; gain.gain.setValueAtTime(0.001, start); gain.gain.exponentialRampToValueAtTime(0.25, start + 0.02); gain.gain.exponentialRampToValueAtTime(0.001, start + 0.35); osc.start(start); osc.stop(start + 0.4); }); setTimeout(function() { ctx.close(); }, 800); } catch(e) {} }
 function playFanfare() { try { var ctx = new (window.AudioContext || window.webkitAudioContext)(); [523, 659, 784, 1047].forEach(function(freq, i) { var osc = ctx.createOscillator(); var gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type = 'triangle'; osc.frequency.value = freq; var start = ctx.currentTime + i * 0.1; gain.gain.setValueAtTime(0.001, start); gain.gain.exponentialRampToValueAtTime(0.25, start + 0.02); gain.gain.exponentialRampToValueAtTime(0.001, start + 0.5); osc.start(start); osc.stop(start + 0.55); }); setTimeout(function() { ctx.close(); }, 1500); } catch(e) {} }
@@ -951,7 +1036,6 @@ function vibrateLight() { if (navigator.vibrate) navigator.vibrate(30); }
 function vibrateSuccess() { if (navigator.vibrate) navigator.vibrate([40, 30, 40]); }
 function vibrateRecord() { if (navigator.vibrate) navigator.vibrate([80, 40, 80, 40, 120]); }
 
-/* ===== XP ===== */
 function calcXpForSale(s) { if (s.isAD) return 0; if (s.percent <= 1.5) return 0; return (Math.abs(s.sum) / 1000) * s.percent; }
 function recalcXp() { var total = 0; sales.forEach(function(s) { if (s.isAD) return; if (!xpData.startDate) return; if (s.date < xpData.startDate) return; total += calcXpForSale(s); }); if (total < 0) total = 0; return total; }
 function updateLevels() {
@@ -993,7 +1077,6 @@ function renderXpCard() {
   }
 }
 
-/* ===== RIPPLE / ANIM / CHECKMARK ===== */
 function attachRipple() {
   document.querySelectorAll('.btn').forEach(function(btn) {
     if (btn.dataset.ripple) return; btn.dataset.ripple = '1';
@@ -1036,9 +1119,8 @@ function migrateRegularProducts() {
   if (changed) save();
 }
 
-/* ===== БЭКАП ===== */
 function getBackupJSON() {
-  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.11' }, null, 2);
+  return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.12' }, null, 2);
 }
 function saveBackupToFile() {
   try {
@@ -1089,6 +1171,11 @@ function saveRegularProduct(name) {
   var shortKey = key.substring(0, 30);
   if (shortKey.length > 10) { if (products.find(function(p) { return normalizeName(p.name).substring(0, 30) === shortKey; })) return; }
   products.push({ art: artFromName, name: name, percent: 1.5, type: 'regular' }); save();
+  /* Автоматически в Firebase */
+  if (artFromName && window.fbSaveProduct) {
+    var fb = window.fbGetProduct ? window.fbGetProduct(artFromName) : null;
+    if (!fb) window.fbSaveProduct(artFromName, { name: name, percent: 1.5, type: 'regular' }).catch(function(){});
+  }
 }
 function getProductPercent(product, dateStrVal) {
   if (!product) return 1.5;
@@ -1110,11 +1197,9 @@ function findPercentForAD(name) {
   return 1.5;
 }
 
-/* ===== СТАТИСТИКА — отправка в Firebase ===== */
 function pushOpenStat() { try { if (window.firebasePushOpen) window.firebasePushOpen(DEVICE_ID); } catch(e) {} }
 function pushSaleStat() { try { if (window.firebasePushSale) window.firebasePushSale(DEVICE_ID); } catch(e) {} }
 
-/* ===== ПРОДАЖИ ===== */
 function addSale() {
   var date = document.getElementById('inputDate').value || today();
   if (date > today()) { showToast('Дата не может быть в будущем', 'warn'); return; }
@@ -1197,7 +1282,6 @@ function savePlan() { plans[currentMonth()] = parseFloat(document.getElementById
 function saveOklad() { salary.oklad = parseFloat(document.getElementById('inputOklad').value) || 0; save(); render(); vibrateLight(); showToast('Оклад сохранён', 'success'); }
 function setProgressClass(el, pct) { if (!el) return; el.className = 'progress-fill'; if (pct >= 100) el.classList.add('gold'); else if (pct >= 90) el.classList.add('ok'); else if (pct >= 80) el.classList.add('orange'); }
 
-/* ===== РЕНДЕР ===== */
 function render() {
   var t = today(), m = currentMonth();
   var tSales = sales.filter(function(s) { return s.date === t && !s.isAD; });
@@ -1211,7 +1295,9 @@ function render() {
   var netTurnover = mSum - mADSum; var netCommission = mComm + mADComm;
   var totalDaysInMonth = daysInMonth(new Date());
   var okladPerDay = totalDaysInMonth > 0 ? salary.oklad / totalDaysInMonth : 0;
-  var earnedToday = okladPerDay + tComm; var earnedMonth = salary.oklad + netCommission;
+  var okladEarned = calcOkladForMonth();
+  var earnedToday = okladPerDay + tComm;
+  var earnedMonth = okladEarned + netCommission;
   var dom = dayOfMonth();
   var avgCommPerDay = dom > 0 ? (netCommission / dom) : 0;
   var forecastComm = avgCommPerDay * totalDaysInMonth;
@@ -1243,7 +1329,7 @@ function render() {
   if (!animatingIds['todayEarned']) document.getElementById('todayEarned').textContent = fmt(earnedToday);
   if (!animatingIds['monthEarned']) document.getElementById('monthEarned').textContent = fmt(earnedMonth);
   document.getElementById('todayEarnedBreak').textContent = 'оклад ' + fmt(okladPerDay) + ' + % ' + fmt(tComm);
-  document.getElementById('monthEarnedBreak').textContent = 'оклад ' + fmt(salary.oklad) + ' + % ' + fmt(netCommission);
+  document.getElementById('monthEarnedBreak').textContent = 'оклад ' + fmt(okladEarned) + ' (' + dom + '/' + totalDaysInMonth + ' дн.) + % ' + fmt(netCommission);
   var adEl = document.getElementById('monthCommission_AD'); if (adEl) adEl.textContent = '−' + fmt(mADSum);
   var adCntEl = document.getElementById('monthADCount'); if (adCntEl) adCntEl.textContent = mAD.length + ' записей';
   var adCommEl = document.getElementById('monthADComm'); if (adCommEl) adCommEl.textContent = 'снято отчислений: −' + fmt(Math.abs(mADComm));
@@ -1295,8 +1381,9 @@ function render() {
   document.getElementById('totalsSum').textContent = fmt(tS); document.getElementById('totalsCount').textContent = totSales.length + ' продаж';
   document.getElementById('totalsComm').textContent = fmt(tC);
   var totADComm = 0; totAD.forEach(function(s) { totADComm += s.commission; });
-  document.getElementById('totalsEarned').textContent = fmt(salary.oklad + tC + totADComm);
-  document.getElementById('totalsOkladText').textContent = fmt(salary.oklad);
+  var totalsMonthOklad = (tm === currentMonth()) ? calcOkladForMonth() : salary.oklad;
+  document.getElementById('totalsEarned').textContent = fmt(totalsMonthOklad + tC + totADComm);
+  document.getElementById('totalsOkladText').textContent = fmt(totalsMonthOklad) + (tm === currentMonth() ? ' (по дням)' : '');
   document.getElementById('totalsCommText').textContent = fmt(tC + totADComm);
   document.getElementById('totalsAD').textContent = '−' + fmt(adS); document.getElementById('totalsADCount').textContent = totAD.length + ' записей';
   document.getElementById('totalsNet').textContent = fmt(netT); renderPercentBreakdown(totSales);
@@ -1341,7 +1428,6 @@ var scrollTimeout = null;
 document.getElementById('swipeContainer').addEventListener('scroll', function() { if (scrollTimeout) clearTimeout(scrollTimeout); scrollTimeout = setTimeout(updateDots, 100); });
 document.querySelectorAll('#dots span').forEach(function(dot) { dot.addEventListener('click', function() { scrollToScreen(this.getAttribute('data-screen')); }); });
 
-/* ===== ПОИСК ===== */
 document.getElementById('searchProduct').oninput = function() {
   var q = this.value.trim(); var res = document.getElementById('searchResults');
   if (q.length < 2) { res.innerHTML = ''; return; }
@@ -1379,7 +1465,6 @@ document.getElementById('adSearchProduct').oninput = function() {
   });
 };
 
-/* ===== ДАТЫ ===== */
 document.getElementById('inputDateDisplay').onclick = function() { var inp = document.getElementById('inputDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('editDateDisplay').onclick = function() { var inp = document.getElementById('editDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('inputDate').addEventListener('change', function() { updateDateDisplay('inputDate', 'inputDateDisplay'); });
@@ -1389,7 +1474,6 @@ document.getElementById('historyDatePicker').addEventListener('change', function
 document.getElementById('adDateDisplay').onclick = function() { var inp = document.getElementById('adDate'); if (inp.showPicker) inp.showPicker(); else inp.click(); };
 document.getElementById('adDate').addEventListener('change', function() { updateDateDisplay('adDate', 'adDateDisplay'); });
 
-/* ===== QR СКАНЕР ===== */
 var liveStream = null, liveScanning = false, torchOn = false, scanTarget = 'add';
 document.getElementById('btnScanQR').onclick = function() { scanTarget = 'add'; startLiveScanner(); };
 document.getElementById('adScanQR').onclick = function() { scanTarget = 'ad'; startLiveScanner(); };
@@ -1425,7 +1509,6 @@ function liveTick() {
 }
 function extractArticle(data) { var article = null, price = null; var m = data.match(/\/catalog\/i(\d+)\/(?:&(\d+))?/); if (m) { article = m[1]; if (m[2]) price = parseInt(m[2]); } else if (/^\d{6,8}$/.test(data)) { article = data; } else { var m2 = data.match(/(\d{6,8})/); if (m2) article = m2[1]; } return { article: article, price: price }; }
 
-/* ===== ОБРАБОТЧИКИ QR — С БАЗОЙ ===== */
 function handleQRData(data) {
   var r = extractArticle(data); if (!r.article) { showToast('Артикул не найден в QR', 'warn'); return; }
   document.getElementById('inputArt').value = r.article;
@@ -1492,7 +1575,7 @@ function handleQRDataBase(data) {
   if (local || fb) {
     var src = local || fb;
     status.className = 'base-status warn';
-    status.textContent = '⚠️ Уже в базе: ' + (src.name || '(без названия)') + ' — перезапишется';
+    status.textContent = '⚠️ Уже в базе: ' + (src.name || '(без названия)');
   } else {
     status.className = 'base-status ok';
     status.textContent = '🟢 Новый артикул. Заполни название.';
@@ -1501,7 +1584,6 @@ function handleQRDataBase(data) {
   setTimeout(function() { document.getElementById('baseName').focus(); }, 300);
 }
 
-/* ===== СТАТУС АРТИКУЛА ===== */
 function setArtStatus(art, ctx) {
   ctx = ctx || 'add';
   var el = document.getElementById(ctx === 'add' ? 'artStatus' : 'adArtStatus');
@@ -1524,7 +1606,7 @@ function setArtStatus(art, ctx) {
   }
   if (local && local.type === 'focus') {
     el.className = 'art-status focus';
-    el.textContent = '🟡 В фокус-листе (' + local.percent + '%), но названия нет. Добавь в базу.';
+    el.textContent = '🟡 В фокус-листе (' + local.percent + '%), но названия нет.';
     return;
   }
   el.className = 'art-status new';
@@ -1578,35 +1660,11 @@ document.getElementById('adInputArt').addEventListener('input', function() {
   }, 300);
 });
 
-document.getElementById('btnQuickSaveProduct').onclick = function() {
-  var art = document.getElementById('inputArt').value.trim();
-  var name = document.getElementById('inputName').value.trim();
-  if (!art) { showToast('Сначала отсканируй артикул', 'warn'); return; }
-  if (!name || /^Товар\s+\d+/.test(name)) { showToast('Введи название товара', 'warn'); return; }
-  if (!window.fbSaveProduct) { showToast('Firebase не подключён', 'error'); return; }
-  var percent = parseFloat(document.getElementById('inputPercent').value) || 1.5;
-  var type = percent > 1.5 ? 'focus' : 'regular';
-  window.fbSaveProduct(art, { name: name, percent: percent, type: type }).then(function() {
-    showToast('Сохранено в общую базу', 'success');
-    vibrateSuccess();
-    setArtStatus(art, 'add');
-    updateNewProductHint(false);
-    var exists = products.find(function(p) { return String(p.art) === String(art); });
-    if (exists) { exists.name = name; exists.percent = percent; exists.type = type; }
-    else { products.push({ art: art, name: name, percent: percent, type: type }); }
-    save();
-  }).catch(function(err) { showToast('Ошибка: ' + err, 'error'); });
-};
-
 /* ===== ЭКРАН БАЗЫ ===== */
-document.getElementById('btnOpenBase').onclick = function() {
-  document.getElementById('screen-settings').classList.remove('active');
-  document.getElementById('screen-base').classList.add('active');
-  renderRecentBase();
-};
+var baseEditArt = null;
 document.getElementById('btnBaseClose').onclick = function() {
   document.getElementById('screen-base').classList.remove('active');
-  document.getElementById('screen-settings').classList.add('active');
+  document.getElementById('statsModal').classList.add('show');
 };
 var _baseArtTimer = null;
 document.getElementById('baseArt').addEventListener('input', function() {
@@ -1655,7 +1713,7 @@ document.getElementById('baseSave').onclick = function() {
     document.getElementById('basePercent').value = '1.5';
     document.getElementById('baseType').value = 'regular';
     document.getElementById('baseArtStatus').textContent = '';
-    renderRecentBase();
+    renderBaseList();
   }).catch(function(err) { showToast('Ошибка: ' + err, 'error'); });
 };
 document.getElementById('baseBulkSave').onclick = function() {
@@ -1691,44 +1749,76 @@ document.getElementById('baseBulkSave').onclick = function() {
     status.textContent = '✅ Загружено ' + done + ' из ' + parsed.length;
     document.getElementById('baseBulk').value = '';
     showToast('Загружено ' + done + ' записей', 'success');
-    renderRecentBase();
+    renderBaseList();
   }).catch(function(err) { status.className = 'base-status err'; status.textContent = '❌ Ошибка: ' + err; });
 };
-document.getElementById('btnUploadMyBase').onclick = function() {
-  if (!window.fbUploadMyBase) { showToast('Firebase не подключён', 'error'); return; }
-  var withArt = products.filter(function(p) { return p.art && String(p.art).trim(); });
-  if (withArt.length === 0) { showToast('У тебя нет товаров с артикулом', 'warn'); return; }
-  var ok = confirm('Залить ' + withArt.length + ' товаров в общую базу?\n\nУже существующие (с названием) будут пропущены.');
-  if (!ok) return;
-  showToast('Заливаю...', 'warn');
-  window.fbUploadMyBase(products).then(function(res) {
-    showToast('Готово: ' + res.uploaded + ' загружено, ' + res.skipped + ' пропущено', 'success');
-    vibrateSuccess();
-    render();
-  }).catch(function(err) { showToast('Ошибка: ' + err, 'error'); });
-};
-function renderRecentBase() {
+
+document.getElementById('baseSearch').addEventListener('input', renderBaseList);
+
+function renderBaseList() {
   var box = document.getElementById('baseRecent');
+  var countEl = document.getElementById('baseCount');
   if (!box) return;
-  if (!window.fbGetRecent) { box.innerHTML = '<div class="empty">Firebase не подключён</div>'; return; }
-  var list = window.fbGetRecent(20);
-  if (!list || list.length === 0) { box.innerHTML = '<div class="empty">Пока ничего нет</div>'; return; }
+  if (!window.fbGetAll) { box.innerHTML = '<div class="empty">Firebase не подключён</div>'; return; }
+  var q = (document.getElementById('baseSearch').value || '').trim().toLowerCase();
+  var all = window.fbGetAll();
+  if (!all || all.length === 0) { box.innerHTML = '<div class="empty">Пока ничего нет</div>'; if (countEl) countEl.textContent = 'Всего: 0'; return; }
+  var filtered = q ? all.filter(function(item) { return (item.art + ' ' + (item.name || '')).toLowerCase().indexOf(q) !== -1; }) : all;
+  if (countEl) countEl.textContent = 'Всего: ' + all.length + (q ? ' · найдено: ' + filtered.length : '');
+  if (filtered.length === 0) { box.innerHTML = '<div class="empty">Ничего не найдено</div>'; return; }
   var html = '';
-  list.forEach(function(item) {
-    html += '<div class="base-list-item"><span class="art">' + item.art + '</span><span class="nm">' + (item.name || '(без названия)') + '</span><button class="del" data-del="' + item.art + '">✕</button></div>';
+  filtered.slice(0, 500).forEach(function(item) {
+    html += '<div class="base-list-item">' +
+      '<span class="art">' + item.art + '</span>' +
+      '<span class="nm">' + (item.name || '(без названия)') + '</span>' +
+      '<button class="edit" data-edit="' + item.art + '">✏️</button>' +
+      '<button class="del" data-del="' + item.art + '">✕</button>' +
+    '</div>';
   });
   box.innerHTML = html;
+  box.querySelectorAll('.edit').forEach(function(btn) {
+    btn.onclick = function() { openEditProduct(this.getAttribute('data-edit')); };
+  });
   box.querySelectorAll('.del').forEach(function(btn) {
     btn.onclick = function() {
       var art = this.getAttribute('data-del');
       if (!confirm('Удалить ' + art + ' из общей базы?')) return;
       if (!window.fbDeleteProduct) { showToast('Firebase не подключён', 'error'); return; }
-      window.fbDeleteProduct(art).then(function() { showToast('Удалено', 'success'); renderRecentBase(); }).catch(function(err) { showToast('Ошибка: ' + err, 'error'); });
+      window.fbDeleteProduct(art).then(function() { showToast('Удалено', 'success'); renderBaseList(); }).catch(function(err) { showToast('Ошибка: ' + err, 'error'); });
     };
   });
 }
 
-/* ===== КНОПКИ ===== */
+function openEditProduct(art) {
+  if (!window.fbGetProduct) return;
+  var item = window.fbGetProduct(art);
+  if (!item) return;
+  baseEditArt = art;
+  document.getElementById('editProdArt').value = art;
+  document.getElementById('editProdName').value = item.name || '';
+  document.getElementById('editProdPercent').value = item.percent || 1.5;
+  document.getElementById('editProdType').value = item.type || 'regular';
+  document.getElementById('editProductModal').classList.add('show');
+}
+document.getElementById('editProdCancel').onclick = function() { document.getElementById('editProductModal').classList.remove('show'); };
+document.getElementById('editProdSave').onclick = function() {
+  if (!baseEditArt) return;
+  var name = document.getElementById('editProdName').value.trim();
+  var percent = parseFloat(document.getElementById('editProdPercent').value) || 1.5;
+  var type = document.getElementById('editProdType').value || 'regular';
+  if (!name) { showToast('Название не может быть пустым', 'warn'); return; }
+  if (!window.fbSaveProduct) { showToast('Firebase не подключён', 'error'); return; }
+  window.fbSaveProduct(baseEditArt, { name: name, percent: percent, type: type }).then(function() {
+    showToast('Сохранено: ' + baseEditArt, 'success');
+    var local = products.find(function(p) { return String(p.art) === String(baseEditArt); });
+    if (local) { local.name = name; local.percent = percent; local.type = type; }
+    else { products.push({ art: baseEditArt, name: name, percent: percent, type: type }); }
+    save();
+    document.getElementById('editProductModal').classList.remove('show');
+    renderBaseList();
+  }).catch(function(err) { showToast('Ошибка: ' + err, 'error'); });
+};
+
 document.getElementById('btnAdd').onclick = addSale;
 document.getElementById('btnUpdate').onclick = updateSale;
 document.getElementById('btnEditCancel').onclick = closeEdit;
@@ -1818,7 +1908,6 @@ function parseData(input) {
   save(); showToast('Обновлено: ' + np.length + ' товаров', 'success');
 }
 
-/* ===== БЭКАП ===== */
 document.getElementById('btnBackup').onclick = function() { document.getElementById('exportText').value = getBackupJSON(); document.getElementById('importText2').value = ''; document.getElementById('screen-backup').classList.add('active'); };
 document.getElementById('btnSaveFile').onclick = function() { if (saveBackupToFile()) showToast('Бэкап сохранён', 'success'); else showToast('Ошибка сохранения', 'error'); };
 document.getElementById('btnShareBackup').onclick = shareBackup;
@@ -1850,7 +1939,6 @@ document.getElementById('btnRestore').onclick = function() {
 document.getElementById('btnBackupClose').onclick = function() { document.getElementById('screen-backup').classList.remove('active'); };
 document.getElementById('btnImportClose').onclick = function() { document.getElementById('screen-import').classList.remove('active'); };
 
-/* ===== НАСТРОЙКИ ===== */
 document.getElementById('aboutBtn').onclick = function() {
   document.getElementById('inputPlan').value = getPlan(currentMonth()) || '';
   document.getElementById('inputOklad').value = salary.oklad || '';
@@ -1865,7 +1953,7 @@ document.getElementById('aboutBtn').onclick = function() {
 document.getElementById('btnSettingsClose').onclick = function() { document.getElementById('screen-settings').classList.remove('active'); };
 document.querySelectorAll('.theme-option').forEach(function(opt) { opt.onclick = function() { var theme = this.dataset.theme; applyTheme(theme); showToast('Тема: ' + this.querySelector('.label').textContent, 'success'); }; });
 
-/* ===== СКРЫТЫЙ ВХОД В СТАТИСТИКУ ===== */
+/* ===== СКРЫТАЯ СТАТИСТИКА + АДМИН-КНОПКИ ===== */
 var versionTaps = 0;
 var versionTapTimer = null;
 document.getElementById('appVersionText').onclick = function() {
@@ -1881,6 +1969,23 @@ document.getElementById('appVersionText').onclick = function() {
 };
 document.getElementById('statsClose').onclick = function() { document.getElementById('statsModal').classList.remove('show'); };
 document.getElementById('statsRefresh').onclick = function() { showToast('Обновляю...', 'warn'); loadStats(); };
+document.getElementById('statsOpenBase').onclick = function() {
+  document.getElementById('statsModal').classList.remove('show');
+  document.getElementById('screen-base').classList.add('active');
+  renderBaseList();
+};
+document.getElementById('statsUploadBase').onclick = function() {
+  if (!window.fbUploadMyBase) { showToast('Firebase не подключён', 'error'); return; }
+  var withArt = products.filter(function(p) { return p.art && String(p.art).trim(); });
+  if (withArt.length === 0) { showToast('У тебя нет товаров с артикулом', 'warn'); return; }
+  var ok = confirm('Залить ' + withArt.length + ' товаров в общую базу?\n\nУже существующие будут пропущены.');
+  if (!ok) return;
+  showToast('Заливаю...', 'warn');
+  window.fbUploadMyBase(products).then(function(res) {
+    showToast('Готово: ' + res.uploaded + ' загружено, ' + res.skipped + ' пропущено', 'success');
+    vibrateSuccess();
+  }).catch(function(err) { showToast('Ошибка: ' + err, 'error'); });
+};
 
 function loadStats() {
   var box = document.getElementById('statsContent');
@@ -1949,8 +2054,7 @@ function timeAgo(ts) {
   return new Date(ts).toLocaleDateString('ru-RU');
 }
 
-/* ===== ЧТО НОВОГО ===== */
-var APP_VERSION = '2.11';
+var APP_VERSION = '2.12';
 var CHANGELOG_FULL = [
   { v: '1.0–1.6', title: 'Основа', items: ['Продажи, план, отчисления', 'QR-сканер, история, итоги, АД', 'Достижения, бэкап, фокус-лист'] },
   { v: '2.0', title: 'Флагманский дизайн', items: ['Стекло, SVG, градиенты', 'Заработок, прогноз, мини-график'] },
@@ -1961,16 +2065,17 @@ var CHANGELOG_FULL = [
   { v: '2.8', title: 'АД + MAX', items: ['АД снимает отчисления по фокус-листу', 'Бэкап в MAX'] },
   { v: '2.9', title: 'Share + прогноз', items: ['Поделиться итогами за день', 'Поделиться итогами за месяц', 'Прогноз заработка исправлен'] },
   { v: '2.10', title: 'Статистика', items: ['Добавлена статистика использования', 'Улучшена стабильность'] },
-  { v: '2.11', title: 'Общая база товаров', items: ['Поле «Артикул» в форме продажи', 'Общая база названий через Firebase', 'Подсказка при новом артикуле', 'Сканер прямо в экране базы', 'Массовый импорт товаров', 'Кнопка «Залить мою базу»'] }
+  { v: '2.11', title: 'Общая база товаров', items: ['Поле «Артикул» в форме продажи', 'Общая база названий через Firebase', 'Сканер прямо в экране базы'] },
+  { v: '2.12', title: 'Админ-база + фиксы', items: ['База скрыта от коллег (через 5 тапов)', 'Редактирование товаров', 'Поиск по базе', 'Список всех товаров', 'Оклад считается по дням'] }
 ];
 var CHANGELOG_LATEST = {
-  version: '2.11',
+  version: '2.12',
   items: [
-    '🗄 Общая база товаров через Firebase',
-    '📦 Поле «Артикул» в форме продажи',
-    '📷 Сканер прямо в экране базы',
-    '📤 Заливка своей базы в общую',
-    '⚠️ Подсказка при новом артикуле'
+    '🗄 База скрыта — доступ только через 5 тапов по версии',
+    '✏️ Редактирование товаров',
+    '🔍 Поиск по базе (по артикулу/названию)',
+    '📜 Список всех товаров',
+    '💰 Оклад считается пропорционально дням месяца'
   ]
 };
 function showWhatsNew() {
@@ -2002,7 +2107,6 @@ function showWhatsNew() {
 }
 document.getElementById('whatsNewClose').onclick = function() { document.getElementById('whatsNewModal').classList.remove('show'); };
 
-/* ===== SERVICE WORKER + INIT ===== */
 if ('serviceWorker' in navigator) { window.addEventListener('load', function() { navigator.serviceWorker.register('sw.js').catch(function(){}); }); }
 if (!xpData.startDate) { var now = new Date(); var firstOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1); xpData.startDate = dateStr(firstOfNextMonth); xpData.xp = 0; xpData.level = 1; save(); }
 document.getElementById('inputDate').value = today();
@@ -2041,7 +2145,6 @@ const fbApp = initializeApp(firebaseConfig);
 const db = getDatabase(fbApp);
 const auth = getAuth(fbApp);
 
-/* ===== ОБЩАЯ БАЗА ТОВАРОВ ===== */
 const BASE_PATH = 'products';
 let firebaseBaseCache = {};
 try {
@@ -2055,15 +2158,18 @@ window.fbLoadBase = function() {
       firebaseBaseCache = snap.val() || {};
       try { localStorage.setItem('firebaseBaseCache', JSON.stringify(firebaseBaseCache)); } catch(e) {}
       resolve(firebaseBaseCache);
-    }).catch(function(err) {
-      console.warn('База не загружена из Firebase, используем кэш:', err);
-      resolve(firebaseBaseCache);
-    });
+    }).catch(function(err) { console.warn('Base load error:', err); resolve(firebaseBaseCache); });
   });
 };
 window.fbGetProduct = function(art) {
   if (!art) return null;
   return firebaseBaseCache[String(art)] || null;
+};
+window.fbGetAll = function() {
+  return Object.keys(firebaseBaseCache).map(function(art) {
+    var v = firebaseBaseCache[art];
+    return { art: art, name: v.name, percent: v.percent, type: v.type, addedAt: v.addedAt || 0, addedBy: v.addedBy };
+  }).sort(function(a, b) { return (b.addedAt || 0) - (a.addedAt || 0); });
 };
 window.fbSaveProduct = function(art, data) {
   if (!art) return Promise.reject('Нет артикула');
@@ -2102,15 +2208,6 @@ window.fbUploadMyBase = function(myProducts) {
   });
   return chain.then(function() { return { total: total, uploaded: uploaded, skipped: skipped }; });
 };
-window.fbGetRecent = function(limit) {
-  limit = limit || 20;
-  var arr = Object.keys(firebaseBaseCache).map(function(art) {
-    var v = firebaseBaseCache[art];
-    return { art: art, name: v.name, percent: v.percent, type: v.type, addedAt: v.addedAt || 0, addedBy: v.addedBy };
-  });
-  arr.sort(function(a, b) { return (b.addedAt || 0) - (a.addedAt || 0); });
-  return arr.slice(0, limit);
-};
 window.fbSyncToLocal = function() {
   if (!firebaseBaseCache) return 0;
   var added = 0;
@@ -2120,13 +2217,8 @@ window.fbSyncToLocal = function() {
       var fb = firebaseBaseCache[art];
       if (!fb || !fb.name) return;
       var local = localProducts.find(function(p) { return String(p.art) === String(art); });
-      if (!local) {
-        localProducts.push({ art: String(art), name: fb.name, percent: (typeof fb.percent === 'number') ? fb.percent : 1.5, type: fb.type || 'regular' });
-        added++;
-      } else if (!local.name || /^Товар\s+\d+/.test(local.name) || /^Возврат\s+\d+/.test(local.name)) {
-        local.name = fb.name;
-        added++;
-      }
+      if (!local) { localProducts.push({ art: String(art), name: fb.name, percent: (typeof fb.percent === 'number') ? fb.percent : 1.5, type: fb.type || 'regular' }); added++; }
+      else if (!local.name || /^Товар\s+\d+/.test(local.name) || /^Возврат\s+\d+/.test(local.name)) { local.name = fb.name; added++; }
     });
     if (added > 0) {
       localStorage.setItem('products', JSON.stringify(localProducts));
@@ -2145,7 +2237,6 @@ window.fbSyncToLocal = function() {
   return added;
 };
 
-/* ===== ЧАТ ===== */
 let chatUser = null;
 let chatStarted = false;
 let lastReadTs = parseInt(localStorage.getItem('chatLastRead') || '0', 10);
@@ -2165,13 +2256,9 @@ document.getElementById('chatInlineBtn').onclick = function(e) {
     else { document.getElementById('chatNameModal').classList.add('show'); }
   }
 };
-document.getElementById('chatBack').onclick = function() {
-  document.getElementById('screen-chat').classList.remove('active');
-  chatOpen = false;
-};
+document.getElementById('chatBack').onclick = function() { document.getElementById('screen-chat').classList.remove('active'); chatOpen = false; };
 function updateBadge(count) {
-  var badge = document.getElementById('chatBadge');
-  var btn = document.getElementById('chatInlineBtn');
+  var badge = document.getElementById('chatBadge'); var btn = document.getElementById('chatInlineBtn');
   if (!badge) return;
   if (count > 0) { badge.textContent = count > 99 ? '99+' : String(count); badge.classList.add('show'); if (btn) btn.classList.add('unread'); }
   else { badge.classList.remove('show'); if (btn) btn.classList.remove('unread'); }
@@ -2188,10 +2275,7 @@ function startChat() {
   if (chatStarted) return;
   chatStarted = true;
   chatUser = localStorage.getItem('chatName') || 'Аноним';
-  signInAnonymously(auth).then(function() { loadMessages(); }).catch(function(err) {
-    document.getElementById('chatOnline').textContent = 'Ошибка входа';
-    console.error('Auth error:', err);
-  });
+  signInAnonymously(auth).then(function() { loadMessages(); }).catch(function(err) { document.getElementById('chatOnline').textContent = 'Ошибка входа'; console.error('Auth error:', err); });
 }
 function loadMessages() {
   var msgsRef = query(ref(db, 'chat/messages'), limitToLast(100));
@@ -2217,15 +2301,12 @@ function loadMessages() {
 function sendMessage() {
   var input = document.getElementById('chatInput'); var text = input.value.trim();
   if (!text || !chatUser) return;
-  push(ref(db, 'chat/messages'), { name: chatUser, text: text, ts: Date.now() }).then(function() {
-    input.value = ''; input.style.height = '44px';
-  }).catch(function(err) { alert('Ошибка: ' + err.message); });
+  push(ref(db, 'chat/messages'), { name: chatUser, text: text, ts: Date.now() }).then(function() { input.value = ''; input.style.height = '44px'; }).catch(function(err) { alert('Ошибка: ' + err.message); });
 }
 document.getElementById('chatSend').onclick = sendMessage;
 document.getElementById('chatInput').addEventListener('keydown', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
 document.getElementById('chatInput').addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 100) + 'px'; });
 
-/* ===== СТАТИСТИКА ===== */
 window.firebasePushOpen = function(deviceId) {
   var userRef = ref(db, 'stats/opens/' + deviceId);
   get(userRef).then(function(snap) {
@@ -2235,38 +2316,24 @@ window.firebasePushOpen = function(deviceId) {
     set(userRef, data).catch(function(){});
   }).catch(function(){});
 };
-window.firebasePushSale = function(deviceId) {
-  push(ref(db, 'stats/sales'), { deviceId: deviceId, ts: Date.now() }).catch(function(){});
-};
+window.firebasePushSale = function(deviceId) { push(ref(db, 'stats/sales'), { deviceId: deviceId, ts: Date.now() }).catch(function(){}); };
 window.firebaseLoadStats = function(callback) {
   Promise.all([ get(ref(db, 'stats/opens')), get(ref(db, 'stats/sales')) ]).then(function(results) {
     callback({ opens: results[0].val() || {}, sales: results[1].val() || {} });
   }).catch(function(err) { console.error('Stats error:', err); callback(null); });
 };
 
-/* Авторизация + загрузка базы при старте */
 signInAnonymously(auth).then(function() {
   window.firebasePushOpen(localStorage.getItem('deviceId') || '');
   return window.fbLoadBase();
-}).then(function() {
-  window.fbSyncToLocal();
-}).catch(function(err) { console.warn('init error:', err); });
+}).then(function() { window.fbSyncToLocal(); }).catch(function(err) { console.warn('init error:', err); });
 
-/* ===== SHARE КАРТИНОК ===== */
 function getAccentHex() { var t = localStorage.getItem('theme') || 'default'; var map = { default: '#10b981', light: '#10b981', polaris: '#0159BA', ios: '#007AFF', terminal: '#00FF00', soviet: '#8B0000' }; return map[t] || '#10b981'; }
 function getBgHex() { var t = localStorage.getItem('theme') || 'default'; var map = { default: '#060a08', light: '#f2f2f7', polaris: '#000000', ios: '#F2F2F7', terminal: '#000000', soviet: '#F5DEB3' }; return map[t] || '#060a08'; }
 function getTextHex() { var t = localStorage.getItem('theme') || 'default'; if (t === 'light' || t === 'ios') return '#1a1a1a'; if (t === 'soviet') return '#1a0808'; if (t === 'terminal') return '#00FF00'; return '#e8f5f0'; }
 function getMutedHex() { var t = localStorage.getItem('theme') || 'default'; if (t === 'light' || t === 'ios') return '#8E8E93'; if (t === 'soviet') return '#8B0000'; if (t === 'terminal') return '#00AA00'; return '#7c9b8d'; }
 
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
-}
+function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 function drawShareImage(type, callback) {
   var W = 1080, H = 1920;
   var canvas = document.createElement('canvas');
@@ -2274,30 +2341,14 @@ function drawShareImage(type, callback) {
   var ctx = canvas.getContext('2d');
   var bg = getBgHex(); var accent = getAccentHex(); var textColor = getTextHex(); var muted = getMutedHex();
   ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
-  if (bg === '#060a08' || bg === '#000000') {
-    var grad = ctx.createRadialGradient(W/2, -200, 100, W/2, 0, 800);
-    grad.addColorStop(0, 'rgba(16,185,129,0.35)'); grad.addColorStop(1, 'rgba(16,185,129,0)');
-    ctx.fillStyle = grad; ctx.fillRect(0, 0, W, 1000);
-  }
-  ctx.fillStyle = textColor;
-  ctx.font = '900 72px -apple-system, BlinkMacSystemFont, sans-serif';
-  ctx.textAlign = 'left';
-  ctx.fillText('Трекер продаж', 80, 180);
-  ctx.font = '600 40px -apple-system, BlinkMacSystemFont, sans-serif';
-  ctx.fillStyle = muted;
+  if (bg === '#060a08' || bg === '#000000') { var grad = ctx.createRadialGradient(W/2, -200, 100, W/2, 0, 800); grad.addColorStop(0, 'rgba(16,185,129,0.35)'); grad.addColorStop(1, 'rgba(16,185,129,0)'); ctx.fillStyle = grad; ctx.fillRect(0, 0, W, 1000); }
+  ctx.fillStyle = textColor; ctx.font = '900 72px -apple-system, BlinkMacSystemFont, sans-serif'; ctx.textAlign = 'left'; ctx.fillText('Трекер продаж', 80, 180);
+  ctx.font = '600 40px -apple-system, BlinkMacSystemFont, sans-serif'; ctx.fillStyle = muted;
   var subtitle = '';
-  if (type === 'day') {
-    var d = new Date(historyDate);
-    subtitle = '● ' + d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-  } else {
-    var monthName = totalsMonth.toLocaleDateString('ru-RU', { month: 'long' });
-    monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
-    subtitle = '● ' + monthName + ' ' + totalsMonth.getFullYear();
-  }
+  if (type === 'day') { var d = new Date(historyDate); subtitle = '● ' + d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }); }
+  else { var monthName = totalsMonth.toLocaleDateString('ru-RU', { month: 'long' }); monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1); subtitle = '● ' + monthName + ' ' + totalsMonth.getFullYear(); }
   ctx.fillText(subtitle, 80, 250);
-  ctx.strokeStyle = accent; ctx.lineWidth = 4;
-  ctx.beginPath(); ctx.moveTo(80, 300); ctx.lineTo(W - 80, 300); ctx.stroke();
-
+  ctx.strokeStyle = accent; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(80, 300); ctx.lineTo(W - 80, 300); ctx.stroke();
   var data = [];
   if (type === 'day') {
     var hDate = dateStr(historyDate);
@@ -2306,10 +2357,7 @@ function drawShareImage(type, callback) {
     var daySum = 0, dayComm = 0, dayADSum = 0, dayADComm = 0;
     daySales.forEach(function(s) { daySum += s.sum; dayComm += s.commission; });
     dayAD.forEach(function(s) { dayADSum += Math.abs(s.sum); dayADComm += s.commission; });
-    data = [
-      { label: 'ПРОДАНО', value: fmt(daySum), sub: daySales.length + ' продаж' },
-      { label: 'ОТЧИСЛЕНИЯ', value: fmt(dayComm), sub: '% с продаж' }
-    ];
+    data = [ { label: 'ПРОДАНО', value: fmt(daySum), sub: daySales.length + ' продаж' }, { label: 'ОТЧИСЛЕНИЯ', value: fmt(dayComm), sub: '% с продаж' } ];
     if (dayAD.length > 0) data.push({ label: 'ВОЗВРАТЫ (АД)', value: '−' + fmt(dayADSum), sub: 'снято: −' + fmt(Math.abs(dayADComm)) });
   } else {
     var m = currentMonth();
@@ -2323,48 +2371,31 @@ function drawShareImage(type, callback) {
     var bdS = {}; mSales.forEach(function(s) { bdS[s.date] = (bdS[s.date] || 0) + s.sum; });
     var dsArr = Object.keys(bdS); var recSum = 0, recDate = '';
     if (dsArr.length > 0) { var bD = dsArr.reduce(function(a,b) { return bdS[a] > bdS[b] ? a : b; }); recSum = bdS[bD]; recDate = new Date(bD).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' }); }
-    data = [
-      { label: 'ПРОДАНО', value: fmt(mSum), sub: mSales.length + ' продаж' },
-      { label: 'ОТЧИСЛЕНИЯ', value: fmt(netComm), sub: 'чистые' }
-    ];
+    data = [ { label: 'ПРОДАНО', value: fmt(mSum), sub: mSales.length + ' продаж' }, { label: 'ОТЧИСЛЕНИЯ', value: fmt(netComm), sub: 'чистые' } ];
     if (mAD.length > 0) data.push({ label: 'ВОЗВРАТЫ (АД)', value: '−' + fmt(mADSum), sub: mAD.length + ' записей' });
     if (recSum > 0) data.push({ label: 'РЕКОРД ДНЯ', value: fmt(recSum), sub: recDate });
   }
   var yStart = 400; var cardH = 200; var cardGap = 40;
   data.forEach(function(item, i) {
     var y = yStart + i * (cardH + cardGap);
-    ctx.fillStyle = 'rgba(255,255,255,0.06)';
-    roundRect(ctx, 80, y, W - 160, cardH, 32); ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 2;
-    roundRect(ctx, 80, y, W - 160, cardH, 32); ctx.stroke();
-    ctx.fillStyle = accent;
-    roundRect(ctx, 80, y, 10, cardH, 5); ctx.fill();
-    ctx.fillStyle = muted; ctx.font = '800 32px -apple-system, sans-serif';
-    ctx.fillText(item.label, 130, y + 70);
-    ctx.fillStyle = accent; ctx.font = '900 72px -apple-system, sans-serif';
-    ctx.fillText(item.value, 130, y + 150);
-    ctx.fillStyle = muted; ctx.font = '600 28px -apple-system, sans-serif';
-    ctx.fillText(item.sub, 130, y + 185);
+    ctx.fillStyle = 'rgba(255,255,255,0.06)'; roundRect(ctx, 80, y, W - 160, cardH, 32); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 2; roundRect(ctx, 80, y, W - 160, cardH, 32); ctx.stroke();
+    ctx.fillStyle = accent; roundRect(ctx, 80, y, 10, cardH, 5); ctx.fill();
+    ctx.fillStyle = muted; ctx.font = '800 32px -apple-system, sans-serif'; ctx.fillText(item.label, 130, y + 70);
+    ctx.fillStyle = accent; ctx.font = '900 72px -apple-system, sans-serif'; ctx.fillText(item.value, 130, y + 150);
+    ctx.fillStyle = muted; ctx.font = '600 28px -apple-system, sans-serif'; ctx.fillText(item.sub, 130, y + 185);
   });
-  ctx.fillStyle = muted; ctx.font = '700 32px -apple-system, sans-serif'; ctx.textAlign = 'center';
-  ctx.fillText('Трекер продаж Polaris', W/2, H - 100);
+  ctx.fillStyle = muted; ctx.font = '700 32px -apple-system, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('Трекер продаж Polaris', W/2, H - 100);
   ctx.textAlign = 'left';
   canvas.toBlob(function(blob) { callback(blob); }, 'image/png', 0.95);
 }
-function downloadImage(blob, filename) {
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
-  showToast('Картинка сохранена — отправь в MAX', 'success');
-}
+function downloadImage(blob, filename) { var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function() { URL.revokeObjectURL(url); }, 1000); showToast('Картинка сохранена', 'success'); }
 function shareImage(type) {
   drawShareImage(type, function(blob) {
     var filename = type === 'day' ? 'tracker_day.png' : 'tracker_month.png';
     var file = new File([blob], filename, { type: 'image/png' });
     if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({ files: [file], title: 'Трекер продаж Polaris' }).then(function() { showToast('Отправлено', 'success'); }).catch(function(err) { if (err.name !== 'AbortError') { console.error('Share error:', err); downloadImage(blob, filename); } });
+      navigator.share({ files: [file], title: 'Трекер продаж Polaris' }).then(function() { showToast('Отправлено', 'success'); }).catch(function(err) { if (err.name !== 'AbortError') downloadImage(blob, filename); });
     } else { downloadImage(blob, filename); }
   });
 }

@@ -14,10 +14,10 @@
 body.theme-light{--bg:#f2f2f7;--card-bg1:rgba(255,255,255,.95);--card-bg2:rgba(255,255,255,.95);--card-border:rgba(0,0,0,.06);--card-shadow:rgba(0,0,0,.08);--text:#1a1a1a;--text-muted:#5b7a6d;--text-dim:#8e8e93;--input-bg:rgba(0,0,0,.04);--input-border:rgba(0,0,0,.1)}
 body.theme-polaris{--bg:#000;--card-bg1:rgba(20,20,20,.9);--card-bg2:rgba(10,10,10,.9);--card-border:rgba(1,89,186,.3);--text:#fff;--text-muted:#6b7b8d;--text-dim:#5b6b7d;--accent:#0159BA;--accent-dark:#014a9c;--accent-light:#2d7fd4;--accent-pale:#a7c8f0;--gold:#FDD310;--gold-dark:#e5b800;--blue:#2d7fd4}
 body.theme-ios{--bg:#F2F2F7;--card-bg1:#fff;--card-bg2:#fff;--card-border:rgba(0,0,0,.04);--card-shadow:rgba(0,0,0,.06);--text:#000;--text-muted:#8E8E93;--text-dim:#8E8E93;--accent:#007AFF;--accent-dark:#0062CC;--accent-light:#5AC8FA;--accent-pale:#E1F0FF;--gold:#FF9500;--gold-dark:#FF7A00;--blue:#007AFF;--red:#FF3B30;--red-dark:#D62B20;--input-bg:rgba(0,0,0,.04);--input-border:rgba(0,0,0,.08);--radius:16px;--radius-small:10px}
-body.theme-terminal{--bg:#000;--card-bg1:rgba(0,20,0,.8);--card-bg2:rgba(0,15,0,.8);--card-border:rgba(0,255,0,.25);--text:#0F0;--text-muted:#0A0;--text-dim:#080;--accent:#0F0;--accent-dark:#0C0;--accent-light:#3F3;--accent-pale:#6F6;--gold:#0F0;--gold-dark:#0C0;--blue:#0F0;--red:#F30;--red-dark:#C20;--input-bg:rgba(0,30,0,.6);--input-border:rgba(0,255,0,.3);--font-main:'Courier New','Courier',monospace;--radius:4px;--radius-small:3px}
+body.theme-terminal{--bg:#000;--card-bg1:rgba(0,20,0,.8);--card-bg2:rgba(0,15,0,.8);--card-border:rgba(0,255,0,.25);--text:#0F0;--text-muted:#0A0;--text-dim:#080;--accent:#0F0;--accent-dark:#0C0;--accent-light:#3F3;--accent-pale:#6F6;--gold:#0F0;--gold-dark:#0C0;--blue:#0F0;--red:#F30;--red-dark:#C20;--input-bg:rgba(0,30,0,.6);--input-border:rgba(0,255,0,.3);--font-main:'Courier New',monospace;--radius:4px;--radius-small:3px}
 body.theme-soviet{--bg:#F5DEB3;--card-bg1:rgba(255,245,220,.95);--card-bg2:rgba(245,235,210,.95);--card-border:rgba(139,0,0,.3);--card-shadow:rgba(139,0,0,.2);--text:#1a0808;--text-muted:#8B0000;--text-dim:#B22222;--accent:#8B0000;--accent-dark:#660000;--accent-light:#B22222;--accent-pale:#F5DEB3;--gold:#B8860B;--gold-dark:#8B6508;--blue:#8B0000;--red:#8B0000;--red-dark:#660000;--input-bg:rgba(255,245,220,.9);--input-border:rgba(139,0,0,.4);--radius:4px;--radius-small:3px}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:var(--font-main);background:var(--bg);color:var(--text);overflow:hidden;font-size:14px;position:relative;transition:background .3s ease,color .3s ease}
+body{font-family:var(--font-main);background:var(--bg);color:var(--text);overflow:hidden;font-size:14px;position:relative;transition:background .3s,color .3s}
 body:not([class*="theme-"]):not(.theme-light):not(.theme-polaris):not(.theme-ios):not(.theme-terminal):not(.theme-soviet)::before{content:'';position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:bgFloat 14s ease-in-out infinite;width:340px;height:340px;top:-80px;left:-100px;background:radial-gradient(circle,rgba(16,185,129,.28),transparent 70%)}
 body:not([class*="theme-"]):not(.theme-light):not(.theme-polaris):not(.theme-ios):not(.theme-terminal):not(.theme-soviet)::after{content:'';position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:bgFloat 14s ease-in-out infinite;width:300px;height:300px;bottom:-100px;right:-80px;background:radial-gradient(circle,rgba(56,189,248,.18),transparent 70%);animation-delay:-7s}
 @keyframes bgFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-20px) scale(1.1)}}
@@ -35,7 +35,7 @@ body.theme-terminal .header h1{background:none;-webkit-text-fill-color:var(--acc
 .lvl-icon.c5{background:linear-gradient(135deg,#ef4444,#fbbf24);animation:lvlPulse 2s ease-out infinite}
 @keyframes lvlPulse{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 10px transparent}100%{box-shadow:0 0 0 0 transparent}}
 body.theme-terminal .lvl-icon,body.theme-soviet .lvl-icon{border-radius:4px}
-.card{background:linear-gradient(180deg,var(--card-bg1) 0%,var(--card-bg2) 100%);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:var(--radius);border:1px solid var(--card-border);box-shadow:0 8px 24px var(--card-shadow),inset 0 1px 0 rgba(255,255,255,.05);margin:0 14px 12px;padding:16px;position:relative;overflow:hidden;z-index:1;transition:transform .15s ease,background .3s ease}
+.card{background:linear-gradient(180deg,var(--card-bg1) 0%,var(--card-bg2) 100%);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:var(--radius);border:1px solid var(--card-border);box-shadow:0 8px 24px var(--card-shadow),inset 0 1px 0 rgba(255,255,255,.05);margin:0 14px 12px;padding:16px;position:relative;overflow:hidden;z-index:1;transition:transform .15s,background .3s}
 body.theme-light .card,body.theme-ios .card,body.theme-soviet .card{box-shadow:0 2px 12px var(--card-shadow),inset 0 1px 0 rgba(255,255,255,.8)}
 body.theme-terminal .card{border:1px solid var(--accent);box-shadow:0 0 12px rgba(0,255,0,.2),inset 0 0 20px rgba(0,255,0,.05);backdrop-filter:none;-webkit-backdrop-filter:none}
 body.theme-soviet .card{border:2px solid var(--accent);box-shadow:3px 3px 0 rgba(139,0,0,.3)}
@@ -128,7 +128,7 @@ body.theme-light .about-name,body.theme-ios .about-name,body.theme-soviet .about
 #aboutBtn{position:fixed;top:20px;right:16px;background:rgba(255,255,255,.05);border:1px solid var(--card-border);color:var(--text-muted);font-size:20px;cursor:pointer;z-index:10;padding:6px 8px;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center}
 body.theme-terminal #aboutBtn{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px}
 body.theme-soviet #aboutBtn{background:#F5DEB3;border:2px solid var(--accent);color:var(--accent);border-radius:4px}
-.chat-inline{position:absolute;right:0;top:50%;transform:translateY(-50%);background:rgba(16,185,129,.15);border:2px solid var(--accent);border-radius:12px;padding:8px 14px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;color:var(--accent);transition:all .2s ease;box-shadow:0 0 16px rgba(16,185,129,.25);font-family:inherit;font-size:13px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.chat-inline{position:absolute;right:0;top:50%;transform:translateY(-50%);background:rgba(16,185,129,.15);border:2px solid var(--accent);border-radius:12px;padding:8px 14px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;color:var(--accent);transition:all .2s;box-shadow:0 0 16px rgba(16,185,129,.25);font-family:inherit;font-size:13px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
 .chat-inline svg{width:20px;height:20px;stroke-width:2.4;flex-shrink:0}
 .chat-inline .chat-label{display:block}
 .chat-inline:active{transform:translateY(-50%) scale(.96)}
@@ -155,11 +155,11 @@ body.theme-soviet .chat-inline{background:#F5DEB3;border:2px solid var(--accent)
 .modal-screen{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);overflow-y:auto;z-index:200;padding-bottom:40px}
 .modal-screen.active{display:block}
 #dots{position:fixed;bottom:6px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:8px;padding:10px 0;z-index:150;pointer-events:none}
-#dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .35s ease;pointer-events:auto;cursor:pointer}
+#dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .35s;pointer-events:auto;cursor:pointer}
 body.theme-light #dots span,body.theme-ios #dots span,body.theme-soviet #dots span{background:rgba(0,0,0,.15)}
 body.theme-terminal #dots span{background:rgba(0,255,0,.2);border-radius:2px}
 #dots span.active{background:var(--accent);width:24px;border-radius:4px;box-shadow:0 0 12px rgba(16,185,129,.6)}
-.qr-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:10;gap:20px;transition:opacity .4s ease}
+.qr-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:10;gap:20px;transition:opacity .4s}
 .qr-loading.hidden{opacity:0;pointer-events:none}
 .qr-spinner{width:50px;height:50px;border:4px solid rgba(255,255,255,.1);border-top-color:var(--accent);border-radius:50%;animation:qrSpin .9s linear infinite}
 @keyframes qrSpin{to{transform:rotate(360deg)}}
@@ -182,7 +182,7 @@ body.theme-terminal #dots span{background:rgba(0,255,0,.2);border-radius:2px}
 .qr-ctl{width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.6);color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .qr-ctl.close{background:rgba(239,68,68,.7);border-color:#fff}
 .qr-ctl.active{background:#fbbf24;color:#0a0f0d;border-color:#fbbf24}
-.toast{position:fixed;top:20px;left:14px;right:14px;padding:14px 16px;border-radius:14px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px;z-index:99999;opacity:0;transform:translateY(-20px);transition:all .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.5);color:#0a0f0d}
+.toast{position:fixed;top:20px;left:14px;right:14px;padding:14px 16px;border-radius:14px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px;z-index:99999;opacity:0;transform:translateY(-20px);transition:all .3s;box-shadow:0 8px 24px rgba(0,0,0,.5);color:#0a0f0d}
 .toast.show{opacity:1;transform:translateY(0)}
 .toast.success{background:linear-gradient(135deg,#10b981,#059669)}
 .toast.warn{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
@@ -217,7 +217,7 @@ body.theme-soviet .toast{background:var(--accent);color:#F5DEB3;border:2px solid
 .xp-name{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.3px}
 .xp-bar-bg{height:10px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden;margin-top:12px;position:relative}
 body.theme-light .xp-bar-bg,body.theme-ios .xp-bar-bg,body.theme-soviet .xp-bar-bg{background:rgba(0,0,0,.08)}
-.xp-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent-light));transition:width .6s ease;width:0%;box-shadow:0 0 12px rgba(16,185,129,.5)}
+.xp-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent-light));transition:width .6s;width:0%;box-shadow:0 0 12px rgba(16,185,129,.5)}
 .xp-meta{display:flex;justify-content:space-between;font-size:11.5px;color:var(--text-muted);margin-top:8px}
 .xp-meta .hi{color:var(--text);font-weight:700}
 .checklist-section{margin:0 14px 16px;padding:16px;background:linear-gradient(180deg,var(--card-bg1) 0%,var(--card-bg2) 100%);border:1px solid var(--card-border);border-radius:var(--radius);box-shadow:0 4px 16px var(--card-shadow)}
@@ -239,7 +239,7 @@ body.theme-soviet .settings-section{border:2px solid var(--accent);border-radius
 .settings-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 body.theme-terminal .settings-title::before{content:'> '}
 .theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
-.theme-option{padding:14px 10px;border:2px solid var(--card-border);border-radius:12px;text-align:center;cursor:pointer;transition:all .2s ease;background:rgba(255,255,255,.02)}
+.theme-option{padding:14px 10px;border:2px solid var(--card-border);border-radius:12px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.02)}
 .theme-option:active{transform:scale(.97)}
 .theme-option.active{border-color:var(--accent);background:rgba(16,185,129,.1);box-shadow:0 0 12px rgba(16,185,129,.3)}
 .theme-option .preview{width:100%;height:40px;border-radius:6px;margin-bottom:8px;border:1px solid rgba(255,255,255,.1)}
@@ -287,7 +287,7 @@ body.theme-soviet .msg-row.own .msg-bubble{background:var(--accent);color:#F5DEB
 .chat-name-box button{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#0a0f0d;border:none;border-radius:var(--radius-small);font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
 .soviet-slogan{display:none;text-align:center;padding:14px;font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--accent);border-top:2px solid var(--accent);border-bottom:2px solid var(--accent);margin:16px 14px;background:rgba(139,0,0,.05)}
 body.theme-soviet .soviet-slogan{display:block}
-.share-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:calc(100% - 28px);margin:12px auto 20px;padding:14px;background:rgba(16,185,129,.15);color:var(--accent);border:2px solid var(--accent);border-radius:var(--radius-small);font-size:14px;font-weight:800;cursor:pointer;text-align:center;letter-spacing:.5px;text-transform:uppercase;font-family:inherit;transition:all .2s ease}
+.share-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:calc(100% - 28px);margin:12px auto 20px;padding:14px;background:rgba(16,185,129,.15);color:var(--accent);border:2px solid var(--accent);border-radius:var(--radius-small);font-size:14px;font-weight:800;cursor:pointer;text-align:center;letter-spacing:.5px;text-transform:uppercase;font-family:inherit;transition:all .2s}
 .share-btn:active{transform:scale(.97)}
 body.theme-terminal .share-btn{background:transparent;border:2px solid var(--accent);border-radius:4px}
 body.theme-soviet .share-btn{background:#F5DEB3;border:2px solid var(--accent);color:var(--accent);border-radius:4px}
@@ -360,8 +360,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
   <div id="swipeContainer">
   <div class="swipe-screen" id="screen-home">
     <div class="header">
-      <div>
-        <h1>Трекер продаж</h1>
+      <div><h1>Трекер продаж</h1>
         <div class="date"><span class="lvl-icon c1" id="hdrLvlIcon">🐣</span><span id="currentDate"></span></div>
       </div>
     </div>
@@ -371,8 +370,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
         План на месяц
         <button class="chat-inline" id="chatInlineBtn" title="Чат">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
-          <span class="chat-label">Чат</span>
-          <span class="chat-badge" id="chatBadge">0</span>
+          <span class="chat-label">Чат</span><span class="chat-badge" id="chatBadge">0</span>
         </button>
       </div>
       <div class="big-number" id="monthPlan">0 ₽</div>
@@ -381,67 +379,27 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
       <div class="sub-text" id="minThreshold">Минимум 80% — не выполнен</div>
     </div>
     <div class="card xp-card">
-      <div class="xp-header">
-        <div class="xp-badge c1" id="xpBadge">🐣</div>
+      <div class="xp-header"><div class="xp-badge c1" id="xpBadge">🐣</div>
         <div class="xp-info"><div class="xp-level" id="xpLevelNum">УРОВЕНЬ 1</div><div class="xp-name" id="xpLevelName">Первый день</div></div>
       </div>
       <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBar"></div></div>
       <div class="xp-meta"><span><span class="hi" id="xpCurrent">0</span> / <span id="xpNext">300</span> XP</span><span id="xpToNext">до след.: 300</span></div>
     </div>
     <div class="grid-2">
-      <div class="card">
-        <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Продано</div>
-        <div class="big-number" style="font-size:22px" id="todaySales">0 ₽</div>
-        <div class="sub-text" id="todayCount">0 продаж</div>
-      </div>
-      <div class="card">
-        <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Отчисления</div>
-        <div class="big-number blue" style="font-size:22px" id="todayCommission">0 ₽</div>
-        <div class="sub-text">сегодня</div>
-      </div>
+      <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Продано</div><div class="big-number" style="font-size:22px" id="todaySales">0 ₽</div><div class="sub-text" id="todayCount">0 продаж</div></div>
+      <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Отчисления</div><div class="big-number blue" style="font-size:22px" id="todayCommission">0 ₽</div><div class="sub-text">сегодня</div></div>
     </div>
-    <div class="card">
-      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>Заработано</div>
-      <div class="grid-2 inside">
-        <div><div class="sub-text" style="margin-top:0">Сегодня</div><div class="big-number gold" style="font-size:22px" id="todayEarned">0 ₽</div><div class="sub-text" id="todayEarnedBreak">—</div></div>
-        <div><div class="sub-text" style="margin-top:0">За месяц</div><div class="big-number gold" style="font-size:22px" id="monthEarned">0 ₽</div><div class="sub-text" id="monthEarnedBreak">—</div></div>
-      </div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>Заработано</div>
+      <div class="grid-2 inside"><div><div class="sub-text" style="margin-top:0">Сегодня</div><div class="big-number gold" style="font-size:22px" id="todayEarned">0 ₽</div><div class="sub-text" id="todayEarnedBreak">—</div></div><div><div class="sub-text" style="margin-top:0">За месяц</div><div class="big-number gold" style="font-size:22px" id="monthEarned">0 ₽</div><div class="sub-text" id="monthEarnedBreak">—</div></div></div>
     </div>
-    <div class="card">
-      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Прогноз заработка</div>
-      <div class="big-number" style="font-size:26px" id="forecastEarned">0 ₽</div>
-      <div class="sub-text">если темп сохранится</div>
-      <div class="sub-text" id="forecastCompare" style="margin-top:10px;">—</div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Прогноз заработка</div><div class="big-number" style="font-size:26px" id="forecastEarned">0 ₽</div><div class="sub-text">если темп сохранится</div><div class="sub-text" id="forecastCompare" style="margin-top:10px;">—</div></div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Возвраты за месяц</div><div class="big-number red" style="font-size:22px" id="monthCommission_AD">−0 ₽</div><div class="sub-text" id="monthADCount">0 записей</div><div class="sub-text" id="monthADComm" style="margin-top:4px;">снято отчислений: −0 ₽</div></div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg>Отчисления за месяц</div><div class="big-number" style="font-size:25px" id="monthCommission">0 ₽</div><div class="sub-text">Продажи минус возвраты</div></div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Рекорд месяца</div>
+      <div class="grid-2 inside"><div><div class="sub-text" style="margin-top:0">По сумме</div><div class="big-number gold" style="font-size:20px" id="recordSum">0 ₽</div><div class="sub-text" id="recordDate">—</div></div><div><div class="sub-text" style="margin-top:0">По отчислениям</div><div class="big-number" style="font-size:20px;color:#34d399" id="recordComm">0 ₽</div><div class="sub-text" id="recordCommDate">—</div></div></div>
     </div>
-    <div class="card">
-      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Возвраты за месяц</div>
-      <div class="big-number red" style="font-size:22px" id="monthCommission_AD">−0 ₽</div>
-      <div class="sub-text" id="monthADCount">0 записей</div>
-      <div class="sub-text" id="monthADComm" style="margin-top:4px;">снято отчислений: −0 ₽</div>
-    </div>
-    <div class="card">
-      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg>Отчисления за месяц</div>
-      <div class="big-number" style="font-size:25px" id="monthCommission">0 ₽</div>
-      <div class="sub-text">Продажи минус возвраты</div>
-    </div>
-    <div class="card">
-      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Рекорд месяца</div>
-      <div class="grid-2 inside">
-        <div><div class="sub-text" style="margin-top:0">По сумме</div><div class="big-number gold" style="font-size:20px" id="recordSum">0 ₽</div><div class="sub-text" id="recordDate">—</div></div>
-        <div><div class="sub-text" style="margin-top:0">По отчислениям</div><div class="big-number" style="font-size:20px;color:#34d399" id="recordComm">0 ₽</div><div class="sub-text" id="recordCommDate">—</div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Осталось до плана</div>
-      <div class="big-number gold" style="font-size:22px" id="remaining">0 ₽</div>
-      <div class="sub-text"><span id="remainingPercent">100.0%</span> от плана</div>
-      <div class="sub-text" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06);">Нужно продавать в день: <span class="accent" id="dailyNeeded">0 ₽</span></div>
-    </div>
-    <div class="card">
-      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Прогноз плана</div>
-      <div class="big-number" style="font-size:22px;color:#fbbf24" id="forecastPercent">0%</div>
-      <div class="sub-text" id="forecastText">при текущем темпе</div>
-    </div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Осталось до плана</div><div class="big-number gold" style="font-size:22px" id="remaining">0 ₽</div><div class="sub-text"><span id="remainingPercent">100.0%</span> от плана</div><div class="sub-text" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06);">Нужно продавать в день: <span class="accent" id="dailyNeeded">0 ₽</span></div></div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Прогноз плана</div><div class="big-number" style="font-size:22px;color:#fbbf24" id="forecastPercent">0%</div><div class="sub-text" id="forecastText">при текущем темпе</div></div>
     <div class="soviet-slogan">ВЫПОЛНИМ ПЛАН — УКРЕПИМ ЭКОНОМИКУ!</div>
   </div>
   <div class="swipe-screen" id="screen-add">
@@ -454,17 +412,10 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
         </div>
         <div id="searchResults"></div>
       </div>
-      <div class="form-group" id="artGroup">
-        <label>Артикул</label>
-        <input type="text" id="inputArt" placeholder="Сканируй QR или введи вручную">
-        <div id="artStatus" class="art-status" style="display:none;"></div>
-      </div>
+      <div class="form-group" id="artGroup"><label>Артикул</label><input type="text" id="inputArt" placeholder="Сканируй QR или введи вручную"><div id="artStatus" class="art-status" style="display:none;"></div></div>
       <div class="form-group"><label>Дата</label><input type="date" id="inputDate" max="" style="display:none;"><div class="date-display" id="inputDateDisplay">Сегодня</div></div>
       <div class="form-group"><label>Товар</label><input type="text" id="inputName" placeholder="Название товара"></div>
-      <div id="newProductHint" class="new-product-hint">
-        <div class="hint-title">⚠️ Новый артикул</div>
-        <div class="hint-text">Названия нет в базе. Введи его в поле «Товар» выше — оно сохранится в общую базу при сохранении продажи.</div>
-      </div>
+      <div id="newProductHint" class="new-product-hint"><div class="hint-title">⚠️ Новый артикул</div><div class="hint-text">Названия нет в базе. Введи его в поле «Товар» выше — оно сохранится в общую базу при сохранении продажи.</div></div>
       <div class="form-group"><label>Количество</label><input type="number" id="inputQty" value="1" min="1"></div>
       <div class="form-group"><label>Цена за штуку (₽)</label><input type="number" id="inputSum" placeholder="0" min="0"></div>
       <div class="form-group"><label>Процент отчисления (%)</label><input type="number" id="inputPercent" value="1.5" min="0" max="100" step="0.1"></div>
@@ -475,25 +426,14 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
     <div class="header"><h1 id="histTitle">История продаж</h1></div>
     <div class="card"><div class="form-group" style="margin-bottom:0;"><label>Выбрать дату</label><input type="date" id="historyDatePicker" max="" style="display:none;"><div class="date-display" id="historyDateDisplay">Сегодня</div></div></div>
     <div class="card"><div id="historyList"><div class="empty">Нет продаж за этот день</div></div></div>
-    <div class="card">
-      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Итог за день</div>
-      <div class="sub-text">Сумма: <span class="accent" id="histTotal">0 ₽</span></div>
-      <div class="sub-text">Отчисления: <span class="accent" id="histCommission">0 ₽</span></div>
-    </div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Итог за день</div><div class="sub-text">Сумма: <span class="accent" id="histTotal">0 ₽</span></div><div class="sub-text">Отчисления: <span class="accent" id="histCommission">0 ₽</span></div></div>
     <button class="share-btn" id="btnShareDay"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Поделиться итогами за день</button>
   </div>
   <div class="swipe-screen" id="screen-totals">
     <div class="header"><h1 id="totalsTitle">Итоги</h1></div>
-    <div class="card">
-      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>План на месяц</div>
-      <div class="big-number" id="totalsPlan">0 ₽</div>
-      <div class="sub-text" id="totalsPercent">0.0% выполнено</div>
-      <div class="progress-bg"><div class="progress-fill" id="totalsProgress"></div><div class="progress-mark" style="left: 80%;"></div></div>
-    </div>
-    <div class="grid-2">
-      <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Продано</div><div class="big-number" style="font-size:22px" id="totalsSum">0 ₽</div><div class="sub-text" id="totalsCount">0 продаж</div></div>
-      <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Отчисления</div><div class="big-number blue" style="font-size:22px" id="totalsComm">0 ₽</div></div>
-    </div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>План на месяц</div><div class="big-number" id="totalsPlan">0 ₽</div><div class="sub-text" id="totalsPercent">0.0% выполнено</div><div class="progress-bg"><div class="progress-fill" id="totalsProgress"></div><div class="progress-mark" style="left: 80%;"></div></div></div>
+    <div class="grid-2"><div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Продано</div><div class="big-number" style="font-size:22px" id="totalsSum">0 ₽</div><div class="sub-text" id="totalsCount">0 продаж</div></div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Отчисления</div><div class="big-number blue" style="font-size:22px" id="totalsComm">0 ₽</div></div></div>
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg>Заработок за месяц</div><div class="big-number gold" style="font-size:25px" id="totalsEarned">0 ₽</div><div class="sub-text">Оклад: <span class="accent" id="totalsOkladText">0 ₽</span></div><div class="sub-text">Проценты: <span class="accent" id="totalsCommText">0 ₽</span></div></div>
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Возвраты (АД)</div><div class="big-number red" style="font-size:22px" id="totalsAD">0 ₽</div><div class="sub-text" id="totalsADCount">0 записей</div></div>
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Чистый оборот</div><div class="big-number" style="font-size:25px" id="totalsNet">0 ₽</div><div class="sub-text">Продажи минус возвраты</div></div>
@@ -504,59 +444,19 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Регулярные товары</div><div class="sub-text">Продано: <span class="accent" id="totalsRegSum">0 ₽</span></div><div class="sub-text">Отчисления: <span class="accent" id="totalsRegComm">0 ₽</span></div><div class="sub-text">Количество: <span class="accent" id="totalsRegCount">0 шт</span></div></div>
     <button class="share-btn" id="btnShareMonth"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Поделиться итогами за месяц</button>
   </div>
-    <div class="swipe-screen" id="screen-checklist">
+  <div class="swipe-screen" id="screen-checklist">
     <div class="header"><h1>Чек-лист ТП</h1></div>
-    <div class="checklist-section"><div class="checklist-title critical">🌐 ЭКОСИСТЕМА IQ HOME</div>
-      <div class="checklist-item">Рассказал про линейку IQ Home</div>
-      <div class="checklist-item">Показал мобильное приложение</div>
-      <div class="checklist-item">Объяснил ключевые преимущества</div>
-      <div class="checklist-item">Связал с категорией клиента</div>
-    </div>
-    <div class="checklist-section"><div class="checklist-title">🎯 ВЫЯВЛЕНИЕ ПОТРЕБНОСТИ</div>
-      <div class="checklist-item">Кто будет пользоваться</div>
-      <div class="checklist-item">Кто ещё будет пользоваться</div>
-      <div class="checklist-item">Чем пользовался ранее</div>
-      <div class="checklist-item">Что не устраивает</div>
-      <div class="checklist-item">Что важно в новом</div>
-      <div class="checklist-item">Формировал потребности</div>
-      <div class="checklist-item">Резюмировал</div>
-    </div>
-    <div class="checklist-section"><div class="checklist-title">📺 ПРЕЗЕНТАЦИЯ</div>
-      <div class="checklist-item">Соответствует потребностям</div>
-      <div class="checklist-item critical">🔴 Техника СПВ</div>
-      <div class="checklist-item">Обратная связь</div>
-      <div class="checklist-item">Дал товар в руки</div>
-      <div class="checklist-item critical">🔴 🎁 Предложил доп. товар</div>
-    </div>
-    <div class="checklist-section"><div class="checklist-title">⚔️ ВОЗРАЖЕНИЯ</div>
-      <div class="checklist-item">Выслушал, не перебивал</div>
-      <div class="checklist-item">Выяснил причину</div>
-      <div class="checklist-item">Присоединился к причине</div>
-      <div class="checklist-item">Привёл аргументы</div>
-      <div class="checklist-item">Убедился в отсутствии сомнений</div>
-      <div class="checklist-item">НЕ продаю конкурентов</div>
-    </div>
-    <div class="checklist-section"><div class="checklist-title">🏁 ЗАВЕРШЕНИЕ</div>
-      <div class="checklist-item">Информационная продажа</div>
-      <div class="checklist-item">Предложил купить сейчас</div>
-      <div class="checklist-item">Поблагодарил / пригласил</div>
-    </div>
+    <div class="checklist-section"><div class="checklist-title critical">🌐 ЭКОСИСТЕМА IQ HOME</div><div class="checklist-item">Рассказал про линейку IQ Home</div><div class="checklist-item">Показал мобильное приложение</div><div class="checklist-item">Объяснил ключевые преимущества</div><div class="checklist-item">Связал с категорией клиента</div></div>
+    <div class="checklist-section"><div class="checklist-title">🎯 ВЫЯВЛЕНИЕ ПОТРЕБНОСТИ</div><div class="checklist-item">Кто будет пользоваться</div><div class="checklist-item">Кто ещё будет пользоваться</div><div class="checklist-item">Чем пользовался ранее</div><div class="checklist-item">Что не устраивает</div><div class="checklist-item">Что важно в новом</div><div class="checklist-item">Формировал потребности</div><div class="checklist-item">Резюмировал</div></div>
+    <div class="checklist-section"><div class="checklist-title">📺 ПРЕЗЕНТАЦИЯ</div><div class="checklist-item">Соответствует потребностям</div><div class="checklist-item critical">🔴 Техника СПВ</div><div class="checklist-item">Обратная связь</div><div class="checklist-item">Дал товар в руки</div><div class="checklist-item critical">🔴 🎁 Предложил доп. товар</div></div>
+    <div class="checklist-section"><div class="checklist-title">⚔️ ВОЗРАЖЕНИЯ</div><div class="checklist-item">Выслушал, не перебивал</div><div class="checklist-item">Выяснил причину</div><div class="checklist-item">Присоединился к причине</div><div class="checklist-item">Привёл аргументы</div><div class="checklist-item">Убедился в отсутствии сомнений</div><div class="checklist-item">НЕ продаю конкурентов</div></div>
+    <div class="checklist-section"><div class="checklist-title">🏁 ЗАВЕРШЕНИЕ</div><div class="checklist-item">Информационная продажа</div><div class="checklist-item">Предложил купить сейчас</div><div class="checklist-item">Поблагодарил / пригласил</div></div>
   </div>
   <div class="swipe-screen" id="screen-ad">
     <div class="header"><h1>Акт дефектовки (АД)</h1></div>
     <div class="card">
-      <div class="form-group"><label>Поиск товара (артикул или название)</label>
-        <div class="search-row">
-          <input type="text" id="adSearchProduct" placeholder="Начни вводить...">
-          <button class="btn-cam" id="adScanQR" type="button"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg></button>
-        </div>
-        <div id="adSearchResults"></div>
-      </div>
-      <div class="form-group" id="adArtGroup">
-        <label>Артикул</label>
-        <input type="text" id="adInputArt" placeholder="Сканируй QR или введи вручную">
-        <div id="adArtStatus" class="art-status" style="display:none;"></div>
-      </div>
+      <div class="form-group"><label>Поиск товара (артикул или название)</label><div class="search-row"><input type="text" id="adSearchProduct" placeholder="Начни вводить..."><button class="btn-cam" id="adScanQR" type="button"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg></button></div><div id="adSearchResults"></div></div>
+      <div class="form-group" id="adArtGroup"><label>Артикул</label><input type="text" id="adInputArt" placeholder="Сканируй QR или введи вручную"><div id="adArtStatus" class="art-status" style="display:none;"></div></div>
       <div class="form-group"><label>Дата возврата</label><input type="date" id="adDate" max="" style="display:none;"><div class="date-display" id="adDateDisplay">Сегодня</div></div>
       <div class="form-group"><label>Товар</label><input type="text" id="adName" placeholder="Название товара"></div>
       <div class="form-group"><label>Количество</label><input type="number" id="adQty" value="1" min="1"></div>
@@ -567,12 +467,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
   </div>
 </div>
 <div id="dots">
-  <span data-screen="home" class="active"></span>
-  <span data-screen="add"></span>
-  <span data-screen="history"></span>
-  <span data-screen="totals"></span>
-  <span data-screen="checklist"></span>
-  <span data-screen="ad"></span>
+  <span data-screen="home" class="active"></span><span data-screen="add"></span><span data-screen="history"></span><span data-screen="totals"></span><span data-screen="checklist"></span><span data-screen="ad"></span>
 </div>
 <button id="aboutBtn">⚙️</button>
 <div id="screen-edit" class="modal-screen">
@@ -623,7 +518,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
   </div>
   <div class="settings-section">
     <div class="settings-title">ℹ️ О приложении</div>
-    <div class="about-row"><span class="label">Версия</span><span class="value" id="appVersionText">2.13 · стабильная</span></div>
+    <div class="about-row"><span class="label">Версия</span><span class="value" id="appVersionText">2.14 · стабильная</span></div>
     <div class="about-row"><span class="label">Разработчик</span><span class="value">Максим</span></div>
     <div class="about-row"><span class="label">Почта</span><span class="value">regionalbarnaul@yandex.ru</span></div>
   </div>
@@ -635,10 +530,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
     <div class="settings-title">➕ Добавить товар</div>
     <div class="base-add-block">
       <label>Артикул</label>
-      <div class="search-row">
-        <input type="text" id="baseArt" placeholder="Сканируй QR или введи вручную" inputmode="numeric">
-        <button class="btn-cam" id="baseScanQR" type="button"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg></button>
-      </div>
+      <div class="search-row"><input type="text" id="baseArt" placeholder="Сканируй QR или введи вручную" inputmode="numeric"><button class="btn-cam" id="baseScanQR" type="button"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg></button></div>
       <div id="baseArtStatus" class="base-status"></div>
       <label style="margin-top:10px;">Название</label>
       <input type="text" id="baseName" placeholder="Скопируй с рабочего приложения DNS">
@@ -646,10 +538,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
       <label style="margin-top:10px;">Процент (%)</label>
       <input type="number" id="basePercent" value="1.5" step="0.1" min="0" max="100">
       <label style="margin-top:10px;">Тип</label>
-      <select id="baseType" style="width:100%;padding:10px 12px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:10px;color:var(--text);font-size:14px;outline:none;font-family:inherit;">
-        <option value="regular">Регулярный (1.5%)</option>
-        <option value="focus">Фокусный</option>
-      </select>
+      <select id="baseType" style="width:100%;padding:10px 12px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:10px;color:var(--text);font-size:14px;outline:none;font-family:inherit;"><option value="regular">Регулярный (1.5%)</option><option value="focus">Фокусный</option></select>
       <button class="btn" id="baseSave" style="margin-top:14px;width:100%;">💾 Сохранить в общую базу</button>
     </div>
   </div>
@@ -657,7 +546,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
     <div class="settings-title">📋 Массовый импорт</div>
     <div class="base-add-block">
       <label>Формат: артикул [таб/пробел] название [таб/пробел] процент</label>
-      <textarea id="baseBulk" placeholder="9328481 Аэрогриль POLARIS PAF 6003W 7&#10;9328483 Аэрогриль POLARIS PAF 8003W 5&#10;9192036 Мясорубка Polaris PMG 2058 1.5"></textarea>
+      <textarea id="baseBulk" placeholder="9328481 Аэрогриль POLARIS PAF 6003W 7&#10;9328483 Аэрогриль POLARIS PAF 8003W 5"></textarea>
       <div id="baseBulkStatus" class="base-status"></div>
       <button class="btn" id="baseBulkSave" style="margin-top:10px;width:100%;">📤 Загрузить список</button>
     </div>
@@ -673,28 +562,18 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
 <div class="edit-product-modal" id="editProductModal">
   <div class="edit-product-box">
     <h3>✏️ Редактировать товар</h3>
-    <label>Артикул</label>
-    <input type="text" id="editProdArt" readonly style="opacity:0.6;">
-    <label>Название</label>
-    <input type="text" id="editProdName">
-    <label>Процент (%)</label>
-    <input type="number" id="editProdPercent" step="0.1" min="0" max="100">
-    <label>Тип</label>
-    <select id="editProdType">
-      <option value="regular">Регулярный</option>
-      <option value="focus">Фокусный</option>
-    </select>
-    <div class="modal-btns">
-      <button class="btn-cancel" id="editProdCancel">Отмена</button>
-      <button class="btn-save" id="editProdSave">Сохранить</button>
-    </div>
+    <label>Артикул</label><input type="text" id="editProdArt" readonly style="opacity:0.6;">
+    <label>Название</label><input type="text" id="editProdName">
+    <label>Процент (%)</label><input type="number" id="editProdPercent" step="0.1" min="0" max="100">
+    <label>Тип</label><select id="editProdType"><option value="regular">Регулярный</option><option value="focus">Фокусный</option></select>
+    <div class="modal-btns"><button class="btn-cancel" id="editProdCancel">Отмена</button><button class="btn-save" id="editProdSave">Сохранить</button></div>
   </div>
 </div>
 <div id="screen-backup" class="modal-screen">
   <div class="header"><h1>Данные</h1></div>
-  <div class="card"><div class="card-title">Экспорт (сохрани себе)</div><div class="sub-text" style="margin-bottom:8px">Скопируй всё и отправь себе в MAX / заметки.</div><textarea id="exportText" readonly style="width:100%;height:180px;padding:10px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:12px;color:var(--text);font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea></div>
-  <div class="card"><div class="card-title">Импорт из файла</div><div class="sub-text" style="margin-bottom:8px">Выбери файл бэкапа (tracker_backup.json) из Загрузок.</div><input type="file" id="restoreFileInput" accept="*/*" style="display:none;"><button class="btn" id="btnFileRestore">📁 Выбрать файл бэкапа</button></div>
-  <div class="card"><div class="card-title">Или вставь текст вручную</div><textarea id="importText2" placeholder="Вставь данные сюда..." style="width:100%;height:140px;padding:10px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:12px;color:var(--text);font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea><button class="btn" id="btnRestore">Восстановить из текста</button></div>
+  <div class="card"><div class="card-title">Экспорт (сохрани себе)</div><textarea id="exportText" readonly style="width:100%;height:180px;padding:10px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:12px;color:var(--text);font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea></div>
+  <div class="card"><div class="card-title">Импорт из файла</div><input type="file" id="restoreFileInput" accept="*/*" style="display:none;"><button class="btn" id="btnFileRestore">📁 Выбрать файл бэкапа</button></div>
+  <div class="card"><div class="card-title">Или вставь текст вручную</div><textarea id="importText2" style="width:100%;height:140px;padding:10px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:12px;color:var(--text);font-size:11px;font-family:monospace;outline:none;resize:none;"></textarea><button class="btn" id="btnRestore">Восстановить из текста</button></div>
   <button class="btn secondary" id="btnBackupClose">Закрыть</button>
 </div>
 <div id="screen-import" class="modal-screen">
@@ -714,31 +593,14 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
 </div>
 <div id="successOverlay"><svg class="success-checkmark" viewBox="0 0 120 120"><circle class="check-circle" cx="60" cy="60" r="50"/><path class="check-mark" d="M35 62 L55 82 L88 42"/></svg></div>
 <div id="screen-chat">
-  <div class="chat-header">
-    <div class="chat-back" id="chatBack">←</div>
-    <div style="flex:1"><div class="chat-title">Чат</div><div class="chat-status"><span class="dot"></span><span id="chatOnline">Подключение...</span></div></div>
-  </div>
+  <div class="chat-header"><div class="chat-back" id="chatBack">←</div><div style="flex:1"><div class="chat-title">Чат</div><div class="chat-status"><span class="dot"></span><span id="chatOnline">Подключение...</span></div></div></div>
   <div class="chat-messages" id="chatMessages"><div class="msg-empty">Загрузка...</div></div>
-  <div class="chat-input-bar">
-    <textarea class="chat-input" id="chatInput" placeholder="Сообщение..." rows="1"></textarea>
-    <button class="chat-send" id="chatSend"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
-  </div>
+  <div class="chat-input-bar"><textarea class="chat-input" id="chatInput" placeholder="Сообщение..." rows="1"></textarea><button class="chat-send" id="chatSend"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div>
 </div>
 <div class="chat-name-modal" id="chatNameModal">
-  <div class="chat-name-box">
-    <h3>Как тебя зовут?</h3><p>Это имя будет показываться в чате с коллегами</p>
-    <input type="text" id="chatNameInput" placeholder="Например, Максим" maxlength="20">
-    <button id="chatNameSave">Войти в чат</button>
-  </div>
+  <div class="chat-name-box"><h3>Как тебя зовут?</h3><p>Это имя будет показываться в чате с коллегами</p><input type="text" id="chatNameInput" placeholder="Например, Максим" maxlength="20"><button id="chatNameSave">Войти в чат</button></div>
 </div>
-<div class="whats-new-modal" id="whatsNewModal">
-  <div class="whats-new-box">
-    <h3>🎉 Что нового</h3>
-    <div class="whats-new-version" id="whatsNewVersion">Версия 2.13</div>
-    <div id="whatsNewContent"></div>
-    <button class="whats-new-btn" id="whatsNewClose">Понятно</button>
-  </div>
-</div>
+<div class="whats-new-modal" id="whatsNewModal"><div class="whats-new-box"><h3>🎉 Что нового</h3><div class="whats-new-version" id="whatsNewVersion">Версия 2.14</div><div id="whatsNewContent"></div><button class="whats-new-btn" id="whatsNewClose">Понятно</button></div></div>
 <div class="stats-modal" id="statsModal">
   <div class="stats-box">
     <h3>📊 Статистика</h3>
@@ -871,7 +733,7 @@ function animateNumber(el, target) { if (!el || !el.id) return; var id = el.id; 
 function showSuccessCheckmark() { var el = document.getElementById('successOverlay'); if (!el) return; el.classList.add('show'); var circle = el.querySelector('.check-circle'); var mark = el.querySelector('.check-mark'); if (circle && mark) { circle.style.animation = 'none'; mark.style.animation = 'none'; void circle.offsetWidth; void mark.offsetWidth; circle.style.animation = ''; mark.style.animation = ''; } setTimeout(function() { el.classList.remove('show'); }, 1000); }
 function migrateRegularProducts() { var changed = false; products.forEach(function(p) { if (!p.art) { var art = extractArticleFromName(p.name); if (art) { p.art = art; changed = true; } } if (p.art && p.name) { var cleaned = cleanNameFromArticle(p.name, p.art); if (cleaned !== p.name && cleaned.length > 0) { p.name = cleaned; changed = true; } } }); if (changed) save(); }
 
-function getBackupJSON() { return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.13' }, null, 2); }
+function getBackupJSON() { return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.14' }, null, 2); }
 function saveBackupToFile() { try { var data = getBackupJSON(); var blob = new Blob([data], {type: 'application/json'}); var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = 'tracker_backup.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function() { URL.revokeObjectURL(url); }, 1000); localStorage.setItem('lastBackupDate', today()); return true; } catch(e) { return false; } }
 function maybeAutoBackup() { var last = localStorage.getItem('lastBackupDate'); if (last === today()) return; saveBackupToFile(); }
 function shareBackup() { var data = getBackupJSON(); if (navigator.share) { navigator.share({ title: 'Бэкап трекера', text: data }).then(function() { localStorage.setItem('lastBackupDate', today()); showToast('Бэкап отправлен', 'success'); }).catch(function(){}); } else { navigator.clipboard.writeText(data).then(function() { localStorage.setItem('lastBackupDate', today()); showToast('Скопировано — вставь в MAX', 'success'); }).catch(function() { showToast('Не удалось скопировать', 'error'); }); } }
@@ -883,12 +745,25 @@ function findProduct(query) { var q = normalizeName(query); return products.filt
 function saveRegularProduct(name) {
   var key = normalizeName(name); if (!key) return;
   var artFromName = extractArticleFromName(name);
+  if (!artFromName) {
+    var artField = document.getElementById('inputArt');
+    if (artField && artField.value.trim()) artFromName = artField.value.trim();
+  }
   var exists = products.find(function(p) { if (artFromName && p.art && p.art === artFromName) return true; if (artFromName && extractArticleFromName(p.name) === artFromName) return true; if (normalizeName(p.name) === key) return true; return false; });
-  if (exists) return;
+  if (exists) {
+    if (artFromName && window.fbSaveProduct) {
+      var fbEx = window.fbGetProduct ? window.fbGetProduct(artFromName) : null;
+      if (!fbEx || !fbEx.name) window.fbSaveProduct(artFromName, { name: name, percent: 1.5, type: 'regular' }).catch(function(){});
+    }
+    return;
+  }
   var shortKey = key.substring(0, 30);
   if (shortKey.length > 10) { if (products.find(function(p) { return normalizeName(p.name).substring(0, 30) === shortKey; })) return; }
   products.push({ art: artFromName, name: name, percent: 1.5, type: 'regular' }); save();
-  if (artFromName && window.fbSaveProduct) { var fb = window.fbGetProduct ? window.fbGetProduct(artFromName) : null; if (!fb) window.fbSaveProduct(artFromName, { name: name, percent: 1.5, type: 'regular' }).catch(function(){}); }
+  if (artFromName && window.fbSaveProduct) {
+    var fb = window.fbGetProduct ? window.fbGetProduct(artFromName) : null;
+    if (!fb || !fb.name) window.fbSaveProduct(artFromName, { name: name, percent: 1.5, type: 'regular' }).catch(function(){});
+  }
 }
 function getProductPercent(product, dateStrVal) { if (!product) return 1.5; if (product.type === 'conditional') { var ws = sales.filter(function(s) { return !s.isAD && normalizeName(s.name) === normalizeName(product.name) && inSameWeek(s.date, dateStrVal); }); var q = 0; ws.forEach(function(s) { q += s.qty; }); return q >= 3 ? 3 : 1.5; } return product.percent; }
 function recalcConditional(productName, dateStrVal) { var key = normalizeName(productName); var ws = sales.filter(function(s) { return !s.isAD && normalizeName(s.name) === key && inSameWeek(s.date, dateStrVal); }); var q = 0; ws.forEach(function(s) { q += s.qty; }); var np = q >= 3 ? 3 : 1.5; ws.forEach(function(s) { s.percent = np; s.commission = s.sum * np / 100; }); }
@@ -1317,7 +1192,7 @@ function renderStats(data) {
 }
 function timeAgo(ts) { if (!ts) return '—'; var diff = Date.now() - ts; var min = Math.floor(diff / 60000); if (min < 1) return 'только что'; if (min < 60) return min + ' мин назад'; var h = Math.floor(min / 60); if (h < 24) return h + ' ч назад'; var d = Math.floor(h / 24); if (d === 1) return 'вчера'; if (d < 7) return d + ' дн назад'; return new Date(ts).toLocaleDateString('ru-RU'); }
 
-var APP_VERSION = '2.13';
+var APP_VERSION = '2.14';
 var CHANGELOG_FULL = [
   { v: '1.0–1.6', title: 'Основа', items: ['Продажи, план, отчисления', 'QR-сканер, история, итоги, АД', 'Достижения, бэкап, фокус-лист'] },
   { v: '2.0', title: 'Флагманский дизайн', items: ['Стекло, SVG, градиенты', 'Заработок, прогноз, мини-график'] },
@@ -1330,14 +1205,15 @@ var CHANGELOG_FULL = [
   { v: '2.10', title: 'Статистика', items: ['Добавлена статистика использования', 'Улучшена стабильность'] },
   { v: '2.11', title: 'Общая база товаров', items: ['Поле «Артикул» в форме продажи', 'Общая база названий через Firebase', 'Сканер прямо в экране базы'] },
   { v: '2.12', title: 'Оклад по дням', items: ['Оклад считается пропорционально прошедшим дням месяца', 'Мелкие улучшения стабильности'] },
-  { v: '2.13', title: 'Стабильность', items: ['Мелкие правки', 'Улучшена производительность'] }
+  { v: '2.13', title: 'Стабильность', items: ['Мелкие правки', 'Улучшена производительность'] },
+  { v: '2.14', title: 'Фикс базы', items: ['Товар с продажи корректно попадает в общую базу', 'Артикул берётся из поля «Артикул», а не только из названия'] }
 ];
 var CHANGELOG_LATEST = {
-  version: '2.13',
+  version: '2.14',
   items: [
-    '💰 Оклад считается пропорционально прошедшим дням месяца',
-    '✅ Улучшена стабильность',
-    '🔧 Мелкие правки'
+    '🔧 Товары из продажи корректно попадают в общую базу',
+    '📦 Артикул берётся из поля «Артикул»',
+    '✅ Улучшена стабильность'
   ]
 };
 function showWhatsNew() {

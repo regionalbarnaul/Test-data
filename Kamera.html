@@ -359,29 +359,18 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
 <body>
   <div id="swipeContainer">
   <div class="swipe-screen" id="screen-home">
-    <div class="header">
-      <div><h1>Трекер продаж</h1>
-        <div class="date"><span class="lvl-icon c1" id="hdrLvlIcon">🐣</span><span id="currentDate"></span></div>
-      </div>
-    </div>
+    <div class="header"><div><h1>Трекер продаж</h1><div class="date"><span class="lvl-icon c1" id="hdrLvlIcon">🐣</span><span id="currentDate"></span></div></div></div>
     <div class="card">
-      <div class="card-head">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-        План на месяц
-        <button class="chat-inline" id="chatInlineBtn" title="Чат">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
-          <span class="chat-label">Чат</span><span class="chat-badge" id="chatBadge">0</span>
-        </button>
+      <div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>План на месяц
+        <button class="chat-inline" id="chatInlineBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="8" y1="17" x2="12" y2="17"/></svg><span class="chat-label">Чат</span><span class="chat-badge" id="chatBadge">0</span></button>
       </div>
       <div class="big-number" id="monthPlan">0 ₽</div>
       <div class="sub-text"><span id="monthPercent">0.0%</span> выполнено · осталось <span id="daysLeft">0</span> дн.</div>
-      <div class="progress-bg"><div class="progress-fill" id="monthProgress"></div><div class="progress-mark" style="left: 80%;"></div></div>
+      <div class="progress-bg"><div class="progress-fill" id="monthProgress"></div><div class="progress-mark" style="left:80%"></div></div>
       <div class="sub-text" id="minThreshold">Минимум 80% — не выполнен</div>
     </div>
     <div class="card xp-card">
-      <div class="xp-header"><div class="xp-badge c1" id="xpBadge">🐣</div>
-        <div class="xp-info"><div class="xp-level" id="xpLevelNum">УРОВЕНЬ 1</div><div class="xp-name" id="xpLevelName">Первый день</div></div>
-      </div>
+      <div class="xp-header"><div class="xp-badge c1" id="xpBadge">🐣</div><div class="xp-info"><div class="xp-level" id="xpLevelNum">УРОВЕНЬ 1</div><div class="xp-name" id="xpLevelName">Первый день</div></div></div>
       <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBar"></div></div>
       <div class="xp-meta"><span><span class="hi" id="xpCurrent">0</span> / <span id="xpNext">300</span> XP</span><span id="xpToNext">до след.: 300</span></div>
     </div>
@@ -406,10 +395,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
     <div class="header"><h1>Новая продажа</h1></div>
     <div class="card">
       <div class="form-group"><label>Поиск товара (артикул или название)</label>
-        <div class="search-row">
-          <input type="text" id="searchProduct" placeholder="Начни вводить...">
-          <button class="btn-cam" id="btnScanQR" type="button"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg></button>
-        </div>
+        <div class="search-row"><input type="text" id="searchProduct" placeholder="Начни вводить..."><button class="btn-cam" id="btnScanQR" type="button"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg></button></div>
         <div id="searchResults"></div>
       </div>
       <div class="form-group" id="artGroup"><label>Артикул</label><input type="text" id="inputArt" placeholder="Сканируй QR или введи вручную"><div id="artStatus" class="art-status" style="display:none;"></div></div>
@@ -431,7 +417,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
   </div>
   <div class="swipe-screen" id="screen-totals">
     <div class="header"><h1 id="totalsTitle">Итоги</h1></div>
-    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>План на месяц</div><div class="big-number" id="totalsPlan">0 ₽</div><div class="sub-text" id="totalsPercent">0.0% выполнено</div><div class="progress-bg"><div class="progress-fill" id="totalsProgress"></div><div class="progress-mark" style="left: 80%;"></div></div></div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>План на месяц</div><div class="big-number" id="totalsPlan">0 ₽</div><div class="sub-text" id="totalsPercent">0.0% выполнено</div><div class="progress-bg"><div class="progress-fill" id="totalsProgress"></div><div class="progress-mark" style="left:80%"></div></div></div>
     <div class="grid-2"><div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Продано</div><div class="big-number" style="font-size:22px" id="totalsSum">0 ₽</div><div class="sub-text" id="totalsCount">0 продаж</div></div>
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Отчисления</div><div class="big-number blue" style="font-size:22px" id="totalsComm">0 ₽</div></div></div>
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg>Заработок за месяц</div><div class="big-number gold" style="font-size:25px" id="totalsEarned">0 ₽</div><div class="sub-text">Оклад: <span class="accent" id="totalsOkladText">0 ₽</span></div><div class="sub-text">Проценты: <span class="accent" id="totalsCommText">0 ₽</span></div></div>
@@ -466,9 +452,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Возвраты за текущий месяц</div><div class="big-number red" style="font-size:22px" id="adMonthSum">0 ₽</div><div class="sub-text" id="adMonthCount">0 записей</div></div>
   </div>
 </div>
-<div id="dots">
-  <span data-screen="home" class="active"></span><span data-screen="add"></span><span data-screen="history"></span><span data-screen="totals"></span><span data-screen="checklist"></span><span data-screen="ad"></span>
-</div>
+<div id="dots"><span data-screen="home" class="active"></span><span data-screen="add"></span><span data-screen="history"></span><span data-screen="totals"></span><span data-screen="checklist"></span><span data-screen="ad"></span></div>
 <button id="aboutBtn">⚙️</button>
 <div id="screen-edit" class="modal-screen">
   <div class="header"><h1>Редактировать</h1></div>
@@ -491,7 +475,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
     <div class="form-group" style="margin-top:12px;"><label>Оклад в месяц (₽)</label><input type="number" id="inputOklad" placeholder="35000" min="0"></div>
     <button class="btn" id="btnOklad">Сохранить оклад</button>
     <div class="sub-text" style="margin-top:12px;">Прогресс: <span class="accent" id="planPercent">0.0%</span> · <span class="accent" id="planProgress">0 ₽</span></div>
-    <div class="progress-bg" style="margin-top:8px;"><div class="progress-fill" id="planProgressBar"></div><div class="progress-mark" style="left: 80%;"></div></div>
+    <div class="progress-bg" style="margin-top:8px;"><div class="progress-fill" id="planProgressBar"></div><div class="progress-mark" style="left:80%"></div></div>
   </div>
   <div class="settings-section">
     <div class="settings-title">🎨 Тема оформления</div>
@@ -532,13 +516,10 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
       <label>Артикул</label>
       <div class="search-row"><input type="text" id="baseArt" placeholder="Сканируй QR или введи вручную" inputmode="numeric"><button class="btn-cam" id="baseScanQR" type="button"><svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="#0a0f0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="14" height="24" rx="2"/><rect x="13" y="10" width="6" height="6"/><circle cx="16" cy="13" r="0.5" fill="#0a0f0d"/><rect x="11" y="19" width="3" height="3"/><rect x="18" y="19" width="3" height="3"/><line x1="11" y1="24" x2="21" y2="24"/></svg></button></div>
       <div id="baseArtStatus" class="base-status"></div>
-      <label style="margin-top:10px;">Название</label>
-      <input type="text" id="baseName" placeholder="Скопируй с рабочего приложения DNS">
+      <label style="margin-top:10px;">Название</label><input type="text" id="baseName" placeholder="Скопируй с рабочего приложения DNS">
       <button class="btn secondary" id="basePasteName" style="margin-top:8px;width:100%;">📥 Вставить название из буфера</button>
-      <label style="margin-top:10px;">Процент (%)</label>
-      <input type="number" id="basePercent" value="1.5" step="0.1" min="0" max="100">
-      <label style="margin-top:10px;">Тип</label>
-      <select id="baseType" style="width:100%;padding:10px 12px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:10px;color:var(--text);font-size:14px;outline:none;font-family:inherit;"><option value="regular">Регулярный (1.5%)</option><option value="focus">Фокусный</option></select>
+      <label style="margin-top:10px;">Процент (%)</label><input type="number" id="basePercent" value="1.5" step="0.1" min="0" max="100">
+      <label style="margin-top:10px;">Тип</label><select id="baseType" style="width:100%;padding:10px 12px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:10px;color:var(--text);font-size:14px;outline:none;font-family:inherit;"><option value="regular">Регулярный (1.5%)</option><option value="focus">Фокусный</option></select>
       <button class="btn" id="baseSave" style="margin-top:14px;width:100%;">💾 Сохранить в общую базу</button>
     </div>
   </div>
@@ -597,19 +578,17 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
   <div class="chat-messages" id="chatMessages"><div class="msg-empty">Загрузка...</div></div>
   <div class="chat-input-bar"><textarea class="chat-input" id="chatInput" placeholder="Сообщение..." rows="1"></textarea><button class="chat-send" id="chatSend"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div>
 </div>
-<div class="chat-name-modal" id="chatNameModal">
-  <div class="chat-name-box"><h3>Как тебя зовут?</h3><p>Это имя будет показываться в чате с коллегами</p><input type="text" id="chatNameInput" placeholder="Например, Максим" maxlength="20"><button id="chatNameSave">Войти в чат</button></div>
-</div>
+<div class="chat-name-modal" id="chatNameModal"><div class="chat-name-box"><h3>Как тебя зовут?</h3><p>Это имя будет показываться в чате с коллегами</p><input type="text" id="chatNameInput" placeholder="Например, Максим" maxlength="20"><button id="chatNameSave">Войти в чат</button></div></div>
 <div class="whats-new-modal" id="whatsNewModal"><div class="whats-new-box"><h3>🎉 Что нового</h3><div class="whats-new-version" id="whatsNewVersion">Версия 2.14</div><div id="whatsNewContent"></div><button class="whats-new-btn" id="whatsNewClose">Понятно</button></div></div>
 <div class="stats-modal" id="statsModal">
   <div class="stats-box">
     <h3>📊 Статистика</h3>
     <div id="statsContent"><div class="empty">Загрузка...</div></div>
     <div class="stats-actions">
-      <button class="whats-new-btn" id="statsOpenBase" style="background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #0a0f0d; margin-top:0;">🗄 Открыть базу товаров</button>
-      <button class="whats-new-btn" id="statsUploadBase" style="background: rgba(255,255,255,0.08); color: var(--text); margin-top:0;">📤 Залить мою базу в общую</button>
-      <button class="whats-new-btn" id="statsRefresh" style="background: rgba(255,255,255,0.06); color: var(--text); margin-top:0;">🔄 Обновить статистику</button>
-      <button class="whats-new-btn" id="statsClose" style="background: rgba(255,255,255,0.06); color: var(--text); margin-top:0;">Закрыть</button>
+      <button class="whats-new-btn" id="statsOpenBase" style="background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#0a0f0d;margin-top:0;">🗄 Открыть базу товаров</button>
+      <button class="whats-new-btn" id="statsUploadBase" style="background:rgba(255,255,255,0.08);color:var(--text);margin-top:0;">📤 Залить мою базу в общую</button>
+      <button class="whats-new-btn" id="statsRefresh" style="background:rgba(255,255,255,0.06);color:var(--text);margin-top:0;">🔄 Обновить статистику</button>
+      <button class="whats-new-btn" id="statsClose" style="background:rgba(255,255,255,0.06);color:var(--text);margin-top:0;">Закрыть</button>
     </div>
   </div>
 </div>
@@ -787,7 +766,7 @@ function addSale() {
   sales.push({ id: Date.now(), date: date, name: name, qty: qty, sum: sum, percent: percent, commission: commission, isAD: false });
   var prod = products.find(function(p) { return normalizeName(p.name) === normalizeName(name); });
   if (prod && prod.type === 'conditional') recalcConditional(name, date);
-  if (!prod) saveRegularProduct(name);
+  saveRegularProduct(name);
   save(); pushSaleStat();
   document.getElementById('inputName').value = ''; document.getElementById('inputSum').value = ''; document.getElementById('inputQty').value = '1'; document.getElementById('inputPercent').value = '1.5'; document.getElementById('searchProduct').value = ''; document.getElementById('searchResults').innerHTML = '';
   document.getElementById('inputArt').value = ''; document.getElementById('artStatus').style.display = 'none'; document.getElementById('newProductHint').classList.remove('show');
@@ -1206,7 +1185,7 @@ var CHANGELOG_FULL = [
   { v: '2.11', title: 'Общая база товаров', items: ['Поле «Артикул» в форме продажи', 'Общая база названий через Firebase', 'Сканер прямо в экране базы'] },
   { v: '2.12', title: 'Оклад по дням', items: ['Оклад считается пропорционально прошедшим дням месяца', 'Мелкие улучшения стабильности'] },
   { v: '2.13', title: 'Стабильность', items: ['Мелкие правки', 'Улучшена производительность'] },
-  { v: '2.14', title: 'Фикс базы', items: ['Товар с продажи корректно попадает в общую базу', 'Артикул берётся из поля «Артикул», а не только из названия'] }
+  { v: '2.14', title: 'Фикс базы', items: ['Товар с продажи корректно попадает в общую базу даже если был локально', 'Артикул берётся из поля «Артикул», а не только из названия'] }
 ];
 var CHANGELOG_LATEST = {
   version: '2.14',

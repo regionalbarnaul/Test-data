@@ -651,7 +651,7 @@ function extractArticleFromName(name) { if (!name) return ''; var m = name.match
 function cleanNameFromArticle(name, art) { if (!name || !art) return name; var re = new RegExp('^' + art + '\\s*[-—]?\\s*'); return name.replace(re, ''); }
 function calcOkladForMonth() { var totalDays = daysInMonth(new Date()); var dom = dayOfMonth(); if (totalDays <= 0) return 0; return salary.oklad * dom / totalDays; }
 
-// ===== РАСЧЁТ КОМИССИИ С УЧЁТОМ АД (логика ДНС, разъяснил Андрей) =====
+// ===== РАСЧЁТ КОМИССИИ С УЧЁТОМ АД (логика ДНС, уточнил Андрей) =====
 // АД уменьшает оборот и, если по этому товару были продажи в этом месяце,
 // снимает комиссию пропорционально. Если продаж не было — комиссия не снимается.
 function calcAdCut(mSales, mAD) {
@@ -1228,15 +1228,13 @@ var CHANGELOG_FULL = [
   { v: '2.14', title: 'Фикс базы', items: ['Товар с продажи корректно попадает в общую базу даже если был локально', 'Артикул берётся из поля «Артикул», а не только из названия'] },
   { v: '2.15', title: 'Правильный расчёт АД', items: ['Логика ДНС (уточнил Андрей Беляев)', 'АД снимает комиссию только за проданное в этом месяце', 'Карточка «Возвраты» — уменьшает оборот'] }
 ];
-var var CHANGELOG_LATEST = {
+var CHANGELOG_LATEST = {
   version: '2.15',
   items: [
     '📊 Правильный расчёт АД (подсказал Андрей)',
     '💰 Комиссия снимается только если товар продавался в этом месяце',
     '📉 «Возвраты (АД)» — уменьшают оборот, а не отчисления',
     '✅ Улучшена стабильность'
-  ]
-};'
   ]
 };
 function showWhatsNew() {

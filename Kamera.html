@@ -382,7 +382,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
       <div class="grid-2 inside"><div><div class="sub-text" style="margin-top:0">Сегодня</div><div class="big-number gold" style="font-size:22px" id="todayEarned">0 ₽</div><div class="sub-text" id="todayEarnedBreak">—</div></div><div><div class="sub-text" style="margin-top:0">За месяц</div><div class="big-number gold" style="font-size:22px" id="monthEarned">0 ₽</div><div class="sub-text" id="monthEarnedBreak">—</div></div></div>
     </div>
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Прогноз заработка</div><div class="big-number" style="font-size:26px" id="forecastEarned">0 ₽</div><div class="sub-text">если темп сохранится</div><div class="sub-text" id="forecastCompare" style="margin-top:10px;">—</div></div>
-    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Возвраты за месяц</div><div class="big-number red" style="font-size:22px" id="monthCommission_AD">−0 ₽</div><div class="sub-text" id="monthADCount">0 записей</div><div class="sub-text" id="monthADComm" style="margin-top:4px;">снято отчислений: −0 ₽</div></div>
+    <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Возвраты за месяц</div><div class="big-number red" style="font-size:22px" id="monthCommission_AD">−0 ₽</div><div class="sub-text" id="monthADCount">0 записей</div><div class="sub-text" id="monthADComm" style="margin-top:4px;">уменьшает оборот: 0 ₽</div></div>
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg>Отчисления за месяц</div><div class="big-number" style="font-size:25px" id="monthCommission">0 ₽</div><div class="sub-text">Продажи минус возвраты</div></div>
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Рекорд месяца</div>
       <div class="grid-2 inside"><div><div class="sub-text" style="margin-top:0">По сумме</div><div class="big-number gold" style="font-size:20px" id="recordSum">0 ₽</div><div class="sub-text" id="recordDate">—</div></div><div><div class="sub-text" style="margin-top:0">По отчислениям</div><div class="big-number" style="font-size:20px;color:#34d399" id="recordComm">0 ₽</div><div class="sub-text" id="recordCommDate">—</div></div></div>
@@ -502,7 +502,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
   </div>
   <div class="settings-section">
     <div class="settings-title">ℹ️ О приложении</div>
-    <div class="about-row"><span class="label">Версия</span><span class="value" id="appVersionText">2.14 · стабильная</span></div>
+    <div class="about-row"><span class="label">Версия</span><span class="value" id="appVersionText">2.15 · АД-фикс</span></div>
     <div class="about-row"><span class="label">Разработчик</span><span class="value">Максим</span></div>
     <div class="about-row"><span class="label">Почта</span><span class="value">regionalbarnaul@yandex.ru</span></div>
   </div>
@@ -579,7 +579,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
   <div class="chat-input-bar"><textarea class="chat-input" id="chatInput" placeholder="Сообщение..." rows="1"></textarea><button class="chat-send" id="chatSend"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div>
 </div>
 <div class="chat-name-modal" id="chatNameModal"><div class="chat-name-box"><h3>Как тебя зовут?</h3><p>Это имя будет показываться в чате с коллегами</p><input type="text" id="chatNameInput" placeholder="Например, Максим" maxlength="20"><button id="chatNameSave">Войти в чат</button></div></div>
-<div class="whats-new-modal" id="whatsNewModal"><div class="whats-new-box"><h3>🎉 Что нового</h3><div class="whats-new-version" id="whatsNewVersion">Версия 2.14</div><div id="whatsNewContent"></div><button class="whats-new-btn" id="whatsNewClose">Понятно</button></div></div>
+<div class="whats-new-modal" id="whatsNewModal"><div class="whats-new-box"><h3>🎉 Что нового</h3><div class="whats-new-version" id="whatsNewVersion">Версия 2.15</div><div id="whatsNewContent"></div><button class="whats-new-btn" id="whatsNewClose">Понятно</button></div></div>
 <div class="stats-modal" id="statsModal">
   <div class="stats-box">
     <h3>📊 Статистика</h3>
@@ -651,6 +651,33 @@ function extractArticleFromName(name) { if (!name) return ''; var m = name.match
 function cleanNameFromArticle(name, art) { if (!name || !art) return name; var re = new RegExp('^' + art + '\\s*[-—]?\\s*'); return name.replace(re, ''); }
 function calcOkladForMonth() { var totalDays = daysInMonth(new Date()); var dom = dayOfMonth(); if (totalDays <= 0) return 0; return salary.oklad * dom / totalDays; }
 
+// ===== РАСЧЁТ КОМИССИИ С УЧЁТОМ АД (логика ДНС, разъяснил Андрей) =====
+// АД уменьшает оборот и, если по этому товару были продажи в этом месяце,
+// снимает комиссию пропорционально. Если продаж не было — комиссия не снимается.
+function calcAdCut(mSales, mAD) {
+  var salesByProduct = {};
+  mSales.forEach(function(s) {
+    var key = normalizeName(s.name);
+    if (!salesByProduct[key]) salesByProduct[key] = { sum: 0, commission: 0 };
+    salesByProduct[key].sum += s.sum;
+    salesByProduct[key].commission += s.commission;
+  });
+  var adCut = 0;
+  mAD.forEach(function(ad) {
+    var key = normalizeName(ad.name);
+    var sale = salesByProduct[key];
+    if (sale && sale.sum > 0) {
+      var adSum = Math.abs(ad.sum);
+      var covered = Math.min(adSum, sale.sum);
+      var pct = sale.commission / sale.sum;
+      adCut += covered * pct;
+      sale.sum -= covered;
+      sale.commission -= covered * pct;
+    }
+  });
+  return adCut;
+}
+
 function applyTheme(theme) {
   document.body.className = '';
   if (theme && theme !== 'default') document.body.classList.add('theme-' + theme);
@@ -712,7 +739,7 @@ function animateNumber(el, target) { if (!el || !el.id) return; var id = el.id; 
 function showSuccessCheckmark() { var el = document.getElementById('successOverlay'); if (!el) return; el.classList.add('show'); var circle = el.querySelector('.check-circle'); var mark = el.querySelector('.check-mark'); if (circle && mark) { circle.style.animation = 'none'; mark.style.animation = 'none'; void circle.offsetWidth; void mark.offsetWidth; circle.style.animation = ''; mark.style.animation = ''; } setTimeout(function() { el.classList.remove('show'); }, 1000); }
 function migrateRegularProducts() { var changed = false; products.forEach(function(p) { if (!p.art) { var art = extractArticleFromName(p.name); if (art) { p.art = art; changed = true; } } if (p.art && p.name) { var cleaned = cleanNameFromArticle(p.name, p.art); if (cleaned !== p.name && cleaned.length > 0) { p.name = cleaned; changed = true; } } }); if (changed) save(); }
 
-function getBackupJSON() { return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.14' }, null, 2); }
+function getBackupJSON() { return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.15' }, null, 2); }
 function saveBackupToFile() { try { var data = getBackupJSON(); var blob = new Blob([data], {type: 'application/json'}); var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = 'tracker_backup.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function() { URL.revokeObjectURL(url); }, 1000); localStorage.setItem('lastBackupDate', today()); return true; } catch(e) { return false; } }
 function maybeAutoBackup() { var last = localStorage.getItem('lastBackupDate'); if (last === today()) return; saveBackupToFile(); }
 function shareBackup() { var data = getBackupJSON(); if (navigator.share) { navigator.share({ title: 'Бэкап трекера', text: data }).then(function() { localStorage.setItem('lastBackupDate', today()); showToast('Бэкап отправлен', 'success'); }).catch(function(){}); } else { navigator.clipboard.writeText(data).then(function() { localStorage.setItem('lastBackupDate', today()); showToast('Скопировано — вставь в MAX', 'success'); }).catch(function() { showToast('Не удалось скопировать', 'error'); }); } }
@@ -746,7 +773,6 @@ function saveRegularProduct(name) {
 }
 function getProductPercent(product, dateStrVal) { if (!product) return 1.5; if (product.type === 'conditional') { var ws = sales.filter(function(s) { return !s.isAD && normalizeName(s.name) === normalizeName(product.name) && inSameWeek(s.date, dateStrVal); }); var q = 0; ws.forEach(function(s) { q += s.qty; }); return q >= 3 ? 3 : 1.5; } return product.percent; }
 function recalcConditional(productName, dateStrVal) { var key = normalizeName(productName); var ws = sales.filter(function(s) { return !s.isAD && normalizeName(s.name) === key && inSameWeek(s.date, dateStrVal); }); var q = 0; ws.forEach(function(s) { q += s.qty; }); var np = q >= 3 ? 3 : 1.5; ws.forEach(function(s) { s.percent = np; s.commission = s.sum * np / 100; }); }
-function findPercentForAD(name) { if (!name) return 1.5; var key = normalizeName(name); var prod = products.find(function(p) { return normalizeName(p.name) === key; }); if (prod) return prod.percent; var art = extractArticleFromName(name); if (art) { prod = products.find(function(p) { return p.art === art; }); if (prod) return prod.percent; } return 1.5; }
 
 function pushOpenStat() { try { if (window.firebasePushOpen) window.firebasePushOpen(DEVICE_ID); } catch(e) {} }
 function pushSaleStat() { try { if (window.firebasePushSale) window.firebasePushSale(DEVICE_ID); } catch(e) {} }
@@ -786,8 +812,8 @@ function addAD() {
   if (!name) { showToast('Заполни поле «Товар»', 'warn'); return; }
   if (price <= 0) { showToast('Укажи сумму возврата', 'warn'); return; }
   if (qty < 1) { showToast('Количество не меньше 1', 'warn'); return; }
-  var sum = price * qty; var percent = findPercentForAD(name); var commission = -(sum * percent / 100);
-  sales.push({ id: Date.now(), date: date, name: name, qty: qty, sum: -sum, percent: percent, commission: commission, isAD: true });
+  var sum = price * qty;
+  sales.push({ id: Date.now(), date: date, name: name, qty: qty, sum: -sum, percent: 0, commission: 0, isAD: true });
   save();
   document.getElementById('adName').value = ''; document.getElementById('adSum').value = ''; document.getElementById('adQty').value = '1'; document.getElementById('adSearchProduct').value = ''; document.getElementById('adSearchResults').innerHTML = '';
   document.getElementById('adInputArt').value = ''; document.getElementById('adArtStatus').style.display = 'none';
@@ -808,7 +834,7 @@ function updateSale() {
   if (!name || price <= 0) { showToast('Заполни «Товар» и «Цену»', 'warn'); return; }
   var sum = price * qty; if (s.isAD) { sum = -sum; }
   s.date = date; s.name = name; s.qty = qty; s.sum = sum; s.percent = percent;
-  s.commission = s.isAD ? -(Math.abs(sum) * percent / 100) : sum * percent / 100;
+  s.commission = s.isAD ? 0 : sum * percent / 100;
   var prod = products.find(function(p) { return normalizeName(p.name) === normalizeName(name); });
   if (prod && prod.type === 'conditional') recalcConditional(name, date);
   save(); closeEdit(); updateLevels(); render();
@@ -821,32 +847,45 @@ function setProgressClass(el, pct) { if (!el) return; el.className = 'progress-f
 function render() {
   var t = today(), m = currentMonth();
   var tSales = sales.filter(function(s) { return s.date === t && !s.isAD; });
+  var tAD = sales.filter(function(s) { return s.date === t && s.isAD; });
   var mSalesAll = sales.filter(function(s) { return s.date.indexOf(m) === 0; });
   var mSales = mSalesAll.filter(function(s) { return !s.isAD; });
   var mAD = mSalesAll.filter(function(s) { return s.isAD; });
-  var tSum = 0, tComm = 0, mSum = 0, mComm = 0, mADSum = 0, mADComm = 0;
+  var tSum = 0, tComm = 0, mSum = 0, mComm = 0, mADSum = 0;
   tSales.forEach(function(s) { tSum += s.sum; tComm += s.commission; });
   mSales.forEach(function(s) { mSum += s.sum; mComm += s.commission; });
-  mAD.forEach(function(s) { mADSum += Math.abs(s.sum); mADComm += s.commission; });
-  var netTurnover = mSum - mADSum; var netCommission = mComm + mADComm;
+  mAD.forEach(function(s) { mADSum += Math.abs(s.sum); });
+
+  // Снятие комиссии по АД (логика ДНС)
+  var tAdCut = calcAdCut(tSales, tAD);
+  var mAdCut = calcAdCut(mSales, mAD);
+  var netTComm = Math.max(0, tComm - tAdCut);
+  var netMComm = Math.max(0, mComm - mAdCut);
+
+  var netTurnover = mSum - mADSum;
   var totalDaysInMonth = daysInMonth(new Date());
   var okladPerDay = totalDaysInMonth > 0 ? salary.oklad / totalDaysInMonth : 0;
   var okladEarned = calcOkladForMonth();
-  var earnedToday = okladPerDay + tComm;
-  var earnedMonth = okladEarned + netCommission;
+  var earnedToday = okladPerDay + netTComm;
+  var earnedMonth = okladEarned + netMComm;
   var dom = dayOfMonth();
-  var avgCommPerDay = dom > 0 ? (netCommission / dom) : 0;
+  var avgCommPerDay = dom > 0 ? (netMComm / dom) : 0;
   var forecastComm = avgCommPerDay * totalDaysInMonth;
   var forecastEarn = salary.oklad + forecastComm;
   var mPlan = getPlan(m); var pct = mPlan > 0 ? (netTurnover / mPlan * 100) : 0;
   var rem = Math.max(0, mPlan - netTurnover); var remPct = mPlan > 0 ? (rem / mPlan * 100) : 100; var dl = daysLeft();
-  var pm = monthStr(prevMonth(new Date())); var pmComm = 0;
-  sales.forEach(function(s) { if (s.date.indexOf(pm) === 0) pmComm += s.commission; });
-  var pmEarn = salary.oklad + pmComm;
+  var pm = monthStr(prevMonth(new Date()));
+  var pmSalesAll = sales.filter(function(s) { return s.date.indexOf(pm) === 0; });
+  var pmSales = pmSalesAll.filter(function(s) { return !s.isAD; });
+  var pmAD = pmSalesAll.filter(function(s) { return s.isAD; });
+  var pmComm = 0; pmSales.forEach(function(s) { pmComm += s.commission; });
+  var pmAdCut = calcAdCut(pmSales, pmAD);
+  var pmNetComm = Math.max(0, pmComm - pmAdCut);
+  var pmEarn = salary.oklad + pmNetComm;
   var fcEl = document.getElementById('forecastEarned'); if (fcEl) fcEl.textContent = fmt(forecastEarn);
   var fccEl = document.getElementById('forecastCompare');
   if (fccEl) {
-    if (pmEarn > 0 && pmComm > 0) { var diffPct = ((forecastEarn - pmEarn) / pmEarn * 100); var sign = diffPct >= 0 ? '+' : ''; var cls = diffPct >= 0 ? '' : ' style="color:#ef4444"'; fccEl.innerHTML = 'В прошлом месяце: <b' + cls + '>' + fmt(pmEarn) + '</b> · прогноз <b' + cls + '>' + sign + diffPct.toFixed(1) + '%</b>'; }
+    if (pmEarn > 0 && pmNetComm > 0) { var diffPct = ((forecastEarn - pmEarn) / pmEarn * 100); var sign = diffPct >= 0 ? '+' : ''; var cls = diffPct >= 0 ? '' : ' style="color:#ef4444"'; fccEl.innerHTML = 'В прошлом месяце: <b' + cls + '>' + fmt(pmEarn) + '</b> · прогноз <b' + cls + '>' + sign + diffPct.toFixed(1) + '%</b>'; }
     else { fccEl.textContent = 'Нет данных за прошлый месяц'; }
   }
   var bar = document.getElementById('monthProgress'); if (bar) { bar.style.width = Math.min(100, pct) + '%'; setProgressClass(bar, pct); }
@@ -854,8 +893,8 @@ function render() {
   if (minEl) { if (pct >= 100) minEl.innerHTML = '✅ <span class="accent">100% — план выполнен</span>'; else if (pct >= 80) minEl.innerHTML = '🟢 <span class="accent">Минимум 80% — выполнен</span>'; else minEl.innerHTML = '🔴 Минимум 80% — не выполнен (' + pct.toFixed(0) + '%)'; }
   if (!animatingIds['monthPlan']) document.getElementById('monthPlan').textContent = fmt(mPlan);
   if (!animatingIds['todaySales']) document.getElementById('todaySales').textContent = fmt(tSum);
-  if (!animatingIds['todayCommission']) document.getElementById('todayCommission').textContent = fmt(tComm);
-  if (!animatingIds['monthCommission']) document.getElementById('monthCommission').textContent = fmt(netCommission);
+  if (!animatingIds['todayCommission']) document.getElementById('todayCommission').textContent = fmt(netTComm);
+  if (!animatingIds['monthCommission']) document.getElementById('monthCommission').textContent = fmt(netMComm);
   if (!animatingIds['remaining']) document.getElementById('remaining').textContent = fmt(rem);
   document.getElementById('monthPercent').textContent = pct.toFixed(1) + '%';
   document.getElementById('daysLeft').textContent = dl;
@@ -864,11 +903,11 @@ function render() {
   document.getElementById('dailyNeeded').textContent = fmt(dl > 0 ? rem / dl : 0);
   if (!animatingIds['todayEarned']) document.getElementById('todayEarned').textContent = fmt(earnedToday);
   if (!animatingIds['monthEarned']) document.getElementById('monthEarned').textContent = fmt(earnedMonth);
-  document.getElementById('todayEarnedBreak').textContent = 'оклад ' + fmt(okladPerDay) + ' + % ' + fmt(tComm);
-  document.getElementById('monthEarnedBreak').textContent = 'оклад ' + fmt(okladEarned) + ' (' + dom + '/' + totalDaysInMonth + ' дн.) + % ' + fmt(netCommission);
+  document.getElementById('todayEarnedBreak').textContent = 'оклад ' + fmt(okladPerDay) + ' + % ' + fmt(netTComm);
+  document.getElementById('monthEarnedBreak').textContent = 'оклад ' + fmt(okladEarned) + ' (' + dom + '/' + totalDaysInMonth + ' дн.) + % ' + fmt(netMComm);
   var adEl = document.getElementById('monthCommission_AD'); if (adEl) adEl.textContent = '−' + fmt(mADSum);
   var adCntEl = document.getElementById('monthADCount'); if (adCntEl) adCntEl.textContent = mAD.length + ' записей';
-  var adCommEl = document.getElementById('monthADComm'); if (adCommEl) adCommEl.textContent = 'снято отчислений: −' + fmt(Math.abs(mADComm));
+  var adCommEl = document.getElementById('monthADComm'); if (adCommEl) adCommEl.textContent = 'уменьшает оборот: ' + fmt(mADSum);
   var totalDays = daysInMonth(new Date()); var forecast = dom > 0 ? (netTurnover / dom * totalDays) : 0;
   var forecastPct = mPlan > 0 ? (forecast / mPlan * 100) : 0;
   var fpEl = document.getElementById('forecastPercent');
@@ -889,7 +928,7 @@ function render() {
   updateDateDisplay('historyDatePicker', 'historyDateDisplay');
   var list = document.getElementById('historyList');
   if (hSales.length === 0) list.innerHTML = '<div class="empty">Нет записей за этот день</div>';
-  else { var html = ''; hSales.forEach(function(s) { var cls = s.isAD ? 'history-item ad' : 'history-item'; var badge = s.isAD ? '<span class="badge-ad">АД</span>' : ''; var metaTxt = s.isAD ? ('Возврат · отчисл. ' + fmt(s.commission)) : (s.percent + '% = ' + fmt(s.commission)); html += '<div class="' + cls + '"><div class="info"><div class="name">' + s.name + ' × ' + s.qty + badge + '</div><div class="meta">' + metaTxt + '</div></div><div class="sum">' + fmt(s.sum) + '</div><button class="edit" data-edit="' + s.id + '">✎</button><button class="delete" data-del="' + s.id + '">✕</button></div>'; }); list.innerHTML = html; list.querySelectorAll('[data-edit]').forEach(function(b) { b.onclick = function() { openEdit(parseInt(this.getAttribute('data-edit'))); }; }); list.querySelectorAll('[data-del]').forEach(function(b) { b.onclick = function() { deleteSale(parseInt(this.getAttribute('data-del'))); }; }); }
+  else { var html = ''; hSales.forEach(function(s) { var cls = s.isAD ? 'history-item ad' : 'history-item'; var badge = s.isAD ? '<span class="badge-ad">АД</span>' : ''; var metaTxt = s.isAD ? ('Возврат · уменьшает оборот') : (s.percent + '% = ' + fmt(s.commission)); html += '<div class="' + cls + '"><div class="info"><div class="name">' + s.name + ' × ' + s.qty + badge + '</div><div class="meta">' + metaTxt + '</div></div><div class="sum">' + fmt(s.sum) + '</div><button class="edit" data-edit="' + s.id + '">✎</button><button class="delete" data-del="' + s.id + '">✕</button></div>'; }); list.innerHTML = html; list.querySelectorAll('[data-edit]').forEach(function(b) { b.onclick = function() { openEdit(parseInt(this.getAttribute('data-edit'))); }; }); list.querySelectorAll('[data-del]').forEach(function(b) { b.onclick = function() { deleteSale(parseInt(this.getAttribute('data-del'))); }; }); }
   var hS = 0, hC = 0; hSales.forEach(function(s) { hS += s.sum; hC += s.commission; });
   document.getElementById('histTotal').textContent = fmt(hS); document.getElementById('histCommission').textContent = fmt(hC);
   var tm = monthStr(totalsMonth); var tot = sales.filter(function(s) { return s.date.indexOf(tm) === 0; });
@@ -897,17 +936,18 @@ function render() {
   var tS = 0, tC = 0, adS = 0, fS = 0, fC = 0, fQ = 0, rS = 0, rC = 0, rQ = 0;
   totSales.forEach(function(s) { tS += s.sum; tC += s.commission; if (s.percent > 1.5) { fS += s.sum; fC += s.commission; fQ += s.qty; } else { rS += s.sum; rC += s.commission; rQ += s.qty; } });
   totAD.forEach(function(s) { adS += Math.abs(s.sum); });
+  var totAdCut = calcAdCut(totSales, totAD);
+  var totNetComm = Math.max(0, tC - totAdCut);
   var netT = tS - adS; var tPlan = getPlan(tm); var tPct = tPlan > 0 ? (netT / tPlan * 100) : 0;
   document.getElementById('totalsTitle').textContent = 'Итоги за ' + totalsMonth.toLocaleDateString('ru-RU', { month: 'long' });
   document.getElementById('totalsPlan').textContent = fmt(tPlan); document.getElementById('totalsPercent').textContent = tPct.toFixed(1) + '% выполнено';
   var tb = document.getElementById('totalsProgress'); tb.style.width = Math.min(100, tPct) + '%'; setProgressClass(tb, tPct);
   document.getElementById('totalsSum').textContent = fmt(tS); document.getElementById('totalsCount').textContent = totSales.length + ' продаж';
-  document.getElementById('totalsComm').textContent = fmt(tC);
-  var totADComm = 0; totAD.forEach(function(s) { totADComm += s.commission; });
+  document.getElementById('totalsComm').textContent = fmt(totNetComm);
   var totalsMonthOklad = (tm === currentMonth()) ? calcOkladForMonth() : salary.oklad;
-  document.getElementById('totalsEarned').textContent = fmt(totalsMonthOklad + tC + totADComm);
+  document.getElementById('totalsEarned').textContent = fmt(totalsMonthOklad + totNetComm);
   document.getElementById('totalsOkladText').textContent = fmt(totalsMonthOklad) + (tm === currentMonth() ? ' (по дням)' : '');
-  document.getElementById('totalsCommText').textContent = fmt(tC + totADComm);
+  document.getElementById('totalsCommText').textContent = fmt(totNetComm);
   document.getElementById('totalsAD').textContent = '−' + fmt(adS); document.getElementById('totalsADCount').textContent = totAD.length + ' записей';
   document.getElementById('totalsNet').textContent = fmt(netT); renderPercentBreakdown(totSales);
   var pm2 = monthStr(prevMonth(totalsMonth)); var pmSum = 0, pmADSum = 0;
@@ -921,7 +961,7 @@ function render() {
   document.getElementById('adMonthSum').textContent = '−' + fmt(mADSum); document.getElementById('adMonthCount').textContent = mAD.length + ' записей';
   if (!window._firstRenderDone) {
     window._firstRenderDone = true;
-    var startAnim = function() { setTimeout(function() { animateNumber(document.getElementById('monthPlan'), mPlan); animateNumber(document.getElementById('todaySales'), tSum); animateNumber(document.getElementById('todayCommission'), tComm); animateNumber(document.getElementById('monthCommission'), netCommission); animateNumber(document.getElementById('remaining'), rem); animateNumber(document.getElementById('todayEarned'), earnedToday); animateNumber(document.getElementById('monthEarned'), earnedMonth); animateNumber(document.getElementById('forecastEarned'), forecastEarn); }, 300); };
+    var startAnim = function() { setTimeout(function() { animateNumber(document.getElementById('monthPlan'), mPlan); animateNumber(document.getElementById('todaySales'), tSum); animateNumber(document.getElementById('todayCommission'), netTComm); animateNumber(document.getElementById('monthCommission'), netMComm); animateNumber(document.getElementById('remaining'), rem); animateNumber(document.getElementById('todayEarned'), earnedToday); animateNumber(document.getElementById('monthEarned'), earnedMonth); animateNumber(document.getElementById('forecastEarned'), forecastEarn); }, 300); };
     if (document.visibilityState === 'visible') setTimeout(startAnim, 1200);
     else document.addEventListener('visibilitychange', function once() { if (document.visibilityState === 'visible') { document.removeEventListener('visibilitychange', once); setTimeout(startAnim, 1200); } });
   }
@@ -1171,7 +1211,7 @@ function renderStats(data) {
 }
 function timeAgo(ts) { if (!ts) return '—'; var diff = Date.now() - ts; var min = Math.floor(diff / 60000); if (min < 1) return 'только что'; if (min < 60) return min + ' мин назад'; var h = Math.floor(min / 60); if (h < 24) return h + ' ч назад'; var d = Math.floor(h / 24); if (d === 1) return 'вчера'; if (d < 7) return d + ' дн назад'; return new Date(ts).toLocaleDateString('ru-RU'); }
 
-var APP_VERSION = '2.14';
+var APP_VERSION = '2.15';
 var CHANGELOG_FULL = [
   { v: '1.0–1.6', title: 'Основа', items: ['Продажи, план, отчисления', 'QR-сканер, история, итоги, АД', 'Достижения, бэкап, фокус-лист'] },
   { v: '2.0', title: 'Флагманский дизайн', items: ['Стекло, SVG, градиенты', 'Заработок, прогноз, мини-график'] },
@@ -1185,13 +1225,15 @@ var CHANGELOG_FULL = [
   { v: '2.11', title: 'Общая база товаров', items: ['Поле «Артикул» в форме продажи', 'Общая база названий через Firebase', 'Сканер прямо в экране базы'] },
   { v: '2.12', title: 'Оклад по дням', items: ['Оклад считается пропорционально прошедшим дням месяца', 'Мелкие улучшения стабильности'] },
   { v: '2.13', title: 'Стабильность', items: ['Мелкие правки', 'Улучшена производительность'] },
-  { v: '2.14', title: 'Фикс базы', items: ['Товар с продажи корректно попадает в общую базу даже если был локально', 'Артикул берётся из поля «Артикул», а не только из названия'] }
+  { v: '2.14', title: 'Фикс базы', items: ['Товар с продажи корректно попадает в общую базу даже если был локально', 'Артикул берётся из поля «Артикул», а не только из названия'] },
+  { v: '2.15', title: 'Правильный расчёт АД', items: ['Логика ДНС (уточнил Андрей Беляев)', 'АД снимает комиссию только за проданное в этом месяце', 'Карточка «Возвраты» — уменьшает оборот'] }
 ];
 var CHANGELOG_LATEST = {
-  version: '2.14',
+  version: '2.15',
   items: [
-    '🔧 Товары из продажи корректно попадают в общую базу',
-    '📦 Артикул берётся из поля «Артикул»',
+    '📊 Правильный расчёт АД — по уточнённой логике ДНС',
+    '💰 Комиссия снимается только если товар продавался в этом месяце',
+    '📉 «Возвраты» — уменьшают оборот, а не отчисления',
     '✅ Улучшена стабильность'
   ]
 };
@@ -1319,8 +1361,8 @@ function drawShareImage(type, callback) {
   ctx.fillText(subtitle, 80, 250);
   ctx.strokeStyle = accent; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(80, 300); ctx.lineTo(W - 80, 300); ctx.stroke();
   var data = [];
-  if (type === 'day') { var hDate = dateStr(historyDate); var daySales = sales.filter(function(s) { return s.date === hDate && !s.isAD; }); var dayAD = sales.filter(function(s) { return s.date === hDate && s.isAD; }); var daySum = 0, dayComm = 0, dayADSum = 0, dayADComm = 0; daySales.forEach(function(s) { daySum += s.sum; dayComm += s.commission; }); dayAD.forEach(function(s) { dayADSum += Math.abs(s.sum); dayADComm += s.commission; }); data = [ { label: 'ПРОДАНО', value: fmt(daySum), sub: daySales.length + ' продаж' }, { label: 'ОТЧИСЛЕНИЯ', value: fmt(dayComm), sub: '% с продаж' } ]; if (dayAD.length > 0) data.push({ label: 'ВОЗВРАТЫ (АД)', value: '−' + fmt(dayADSum), sub: 'снято: −' + fmt(Math.abs(dayADComm)) }); }
-  else { var m = currentMonth(); var mSalesAll = sales.filter(function(s) { return s.date.indexOf(m) === 0; }); var mSales = mSalesAll.filter(function(s) { return !s.isAD; }); var mAD = mSalesAll.filter(function(s) { return s.isAD; }); var mSum = 0, mComm = 0, mADSum = 0, mADComm = 0; mSales.forEach(function(s) { mSum += s.sum; mComm += s.commission; }); mAD.forEach(function(s) { mADSum += Math.abs(s.sum); mADComm += s.commission; }); var netComm = mComm + mADComm; var bdS = {}; mSales.forEach(function(s) { bdS[s.date] = (bdS[s.date] || 0) + s.sum; }); var dsArr = Object.keys(bdS); var recSum = 0, recDate = ''; if (dsArr.length > 0) { var bD = dsArr.reduce(function(a,b) { return bdS[a] > bdS[b] ? a : b; }); recSum = bdS[bD]; recDate = new Date(bD).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' }); } data = [ { label: 'ПРОДАНО', value: fmt(mSum), sub: mSales.length + ' продаж' }, { label: 'ОТЧИСЛЕНИЯ', value: fmt(netComm), sub: 'чистые' } ]; if (mAD.length > 0) data.push({ label: 'ВОЗВРАТЫ (АД)', value: '−' + fmt(mADSum), sub: mAD.length + ' записей' }); if (recSum > 0) data.push({ label: 'РЕКОРД ДНЯ', value: fmt(recSum), sub: recDate }); }
+  if (type === 'day') { var hDate = dateStr(historyDate); var daySales = sales.filter(function(s) { return s.date === hDate && !s.isAD; }); var dayAD = sales.filter(function(s) { return s.date === hDate && s.isAD; }); var daySum = 0, dayComm = 0, dayADSum = 0; daySales.forEach(function(s) { daySum += s.sum; dayComm += s.commission; }); dayAD.forEach(function(s) { dayADSum += Math.abs(s.sum); }); var dayAdCut = calcAdCut(daySales, dayAD); var dayNetComm = Math.max(0, dayComm - dayAdCut); data = [ { label: 'ПРОДАНО', value: fmt(daySum), sub: daySales.length + ' продаж' }, { label: 'ОТЧИСЛЕНИЯ', value: fmt(dayNetComm), sub: '% с продаж' } ]; if (dayAD.length > 0) data.push({ label: 'ВОЗВРАТЫ (АД)', value: '−' + fmt(dayADSum), sub: 'уменьшает оборот' }); }
+  else { var m = currentMonth(); var mSalesAll = sales.filter(function(s) { return s.date.indexOf(m) === 0; }); var mSales = mSalesAll.filter(function(s) { return !s.isAD; }); var mAD = mSalesAll.filter(function(s) { return s.isAD; }); var mSum = 0, mComm = 0, mADSum = 0; mSales.forEach(function(s) { mSum += s.sum; mComm += s.commission; }); mAD.forEach(function(s) { mADSum += Math.abs(s.sum); }); var netComm = Math.max(0, mComm - calcAdCut(mSales, mAD)); var bdS = {}; mSales.forEach(function(s) { bdS[s.date] = (bdS[s.date] || 0) + s.sum; }); var dsArr = Object.keys(bdS); var recSum = 0, recDate = ''; if (dsArr.length > 0) { var bD = dsArr.reduce(function(a,b) { return bdS[a] > bdS[b] ? a : b; }); recSum = bdS[bD]; recDate = new Date(bD).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' }); } data = [ { label: 'ПРОДАНО', value: fmt(mSum), sub: mSales.length + ' продаж' }, { label: 'ОТЧИСЛЕНИЯ', value: fmt(netComm), sub: 'чистые' } ]; if (mAD.length > 0) data.push({ label: 'ВОЗВРАТЫ (АД)', value: '−' + fmt(mADSum), sub: 'уменьшает оборот' }); if (recSum > 0) data.push({ label: 'РЕКОРД ДНЯ', value: fmt(recSum), sub: recDate }); }
   var yStart = 400; var cardH = 200; var cardGap = 40;
   data.forEach(function(item, i) { var y = yStart + i * (cardH + cardGap); ctx.fillStyle = 'rgba(255,255,255,0.06)'; roundRect(ctx, 80, y, W - 160, cardH, 32); ctx.fill(); ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 2; roundRect(ctx, 80, y, W - 160, cardH, 32); ctx.stroke(); ctx.fillStyle = accent; roundRect(ctx, 80, y, 10, cardH, 5); ctx.fill(); ctx.fillStyle = muted; ctx.font = '800 32px -apple-system, sans-serif'; ctx.fillText(item.label, 130, y + 70); ctx.fillStyle = accent; ctx.font = '900 72px -apple-system, sans-serif'; ctx.fillText(item.value, 130, y + 150); ctx.fillStyle = muted; ctx.font = '600 28px -apple-system, sans-serif'; ctx.fillText(item.sub, 130, y + 185); });
   ctx.fillStyle = muted; ctx.font = '700 32px -apple-system, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('Трекер продаж Polaris', W/2, H - 100);

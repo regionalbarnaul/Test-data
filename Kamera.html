@@ -354,6 +354,28 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
 .edit-product-box .modal-btns button{flex:1;padding:12px;border-radius:10px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:inherit}
 .edit-product-box .btn-save{background:var(--accent);color:#0a0f0d}
 .edit-product-box .btn-cancel{background:rgba(255,255,255,.08);color:var(--text)}
+
+/* ===== ГРАФИК ПРОДАЖ ПО ДНЯМ ===== */
+.hbar-row{display:grid;grid-template-columns:56px 1fr 88px;align-items:center;gap:8px;padding:6px 0;font-size:12px;border-bottom:1px solid var(--card-border)}
+.hbar-row:last-child{border-bottom:none}
+.hbar-row.today .hbar-date{color:var(--gold);font-weight:700}
+.hbar-row.today .hbar-sum{color:var(--gold);font-weight:700}
+.hbar-date{color:var(--text-muted);font-weight:600;font-size:12px}
+.hbar-track{background:rgba(255,255,255,.04);border-radius:5px;height:14px;overflow:hidden;position:relative}
+body.theme-light .hbar-track,body.theme-ios .hbar-track,body.theme-soviet .hbar-track{background:rgba(0,0,0,.06)}
+.hbar-fill{height:100%;border-radius:5px;min-width:3px;background:linear-gradient(90deg,var(--accent-light),var(--accent));transition:width .3s}
+.hbar-row.today .hbar-fill{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
+.hbar-sum{text-align:right;color:var(--accent);font-weight:600;font-size:12px;white-space:nowrap}
+.hbar-row.empty .hbar-sum{color:var(--text-dim);font-weight:500}
+.hbar-row.empty .hbar-fill{background:rgba(255,255,255,.05)}
+.totals-nav{display:flex;align-items:center;gap:10px;padding:18px 16px 12px;position:relative;z-index:1}
+.totals-nav h1{font-size:24px;font-weight:800;flex:1;margin:0;letter-spacing:-.5px;line-height:1.15;background:linear-gradient(135deg,var(--accent-pale) 0%,var(--accent) 60%,var(--accent-dark) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+body.theme-light .totals-nav h1,body.theme-ios .totals-nav h1,body.theme-soviet .totals-nav h1{background:none;-webkit-text-fill-color:var(--text);color:var(--text)}
+body.theme-terminal .totals-nav h1{background:none;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+.totals-nav button{background:rgba(255,255,255,.06);border:1px solid var(--card-border);color:var(--text);width:38px;height:38px;border-radius:10px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;flex-shrink:0}
+.totals-nav button:active{background:rgba(255,255,255,.12)}
+body.theme-terminal .totals-nav button{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px}
+body.theme-soviet .totals-nav button{background:#F5DEB3;border:2px solid var(--accent);color:var(--accent);border-radius:4px}
 </style>
 </head>
 <body>
@@ -416,7 +438,11 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
     <button class="share-btn" id="btnShareDay"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Поделиться итогами за день</button>
   </div>
   <div class="swipe-screen" id="screen-totals">
-    <div class="header"><h1 id="totalsTitle">Итоги</h1></div>
+    <div class="totals-nav">
+      <button id="totalsPrev">◀</button>
+      <h1 id="totalsTitle">Итоги</h1>
+      <button id="totalsNext">▶</button>
+    </div>
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>План на месяц</div><div class="big-number" id="totalsPlan">0 ₽</div><div class="sub-text" id="totalsPercent">0.0% выполнено</div><div class="progress-bg"><div class="progress-fill" id="totalsProgress"></div><div class="progress-mark" style="left:80%"></div></div></div>
     <div class="grid-2"><div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Продано</div><div class="big-number" style="font-size:22px" id="totalsSum">0 ₽</div><div class="sub-text" id="totalsCount">0 продаж</div></div>
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>Отчисления</div><div class="big-number blue" style="font-size:22px" id="totalsComm">0 ₽</div></div></div>
@@ -429,6 +455,28 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Фокусные товары</div><div class="sub-text">Продано: <span class="accent" id="totalsFocusSum">0 ₽</span></div><div class="sub-text">Отчисления: <span class="accent" id="totalsFocusComm">0 ₽</span></div><div class="sub-text">Количество: <span class="accent" id="totalsFocusCount">0 шт</span></div></div>
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Регулярные товары</div><div class="sub-text">Продано: <span class="accent" id="totalsRegSum">0 ₽</span></div><div class="sub-text">Отчисления: <span class="accent" id="totalsRegComm">0 ₽</span></div><div class="sub-text">Количество: <span class="accent" id="totalsRegCount">0 шт</span></div></div>
     <button class="share-btn" id="btnShareMonth"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Поделиться итогами за месяц</button>
+  </div>
+  <div class="swipe-screen" id="screen-daily">
+    <div class="header">
+      <div>
+        <h1>Продажи по дням</h1>
+        <div class="date"><span id="dailyMonthLabel">—</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <span id="dailyTitle">За текущий месяц</span>
+      </div>
+      <div id="dailyChart"></div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Итоги месяца
+      </div>
+      <div class="sub-text" id="dailyChartInfo" style="margin-top:0;">—</div>
+    </div>
   </div>
   <div class="swipe-screen" id="screen-checklist">
     <div class="header"><h1>Чек-лист ТП</h1></div>
@@ -452,7 +500,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
     <div class="card"><div class="card-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>Возвраты за текущий месяц</div><div class="big-number red" style="font-size:22px" id="adMonthSum">0 ₽</div><div class="sub-text" id="adMonthCount">0 записей</div></div>
   </div>
 </div>
-<div id="dots"><span data-screen="home" class="active"></span><span data-screen="add"></span><span data-screen="history"></span><span data-screen="totals"></span><span data-screen="checklist"></span><span data-screen="ad"></span></div>
+<div id="dots"><span data-screen="home" class="active"></span><span data-screen="add"></span><span data-screen="history"></span><span data-screen="totals"></span><span data-screen="daily"></span><span data-screen="checklist"></span><span data-screen="ad"></span></div>
 <button id="aboutBtn">⚙️</button>
 <div id="screen-edit" class="modal-screen">
   <div class="header"><h1>Редактировать</h1></div>
@@ -502,7 +550,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
   </div>
   <div class="settings-section">
     <div class="settings-title">ℹ️ О приложении</div>
-    <div class="about-row"><span class="label">Версия</span><span class="value" id="appVersionText">2.15 · АД-фикс</span></div>
+    <div class="about-row"><span class="label">Версия</span><span class="value" id="appVersionText">2.16 · продажи по дням</span></div>
     <div class="about-row"><span class="label">Разработчик</span><span class="value">Максим</span></div>
     <div class="about-row"><span class="label">Почта</span><span class="value">regionalbarnaul@yandex.ru</span></div>
   </div>
@@ -579,7 +627,7 @@ body.theme-terminal .whats-new-item::before{content:'>';color:var(--accent);font
   <div class="chat-input-bar"><textarea class="chat-input" id="chatInput" placeholder="Сообщение..." rows="1"></textarea><button class="chat-send" id="chatSend"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div>
 </div>
 <div class="chat-name-modal" id="chatNameModal"><div class="chat-name-box"><h3>Как тебя зовут?</h3><p>Это имя будет показываться в чате с коллегами</p><input type="text" id="chatNameInput" placeholder="Например, Максим" maxlength="20"><button id="chatNameSave">Войти в чат</button></div></div>
-<div class="whats-new-modal" id="whatsNewModal"><div class="whats-new-box"><h3>🎉 Что нового</h3><div class="whats-new-version" id="whatsNewVersion">Версия 2.15</div><div id="whatsNewContent"></div><button class="whats-new-btn" id="whatsNewClose">Понятно</button></div></div>
+<div class="whats-new-modal" id="whatsNewModal"><div class="whats-new-box"><h3>🎉 Что нового</h3><div class="whats-new-version" id="whatsNewVersion">Версия 2.16</div><div id="whatsNewContent"></div><button class="whats-new-btn" id="whatsNewClose">Понятно</button></div></div>
 <div class="stats-modal" id="statsModal">
   <div class="stats-box">
     <h3>📊 Статистика</h3>
@@ -600,7 +648,7 @@ var editingId = null;
 var historyDate = new Date();
 var totalsMonth = new Date();
 var animatingIds = {};
-var screenOrder = ['home', 'add', 'history', 'totals', 'checklist', 'ad'];
+var screenOrder = ['home', 'add', 'history', 'totals', 'daily', 'checklist', 'ad'];
 try {
   sales = JSON.parse(localStorage.getItem('sales') || '[]');
   plans = JSON.parse(localStorage.getItem('plans') || '{}');
@@ -651,9 +699,6 @@ function extractArticleFromName(name) { if (!name) return ''; var m = name.match
 function cleanNameFromArticle(name, art) { if (!name || !art) return name; var re = new RegExp('^' + art + '\\s*[-—]?\\s*'); return name.replace(re, ''); }
 function calcOkladForMonth() { var totalDays = daysInMonth(new Date()); var dom = dayOfMonth(); if (totalDays <= 0) return 0; return salary.oklad * dom / totalDays; }
 
-// ===== РАСЧЁТ КОМИССИИ С УЧЁТОМ АД (логика ДНС, уточнил Андрей) =====
-// АД уменьшает оборот и, если по этому товару были продажи в этом месяце,
-// снимает комиссию пропорционально. Если продаж не было — комиссия не снимается.
 function calcAdCut(mSales, mAD) {
   var salesByProduct = {};
   mSales.forEach(function(s) {
@@ -739,7 +784,7 @@ function animateNumber(el, target) { if (!el || !el.id) return; var id = el.id; 
 function showSuccessCheckmark() { var el = document.getElementById('successOverlay'); if (!el) return; el.classList.add('show'); var circle = el.querySelector('.check-circle'); var mark = el.querySelector('.check-mark'); if (circle && mark) { circle.style.animation = 'none'; mark.style.animation = 'none'; void circle.offsetWidth; void mark.offsetWidth; circle.style.animation = ''; mark.style.animation = ''; } setTimeout(function() { el.classList.remove('show'); }, 1000); }
 function migrateRegularProducts() { var changed = false; products.forEach(function(p) { if (!p.art) { var art = extractArticleFromName(p.name); if (art) { p.art = art; changed = true; } } if (p.art && p.name) { var cleaned = cleanNameFromArticle(p.name, p.art); if (cleaned !== p.name && cleaned.length > 0) { p.name = cleaned; changed = true; } } }); if (changed) save(); }
 
-function getBackupJSON() { return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.15' }, null, 2); }
+function getBackupJSON() { return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.16' }, null, 2); }
 function saveBackupToFile() { try { var data = getBackupJSON(); var blob = new Blob([data], {type: 'application/json'}); var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = 'tracker_backup.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function() { URL.revokeObjectURL(url); }, 1000); localStorage.setItem('lastBackupDate', today()); return true; } catch(e) { return false; } }
 function maybeAutoBackup() { var last = localStorage.getItem('lastBackupDate'); if (last === today()) return; saveBackupToFile(); }
 function shareBackup() { var data = getBackupJSON(); if (navigator.share) { navigator.share({ title: 'Бэкап трекера', text: data }).then(function() { localStorage.setItem('lastBackupDate', today()); showToast('Бэкап отправлен', 'success'); }).catch(function(){}); } else { navigator.clipboard.writeText(data).then(function() { localStorage.setItem('lastBackupDate', today()); showToast('Скопировано — вставь в MAX', 'success'); }).catch(function() { showToast('Не удалось скопировать', 'error'); }); } }
@@ -844,6 +889,64 @@ function savePlan() { plans[currentMonth()] = parseFloat(document.getElementById
 function saveOklad() { salary.oklad = parseFloat(document.getElementById('inputOklad').value) || 0; save(); render(); vibrateLight(); showToast('Оклад сохранён', 'success'); }
 function setProgressClass(el, pct) { if (!el) return; el.className = 'progress-fill'; if (pct >= 100) el.classList.add('gold'); else if (pct >= 90) el.classList.add('ok'); else if (pct >= 80) el.classList.add('orange'); }
 
+function renderDailyScreen() {
+  var box = document.getElementById('dailyChart');
+  var info = document.getElementById('dailyChartInfo');
+  var label = document.getElementById('dailyMonthLabel');
+  var title = document.getElementById('dailyTitle');
+  if (!box) return;
+
+  var monthKey = monthStr(totalsMonth);
+  var mSales = sales.filter(function(s) { return s.date.indexOf(monthKey) === 0 && !s.isAD; });
+
+  var year = totalsMonth.getFullYear();
+  var month = totalsMonth.getMonth();
+  var daysInM = new Date(year, month + 1, 0).getDate();
+  var now = new Date();
+  var isCurrent = (currentMonth() === monthKey);
+  var todayD = isCurrent ? now.getDate() : daysInM;
+
+  var monthNames = ['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'];
+  var shortNames = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  if (label) label.textContent = monthNames[month] + ' ' + year + (isCurrent ? ' · сейчас' : '');
+  if (title) title.textContent = isCurrent ? 'За текущий месяц' : 'За прошлый месяц';
+
+  var sums = {};
+  mSales.forEach(function(s) {
+    var d = parseInt(s.date.split('-')[2]);
+    sums[d] = (sums[d] || 0) + s.sum;
+  });
+
+  var max = 0;
+  for (var d = 1; d <= daysInM; d++) { if ((sums[d] || 0) > max) max = sums[d]; }
+
+  var total = 0;
+  for (var d = 1; d <= daysInM; d++) { total += sums[d] || 0; }
+
+  var html = '';
+  for (var d = daysInM; d >= 1; d--) {
+    var val = sums[d] || 0;
+    var pct = max > 0 ? Math.round((val / max) * 100) : 0;
+    if (val > 0 && pct < 6) pct = 6;
+    var isToday = (d === todayD && isCurrent);
+    var cls = 'hbar-row';
+    if (isToday) cls += ' today';
+    if (val === 0) cls += ' empty';
+    var dateStr = d + ' ' + shortNames[month];
+    var sumStr = val > 0 ? fmt(val) : '—';
+    html += '<div class="' + cls + '">' +
+      '<div class="hbar-date">' + dateStr + '</div>' +
+      '<div class="hbar-track"><div class="hbar-fill" style="width:' + (pct || 2) + '%;"></div></div>' +
+      '<div class="hbar-sum">' + sumStr + '</div>' +
+    '</div>';
+  }
+  box.innerHTML = html;
+
+  var activeDays = Object.keys(sums).length;
+  var avg = activeDays > 0 ? total / activeDays : 0;
+  if (info) info.textContent = 'Всего: ' + fmt(total) + ' · дней с продажами: ' + activeDays + ' · средний день: ' + fmt(avg);
+}
+
 function render() {
   var t = today(), m = currentMonth();
   var tSales = sales.filter(function(s) { return s.date === t && !s.isAD; });
@@ -856,7 +959,6 @@ function render() {
   mSales.forEach(function(s) { mSum += s.sum; mComm += s.commission; });
   mAD.forEach(function(s) { mADSum += Math.abs(s.sum); });
 
-  // Снятие комиссии по АД (логика ДНС)
   var tAdCut = calcAdCut(tSales, tAD);
   var mAdCut = calcAdCut(mSales, mAD);
   var netTComm = Math.max(0, tComm - tAdCut);
@@ -959,6 +1061,7 @@ function render() {
   document.getElementById('totalsFocusSum').textContent = fmt(fS); document.getElementById('totalsFocusComm').textContent = fmt(fC); document.getElementById('totalsFocusCount').textContent = fQ + ' шт';
   document.getElementById('totalsRegSum').textContent = fmt(rS); document.getElementById('totalsRegComm').textContent = fmt(rC); document.getElementById('totalsRegCount').textContent = rQ + ' шт';
   document.getElementById('adMonthSum').textContent = '−' + fmt(mADSum); document.getElementById('adMonthCount').textContent = mAD.length + ' записей';
+  renderDailyScreen();
   if (!window._firstRenderDone) {
     window._firstRenderDone = true;
     var startAnim = function() { setTimeout(function() { animateNumber(document.getElementById('monthPlan'), mPlan); animateNumber(document.getElementById('todaySales'), tSum); animateNumber(document.getElementById('todayCommission'), netTComm); animateNumber(document.getElementById('monthCommission'), netMComm); animateNumber(document.getElementById('remaining'), rem); animateNumber(document.getElementById('todayEarned'), earnedToday); animateNumber(document.getElementById('monthEarned'), earnedMonth); animateNumber(document.getElementById('forecastEarned'), forecastEarn); }, 300); };
@@ -972,6 +1075,23 @@ function updateDots() { var container = document.getElementById('swipeContainer'
 var scrollTimeout = null;
 document.getElementById('swipeContainer').addEventListener('scroll', function() { if (scrollTimeout) clearTimeout(scrollTimeout); scrollTimeout = setTimeout(updateDots, 100); });
 document.querySelectorAll('#dots span').forEach(function(dot) { dot.addEventListener('click', function() { scrollToScreen(this.getAttribute('data-screen')); }); });
+
+document.getElementById('totalsPrev').onclick = function() {
+  var m = new Date(totalsMonth);
+  m.setMonth(m.getMonth() - 1);
+  totalsMonth = m;
+  render();
+  vibrateLight();
+};
+document.getElementById('totalsNext').onclick = function() {
+  var m = new Date(totalsMonth);
+  m.setMonth(m.getMonth() + 1);
+  var now = new Date();
+  if (m > now) return;
+  totalsMonth = m;
+  render();
+  vibrateLight();
+};
 
 document.getElementById('searchProduct').oninput = function() {
   var q = this.value.trim(); var res = document.getElementById('searchResults');
@@ -1211,7 +1331,7 @@ function renderStats(data) {
 }
 function timeAgo(ts) { if (!ts) return '—'; var diff = Date.now() - ts; var min = Math.floor(diff / 60000); if (min < 1) return 'только что'; if (min < 60) return min + ' мин назад'; var h = Math.floor(min / 60); if (h < 24) return h + ' ч назад'; var d = Math.floor(h / 24); if (d === 1) return 'вчера'; if (d < 7) return d + ' дн назад'; return new Date(ts).toLocaleDateString('ru-RU'); }
 
-var APP_VERSION = '2.15';
+var APP_VERSION = '2.16';
 var CHANGELOG_FULL = [
   { v: '1.0–1.6', title: 'Основа', items: ['Продажи, план, отчисления', 'QR-сканер, история, итоги, АД', 'Достижения, бэкап, фокус-лист'] },
   { v: '2.0', title: 'Флагманский дизайн', items: ['Стекло, SVG, градиенты', 'Заработок, прогноз, мини-график'] },
@@ -1226,14 +1346,14 @@ var CHANGELOG_FULL = [
   { v: '2.12', title: 'Оклад по дням', items: ['Оклад считается пропорционально прошедшим дням месяца', 'Мелкие улучшения стабильности'] },
   { v: '2.13', title: 'Стабильность', items: ['Мелкие правки', 'Улучшена производительность'] },
   { v: '2.14', title: 'Фикс базы', items: ['Товар с продажи корректно попадает в общую базу даже если был локально', 'Артикул берётся из поля «Артикул», а не только из названия'] },
-  { v: '2.15', title: 'Правильный расчёт АД', items: ['Логика ДНС (уточнил Андрей Беляев)', 'АД снимает комиссию только за проданное в этом месяце', 'Карточка «Возвраты» — уменьшает оборот'] }
+  { v: '2.15', title: 'Правильный расчёт АД', items: ['Логика ДНС (уточнил Андрей Беляев)', 'АД снимает комиссию только за проданное в этом месяце', 'Карточка «Возвраты» — уменьшает оборот'] },
+  { v: '2.16', title: 'Продажи по дням', items: ['Новый экран «Продажи по дням» — 7-я точка в свайпе', 'Горизонтальный график по дням', 'Стрелки ◀ ▶ в Итогах — переключение месяцев'] }
 ];
 var CHANGELOG_LATEST = {
-  version: '2.15',
+  version: '2.16',
   items: [
-    '📊 Правильный расчёт АД (подсказал Андрей)',
-    '💰 Комиссия снимается только если товар продавался в этом месяце',
-    '📉 «Возвраты (АД)» — уменьшают оборот, а не отчисления',
+    '📊 Новый экран «Продажи по дням» — 7-я точка в свайпе',
+    '📅 Стрелки ◀ ▶ в Итогах — переключение месяцев',
     '✅ Улучшена стабильность'
   ]
 };

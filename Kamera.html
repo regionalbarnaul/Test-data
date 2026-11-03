@@ -550,7 +550,7 @@ body.theme-soviet .totals-nav button{background:#F5DEB3;border:2px solid var(--a
   </div>
   <div class="settings-section">
     <div class="settings-title">ℹ️ О приложении</div>
-    <div class="about-row"><span class="label">Версия</span><span class="value" id="appVersionText">2.16 · продажи по дням</span></div>
+    <div class="about-row"><span class="label">Версия</span><span class="value" id="appVersionText">2.17 · фиксы фокуса</span></div>
     <div class="about-row"><span class="label">Разработчик</span><span class="value">Максим</span></div>
     <div class="about-row"><span class="label">Почта</span><span class="value">regionalbarnaul@yandex.ru</span></div>
   </div>
@@ -627,7 +627,7 @@ body.theme-soviet .totals-nav button{background:#F5DEB3;border:2px solid var(--a
   <div class="chat-input-bar"><textarea class="chat-input" id="chatInput" placeholder="Сообщение..." rows="1"></textarea><button class="chat-send" id="chatSend"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div>
 </div>
 <div class="chat-name-modal" id="chatNameModal"><div class="chat-name-box"><h3>Как тебя зовут?</h3><p>Это имя будет показываться в чате с коллегами</p><input type="text" id="chatNameInput" placeholder="Например, Максим" maxlength="20"><button id="chatNameSave">Войти в чат</button></div></div>
-<div class="whats-new-modal" id="whatsNewModal"><div class="whats-new-box"><h3>🎉 Что нового</h3><div class="whats-new-version" id="whatsNewVersion">Версия 2.16</div><div id="whatsNewContent"></div><button class="whats-new-btn" id="whatsNewClose">Понятно</button></div></div>
+<div class="whats-new-modal" id="whatsNewModal"><div class="whats-new-box"><h3>🎉 Что нового</h3><div class="whats-new-version" id="whatsNewVersion">Версия 2.17</div><div id="whatsNewContent"></div><button class="whats-new-btn" id="whatsNewClose">Понятно</button></div></div>
 <div class="stats-modal" id="statsModal">
   <div class="stats-box">
     <h3>📊 Статистика</h3>
@@ -784,7 +784,7 @@ function animateNumber(el, target) { if (!el || !el.id) return; var id = el.id; 
 function showSuccessCheckmark() { var el = document.getElementById('successOverlay'); if (!el) return; el.classList.add('show'); var circle = el.querySelector('.check-circle'); var mark = el.querySelector('.check-mark'); if (circle && mark) { circle.style.animation = 'none'; mark.style.animation = 'none'; void circle.offsetWidth; void mark.offsetWidth; circle.style.animation = ''; mark.style.animation = ''; } setTimeout(function() { el.classList.remove('show'); }, 1000); }
 function migrateRegularProducts() { var changed = false; products.forEach(function(p) { if (!p.art) { var art = extractArticleFromName(p.name); if (art) { p.art = art; changed = true; } } if (p.art && p.name) { var cleaned = cleanNameFromArticle(p.name, p.art); if (cleaned !== p.name && cleaned.length > 0) { p.name = cleaned; changed = true; } } }); if (changed) save(); }
 
-function getBackupJSON() { return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.16' }, null, 2); }
+function getBackupJSON() { return JSON.stringify({ sales: sales, plans: plans, products: products, salary: salary, xpData: xpData, theme: localStorage.getItem('theme') || 'default', exportDate: new Date().toISOString(), version: '2.17' }, null, 2); }
 function saveBackupToFile() { try { var data = getBackupJSON(); var blob = new Blob([data], {type: 'application/json'}); var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = 'tracker_backup.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function() { URL.revokeObjectURL(url); }, 1000); localStorage.setItem('lastBackupDate', today()); return true; } catch(e) { return false; } }
 function maybeAutoBackup() { var last = localStorage.getItem('lastBackupDate'); if (last === today()) return; saveBackupToFile(); }
 function shareBackup() { var data = getBackupJSON(); if (navigator.share) { navigator.share({ title: 'Бэкап трекера', text: data }).then(function() { localStorage.setItem('lastBackupDate', today()); showToast('Бэкап отправлен', 'success'); }).catch(function(){}); } else { navigator.clipboard.writeText(data).then(function() { localStorage.setItem('lastBackupDate', today()); showToast('Скопировано — вставь в MAX', 'success'); }).catch(function() { showToast('Не удалось скопировать', 'error'); }); } }
@@ -1313,6 +1313,7 @@ document.getElementById('btnSyncFocus').onclick = function() {
       } else { 
         var m2 = pr.match(/(\d+(?:[.,]\d+)?)/); 
         percent = m2 ? parseFloat(m2[1].replace(',', '.')) : 1.5; 
+        if (percent > 0 && percent < 1) percent = percent * 100;
       } 
       np.push({ art: art, name: cleanNameFromArticle(name, art), percent: percent, type: type }); 
     }
@@ -1322,19 +1323,35 @@ document.getElementById('btnSyncFocus').onclick = function() {
       return; 
     }
 
-    var cleaned = []; 
-    products.forEach(function(p) { 
-      if (p.type === 'regular') cleaned.push(p); 
-    });
-    
-    var seenArts = {}; 
-    np.forEach(function(x) { 
-      if (x.art && seenArts[x.art]) return; 
-      if (x.art) seenArts[x.art] = true; 
-      cleaned.push(x); 
+    var newArts = {};
+    np.forEach(function(x) { if (x.art) newArts[x.art] = true; });
+
+    products.forEach(function(p) {
+      if (p.type === 'focus' || p.type === 'conditional') {
+        if (!newArts[p.art]) {
+          p.type = 'regular';
+          p.percent = 1.5;
+          if (window.fbSaveProduct && p.art) {
+            window.fbSaveProduct(p.art, { name: p.name, percent: 1.5, type: 'regular' }).catch(function(){});
+          }
+        }
+      }
     });
 
-    products = cleaned; 
+    np.forEach(function(x) {
+      var existing = products.find(function(p) { return p.art === x.art; });
+      if (existing) {
+        existing.type = x.type;
+        existing.percent = x.percent;
+        existing.name = x.name;
+      } else {
+        products.push(x);
+      }
+      if (window.fbSaveProduct && x.art) {
+        window.fbSaveProduct(x.art, { name: x.name, percent: x.percent, type: x.type }).catch(function(){});
+      }
+    });
+
     save(); 
     showToast('Загружено: ' + np.length + ' товаров', 'success'); 
     render(); 
@@ -1412,7 +1429,7 @@ function renderStats(data) {
 }
 function timeAgo(ts) { if (!ts) return '—'; var diff = Date.now() - ts; var min = Math.floor(diff / 60000); if (min < 1) return 'только что'; if (min < 60) return min + ' мин назад'; var h = Math.floor(min / 60); if (h < 24) return h + ' ч назад'; var d = Math.floor(h / 24); if (d === 1) return 'вчера'; if (d < 7) return d + ' дн назад'; return new Date(ts).toLocaleDateString('ru-RU'); }
 
-var APP_VERSION = '2.16';
+var APP_VERSION = '2.17';
 var CHANGELOG_FULL = [
   { v: '1.0–1.6', title: 'Основа', items: ['Продажи, план, отчисления', 'QR-сканер, история, итоги, АД', 'Достижения, бэкап, фокус-лист'] },
   { v: '2.0', title: 'Флагманский дизайн', items: ['Стекло, SVG, градиенты', 'Заработок, прогноз, мини-график'] },
@@ -1428,14 +1445,16 @@ var CHANGELOG_FULL = [
   { v: '2.13', title: 'Стабильность', items: ['Мелкие правки', 'Улучшена производительность'] },
   { v: '2.14', title: 'Фикс базы', items: ['Товар с продажи корректно попадает в общую базу даже если был локально', 'Артикул берётся из поля «Артикул», а не только из названия'] },
   { v: '2.15', title: 'Правильный расчёт АД', items: ['Логика ДНС (уточнил Андрей Беляев)', 'АД снимает комиссию только за проданное в этом месяце', 'Карточка «Возвраты» — уменьшает оборот'] },
-  { v: '2.16', title: 'Продажи по дням', items: ['Новый экран «Продажи по дням» — 7-я точка в свайпе', 'Горизонтальный график по дням', 'Стрелки ◀ ▶ в Итогах — переключение месяцев'] }
+  { v: '2.16', title: 'Продажи по дням', items: ['Новый экран «Продажи по дням» — 7-я точка в свайпе', 'Горизонтальный график по дням', 'Стрелки ◀ ▶ в Итогах — переключение месяцев'] },
+  { v: '2.17', title: 'Синхронизация фокуса', items: ['Шестерёнка скрыта на всех экранах, кроме главного', 'Стрелки ◀ ▶ на экране «Итоги» больше не перекрываются', 'Фокус-лист обновляется без кэша и правильно видит проценты', 'Старые фокусные товары автоматически сбрасываются в Firebase'] }
 ];
 var CHANGELOG_LATEST = {
-  version: '2.16',
+  version: '2.17',
   items: [
-    '📊 Новый экран «Продажи по дням» — 7-я точка в свайпе',
-    '📅 Стрелки ◀ ▶ в Итогах — переключение месяцев',
-    '✅ Улучшена стабильность'
+    '⚙️ Шестерёнка настроек скрыта на всех экранах, кроме главного',
+    '📅 Стрелки ◀ ▶ на экране «Итоги» больше не перекрываются',
+    '🔄 Фокус-лист обновляется без кэша и правильно видит проценты',
+    '☁️ Старые фокусные товары автоматически сбрасываются в Firebase'
   ]
 };
 function showWhatsNew() {

@@ -1071,7 +1071,17 @@ function render() {
 }
 function renderPercentBreakdown(monthSales) { var el = document.getElementById('percentBreakdown'); if (!el) return; if (!monthSales || monthSales.length === 0) { el.innerHTML = '<div class="empty">Нет продаж за этот месяц</div>'; return; } var groups = {}; monthSales.forEach(function(s) { var key = (Math.round(s.percent * 10) / 10).toString(); if (!groups[key]) groups[key] = { qty: 0, sum: 0, comm: 0 }; groups[key].qty += s.qty; groups[key].sum += s.sum; groups[key].comm += s.commission; }); var keys = Object.keys(groups).sort(function(a, b) { return parseFloat(a) - parseFloat(b); }); var html = ''; keys.forEach(function(k) { var g = groups[k]; html += '<div class="percent-row"><span class="percent-badge">' + k + '%</span><div class="percent-info">' + g.qty + ' шт</div><div><div class="percent-sum">' + fmt(g.sum) + '</div><div class="percent-comm">отч. ' + fmt(g.comm) + '</div></div></div>'; }); el.innerHTML = html; }
 function scrollToScreen(name) { var container = document.getElementById('swipeContainer'); var idx = screenOrder.indexOf(name); if (idx === -1) return; container.scrollTo({ left: idx * window.innerWidth, behavior: 'smooth' }); }
-function updateDots() { var container = document.getElementById('swipeContainer'); var idx = Math.round(container.scrollLeft / window.innerWidth); if (idx < 0) idx = 0; if (idx >= screenOrder.length) idx = screenOrder.length - 1; document.querySelectorAll('#dots span').forEach(function(s, i) { s.classList.toggle('active', i === idx); }); }
+function updateDots() { 
+  var container = document.getElementById('swipeContainer'); 
+  var idx = Math.round(container.scrollLeft / window.innerWidth); 
+  if (idx < 0) idx = 0; 
+  if (idx >= screenOrder.length) idx = screenOrder.length - 1; 
+  document.querySelectorAll('#dots span').forEach(function(s, i) { 
+    s.classList.toggle('active', i === idx); 
+  }); 
+  var ab = document.getElementById('aboutBtn'); 
+  if (ab) ab.style.display = (idx === 0) ? 'flex' : 'none'; 
+}
 var scrollTimeout = null;
 document.getElementById('swipeContainer').addEventListener('scroll', function() { if (scrollTimeout) clearTimeout(scrollTimeout); scrollTimeout = setTimeout(updateDots, 100); });
 document.querySelectorAll('#dots span').forEach(function(dot) { dot.addEventListener('click', function() { scrollToScreen(this.getAttribute('data-screen')); }); });
@@ -1241,26 +1251,97 @@ document.getElementById('btnOklad').onclick = saveOklad;
 document.getElementById('btnAddAD').onclick = addAD;
 document.getElementById('btnImportManual').onclick = function() { document.getElementById('screen-import').classList.add('active'); };
 document.getElementById('btnDedup').onclick = function() { var seen = {}, unique = [], removed = 0; products.forEach(function(p) { var artKey = null; if (p.art) artKey = 'art_' + p.art; else { var artInName = extractArticleFromName(p.name); if (artInName) artKey = 'art_' + artInName; } if (artKey && seen[artKey]) { var e = seen[artKey]; if (e.type !== 'focus' && p.type === 'focus') { e.art = p.art || e.art; e.name = p.name; e.percent = p.percent; e.type = p.type; } else if (e.type === 'focus' && p.type !== 'focus') {} else { if (p.percent > e.percent) { e.art = p.art || e.art; e.name = p.name; e.percent = p.percent; e.type = p.type; } } removed++; } else { if (artKey) seen[artKey] = p; unique.push(p); } }); products = unique; save(); showToast('Удалено дублей: ' + removed, 'success'); render(); };
+
 document.getElementById('btnSyncFocus').onclick = function() {
-  var ok = confirm('Загрузить фокус-лист?'); if (!ok) return;
-  var url = 'https://raw.githubusercontent.com/regionalbarnaul/Test-data/main/Test.csv';
+  var ok = confirm('Загрузить свежий фокус-лист? Старые фокусные товары будут заменены.');
+  if (!ok) return;
+  
+  var url = 'https://raw.githubusercontent.com/regionalbarnaul/Test-data/main/Test.csv?t=' + Date.now();
   showToast('Загружаю фокус-лист...', 'warn');
-  fetch(url).then(function(r) { return r.text(); }).then(function(text) {
+  
+  fetch(url).then(function(r) { 
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.text(); 
+  }).then(function(text) {
     if (text.charCodeAt(0) === 0xFEFF) text = text.substring(1);
-    function parseCSV(str) { var rows = [], row = [], cur = '', q = false; for (var i = 0; i < str.length; i++) { var ch = str[i]; if (q) { if (ch === '"') { if (str[i+1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; } else { if (ch === '"') q = true; else if (ch === ',') { row.push(cur); cur = ''; } else if (ch === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; } else if (ch === '\r') {} else cur += ch; } } if (cur !== '' || row.length > 0) { row.push(cur); rows.push(row); } return rows; }
-    var rows = parseCSV(text); var np = [];
-    for (var i = 1; i < rows.length; i++) { var r = rows[i]; if (r.length < 3) continue; var art = (r[0] || '').trim(), name = (r[1] || '').trim(), pr = (r[2] || '').trim(); if (!art || !name) continue; var type = 'focus', percent = 0; if (pr.indexOf('при продажах') !== -1) { type = 'conditional'; var mm = pr.match(/(\d+)/); percent = mm ? parseInt(mm[1]) : 3; } else { var m2 = pr.match(/(\d+(?:[.,]\d+)?)/); percent = m2 ? parseFloat(m2[1].replace(',', '.')) : 0; } np.push({ art: art, name: cleanNameFromArticle(name, art), percent: percent, type: type }); }
-    if (np.length === 0) { showToast('Товары не найдены', 'warn'); return; }
-    var csvArts = {}; np.forEach(function(x) { if (x.art) csvArts[x.art] = true; });
-    var cleaned = []; var removed = 0;
-    products.forEach(function(p) { if (p.type !== 'regular') { cleaned.push(p); return; } var artInField = p.art || ''; var artInName = extractArticleFromName(p.name); if ((artInField && csvArts[artInField]) || (artInName && csvArts[artInName])) { removed++; return; } cleaned.push(p); });
-    products = cleaned;
-    products = products.filter(function(p) { return p.type !== 'focus' && p.type !== 'conditional'; });
-    var seenArts = {}; var npUnique = [];
-    np.forEach(function(x) { if (x.art && seenArts[x.art]) return; if (x.art) seenArts[x.art] = true; npUnique.push(x); });
-    npUnique.forEach(function(x) { products.push(x); });
-    save(); var msg = 'Загружено: ' + npUnique.length + ' товаров'; if (removed > 0) msg += ' · убрано дублей: ' + removed; showToast(msg, 'success'); render();
-  }).catch(function(e) { showToast('Ошибка загрузки: ' + e.message, 'error'); });
+    
+    function parseCSV(str) { 
+      var rows = [], row = [], cur = '', q = false; 
+      var firstLine = str.split('\n')[0];
+      var delim = ',';
+      if (firstLine.indexOf(';') !== -1 && firstLine.indexOf(',') === -1) delim = ';';
+      else if (firstLine.indexOf('\t') !== -1) delim = '\t';
+
+      for (var i = 0; i < str.length; i++) { 
+        var ch = str[i]; 
+        if (q) { 
+          if (ch === '"') { 
+            if (str[i+1] === '"') { cur += '"'; i++; } 
+            else q = false; 
+          } else cur += ch; 
+        } else { 
+          if (ch === '"') q = true; 
+          else if (ch === delim) { row.push(cur); cur = ''; } 
+          else if (ch === '\n') { row.push(cur); rows.push(row); row = []; cur = ''; } 
+          else if (ch === '\r') {} 
+          else cur += ch; 
+        } 
+      } 
+      if (cur !== '' || row.length > 0) { row.push(cur); rows.push(row); } 
+      return rows; 
+    }
+
+    var rows = parseCSV(text);
+    var np = []; 
+    
+    for (var i = 1; i < rows.length; i++) { 
+      var r = rows[i]; 
+      if (r.length < 2) continue; 
+      
+      var art = (r[0] || '').trim();
+      var name = (r[1] || '').trim();
+      if (!art || !name) continue; 
+      
+      var pr = (r[r.length - 1] || '').trim();
+      var type = 'focus'; 
+      var percent = 0; 
+      
+      if (pr.toLowerCase().indexOf('при продажах') !== -1) { 
+        type = 'conditional'; 
+        var mm = pr.match(/(\d+)/); 
+        percent = mm ? parseInt(mm[1]) : 3; 
+      } else { 
+        var m2 = pr.match(/(\d+(?:[.,]\d+)?)/); 
+        percent = m2 ? parseFloat(m2[1].replace(',', '.')) : 1.5; 
+      } 
+      np.push({ art: art, name: cleanNameFromArticle(name, art), percent: percent, type: type }); 
+    }
+
+    if (np.length === 0) { 
+      showToast('Товары не найдены в файле', 'warn'); 
+      return; 
+    }
+
+    var cleaned = []; 
+    products.forEach(function(p) { 
+      if (p.type === 'regular') cleaned.push(p); 
+    });
+    
+    var seenArts = {}; 
+    np.forEach(function(x) { 
+      if (x.art && seenArts[x.art]) return; 
+      if (x.art) seenArts[x.art] = true; 
+      cleaned.push(x); 
+    });
+
+    products = cleaned; 
+    save(); 
+    showToast('Загружено: ' + np.length + ' товаров', 'success'); 
+    render(); 
+    
+  }).catch(function(e) { 
+    showToast('Ошибка загрузки: ' + e.message, 'error'); 
+  });
 };
 document.getElementById('btnImport').onclick = function() { var val = document.getElementById('importText').value.trim(); if (!val) { showToast('Вставьте данные', 'warn'); return; } parseData(val); document.getElementById('importText').value = ''; document.getElementById('screen-import').classList.remove('active'); };
 function parseData(input) {
@@ -1401,6 +1482,7 @@ render();
 updateDots();
 setTimeout(function() { showWhatsNew(); }, 800);
 </script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getDatabase, ref, push, onValue, set, get, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
